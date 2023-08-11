@@ -40,9 +40,14 @@ module TSOS {
             // Where AM I ? 
             sc = new ShellCommand(this.shellWhereAmI,
                 "whereami",
-                "- Displays your current location (use your imagination).");
+                "- Displays your current location (use your imagination.");
             this.commandList[this.commandList.length] = sc;
 
+            //Therapy Function 
+            sc = new ShellCommand(this.shellTherapy,
+                "Therapy",
+                "- Displays advice on what me as a Therapist will tell you.");
+            this.commandList[this.commandList.length] = sc;
 
             // help
             sc = new ShellCommand(this.shellHelp,
@@ -240,6 +245,19 @@ module TSOS {
 
             const location = "You are in the 5th Dimension! Good Luck";  //Subject to Change  
         }
+
+        public shellTherapy(args: string[]) {
+            console.log("shellTherapy function called");
+        
+            const therapyMessages = [
+                "Get off of your computer, and go for a walk",
+            ];
+        
+            const randomMessage = therapyMessages[Math.floor(Math.random() * therapyMessages.length)];
+        
+            _StdOut.putText("Therapist says: " + randomMessage);
+        }
+        
 
         public shellHelp(args: string[]) {
             _StdOut.putText("Commands:");
