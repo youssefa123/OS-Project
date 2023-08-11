@@ -8,9 +8,6 @@
    ------------ */
 
 // TODO: Write a base class / prototype for system services and let Shell inherit from it.
-// Import necessary modules and classes
-
-// ... other imports ...
 
 module TSOS {
     export class Shell {
@@ -19,7 +16,6 @@ module TSOS {
         public commandList = [];
         public curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
         public apologies = "[sorry]";
-        shelldate: any;
 
         constructor() {
         }
@@ -40,15 +36,6 @@ module TSOS {
                                   "help",
                                   "- This is the help command. Seek help.");
             this.commandList[this.commandList.length] = sc;
-
-            // date 
-            sc = new ShellCommand(this.shellDate,
-                                "date",
-                                "- This will display the current date.");
-            this.commandList[this.commandList.length] = sc;
-
-            //where am i displays the users current location (use your imagination)
-            
 
             // shutdown
             sc = new ShellCommand(this.shellShutdown,
@@ -212,16 +199,6 @@ module TSOS {
               _StdOut.putText("For what?");
            }
         }
-
-
-        //ShellDate 
-        
-        public shellDate(args: strings[]) {
-            const now = new Date();
-            const dateString = now.toLocaleString();
-            _StdOut.putText("Current date and time: " + dateString);
-        }
-        
 
         // Although args is unused in some of these functions, it is always provided in the 
         // actual parameter list when this function is called, so I feel like we need it.
