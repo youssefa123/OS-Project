@@ -45,7 +45,7 @@ module TSOS {
 
             //Therapy Function 
             sc = new ShellCommand(this.shellTherapy,
-                "Therapy",
+                "therapy",
                 "- Displays advice on what me as a Therapist will tell you.");
             this.commandList[this.commandList.length] = sc;
 
@@ -244,18 +244,14 @@ module TSOS {
             console.log("shellWhereAmI function");
 
             const location = "You are in the 5th Dimension! Good Luck";  //Subject to Change  
+            _StdOut.putText(location);
         }
 
         public shellTherapy(args: string[]) {
             console.log("shellTherapy function called");
-        
-            const therapyMessages = [
-                "Get off of your computer, and go for a walk",
-            ];
-        
-            const randomMessage = therapyMessages[Math.floor(Math.random() * therapyMessages.length)];
-        
-            _StdOut.putText("Therapist says: " + randomMessage);
+
+            const randomMessage = "Hello this is Youssef, a virtual AI Therapist, currently in development be back soon!"
+            _StdOut.putText(randomMessage);
         }
         
 

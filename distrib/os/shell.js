@@ -27,6 +27,12 @@ var TSOS;
             //Date and Time 
             sc = new TSOS.ShellCommand(this.shellDate, "date", "- Displays the current date and time.");
             this.commandList[this.commandList.length] = sc;
+            // Where AM I ? 
+            sc = new TSOS.ShellCommand(this.shellWhereAmI, "whereami", "- Displays your current location (use your imagination.");
+            this.commandList[this.commandList.length] = sc;
+            //Therapy Function 
+            sc = new TSOS.ShellCommand(this.shellTherapy, "therapy", "- Displays advice on what me as a Therapist will tell you.");
+            this.commandList[this.commandList.length] = sc;
             // help
             sc = new TSOS.ShellCommand(this.shellHelp, "help", "- This is the help command. Seek help.");
             this.commandList[this.commandList.length] = sc;
@@ -176,12 +182,22 @@ var TSOS;
             _StdOut.putText(APP_NAME + " version " + APP_VERSION);
         }
         shellDate(args) {
-            const currentDate = new Date();
+            const currentDate = new Date(); //calling the Date constructor without any arguments, so it automatically captures the current date and time.
             const CDate = currentDate.toDateString();
             const CurrentTime = currentDate.toLocaleTimeString();
             console.log("Current date:", CDate);
             console.log("Current time:", CurrentTime);
             _StdOut.putText("The date is: " + CDate + " The time is: " + CurrentTime);
+        }
+        shellWhereAmI(args) {
+            console.log("shellWhereAmI function");
+            const location = "You are in the 5th Dimension! Good Luck"; //Subject to Change  
+            _StdOut.putText(location);
+        }
+        shellTherapy(args) {
+            console.log("shellTherapy function called");
+            const randomMessage = "Hello this is Youssef, a virtual AI Therapist, currently in development be back soon!";
+            _StdOut.putText(randomMessage);
         }
         shellHelp(args) {
             _StdOut.putText("Commands:");
