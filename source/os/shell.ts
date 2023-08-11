@@ -33,7 +33,7 @@ module TSOS {
 
             //Date and Time 
             sc = new ShellCommand(this.shellDate,
-                                  "Date",
+                                  "date",
                                   "- Displays the current date and time.");
             this.commandList[this.commandList.length] = sc;
 
@@ -218,14 +218,18 @@ module TSOS {
         }
 
         public shellDate(args: string[]) {
+            
+        
             const currentDate = new Date();
             const CDate = currentDate.toDateString();
             const CurrentTime = currentDate.toLocaleTimeString();
-
-            _StdOut.putText("The date is: " + CDate);
-            _StdOut.advanceLine();
-            _StdOut.putText("The time is: " + CurrentTime);
+        
+            console.log("Current date:", CDate);
+            console.log("Current time:", CurrentTime);
+        
+            _StdOut.putText("The date is: " + CDate + " The time is: " + CurrentTime);
         }
+        
 
 
 

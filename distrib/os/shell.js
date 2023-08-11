@@ -24,6 +24,9 @@ var TSOS;
             // ver
             sc = new TSOS.ShellCommand(this.shellVer, "ver", "- Displays the current version data.");
             this.commandList[this.commandList.length] = sc;
+            //Date and Time 
+            sc = new TSOS.ShellCommand(this.shellDate, "date", "- Displays the current date and time.");
+            this.commandList[this.commandList.length] = sc;
             // help
             sc = new TSOS.ShellCommand(this.shellHelp, "help", "- This is the help command. Seek help.");
             this.commandList[this.commandList.length] = sc;
@@ -166,10 +169,19 @@ var TSOS;
         }
         // Although args is unused in some of these functions, it is always provided in the 
         // actual parameter list when this function is called, so I feel like we need it.
+        //My very boring information
         shellVer(args) {
             const APP_NAME = "Youssef's OS";
-            const APP_VERSION = "0.0.1";
+            const APP_VERSION = "0.01";
             _StdOut.putText(APP_NAME + " version " + APP_VERSION);
+        }
+        shellDate(args) {
+            const currentDate = new Date();
+            const CDate = currentDate.toDateString();
+            const CurrentTime = currentDate.toLocaleTimeString();
+            console.log("Current date:", CDate);
+            console.log("Current time:", CurrentTime);
+            _StdOut.putText("The date is: " + CDate + " The time is: " + CurrentTime);
         }
         shellHelp(args) {
             _StdOut.putText("Commands:");
