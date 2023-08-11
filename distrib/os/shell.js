@@ -168,7 +168,7 @@ var TSOS;
         // actual parameter list when this function is called, so I feel like we need it.
         shellVer(args) {
             const APP_NAME = "Youssef's OS";
-            const APP_VERSION = "0.1";
+            const APP_VERSION = "0.0.1";
             _StdOut.putText(APP_NAME + " version " + APP_VERSION);
         }
         shellHelp(args) {

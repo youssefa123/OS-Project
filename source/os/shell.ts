@@ -31,6 +31,12 @@ module TSOS {
                                   "- Displays the current version data.");
             this.commandList[this.commandList.length] = sc;
 
+            //Date and Time 
+            sc = new ShellCommand(this.shellDate,
+                                  "Date",
+                                  "- Displays the current date and time.");
+            this.commandList[this.commandList.length] = sc;
+
             // help
             sc = new ShellCommand(this.shellHelp,
                                   "help",
@@ -202,12 +208,26 @@ module TSOS {
 
         // Although args is unused in some of these functions, it is always provided in the 
         // actual parameter list when this function is called, so I feel like we need it.
+        
 
+        //My very boring information
         public shellVer(args: string[]) {
             const APP_NAME = "Youssef's OS";
-            const APP_VERSION = "0.0.1";
+            const APP_VERSION = "0.01";
             _StdOut.putText(APP_NAME + " version " + APP_VERSION);
         }
+
+        public shellDate(args: string[]) {
+            const currentDate = new Date();
+            const CDate = currentDate.toDateString();
+            const CurrentTime = currentDate.toLocaleTimeString();
+
+            _StdOut.putText("The date is: " + CDate);
+            _StdOut.advanceLine();
+            _StdOut.putText("The time is: " + CurrentTime);
+        }
+
+
 
         public shellHelp(args: string[]) {
             _StdOut.putText("Commands:");
