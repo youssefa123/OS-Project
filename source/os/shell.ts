@@ -37,6 +37,13 @@ module TSOS {
                                   "- Displays the current date and time.");
             this.commandList[this.commandList.length] = sc;
 
+            // Where AM I ? 
+            sc = new ShellCommand(this.shellWhereAmI,
+                "whereami",
+                "- Displays your current location (use your imagination).");
+            this.commandList[this.commandList.length] = sc;
+
+
             // help
             sc = new ShellCommand(this.shellHelp,
                                   "help",
@@ -228,8 +235,11 @@ module TSOS {
             _StdOut.putText("The date is: " + CDate + " The time is: " + CurrentTime);
         }
         
+        public shellWhereAmI(args: string[]) {
+            console.log("shellWhereAmI function");
 
-
+            const location = "You are in the 5th Dimension! Good Luck";  //Subject to Change  
+        }
 
         public shellHelp(args: string[]) {
             _StdOut.putText("Commands:");
