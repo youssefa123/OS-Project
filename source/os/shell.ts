@@ -204,6 +204,8 @@ module TSOS {
         // actual parameter list when this function is called, so I feel like we need it.
 
         public shellVer(args: string[]) {
+            const APP_NAME = "Youssef's OS";
+            const APP_VERSION = "0.1";
             _StdOut.putText(APP_NAME + " version " + APP_VERSION);
         }
 
