@@ -218,9 +218,7 @@ module TSOS {
         }
 
         public shellDate(args: string[]) {
-            
-        
-            const currentDate = new Date();
+            const currentDate = new Date(); //calling the Date constructor without any arguments, so it automatically captures the current date and time.
             const CDate = currentDate.toDateString();
             const CurrentTime = currentDate.toLocaleTimeString();
         
