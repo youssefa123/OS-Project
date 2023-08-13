@@ -32,11 +32,31 @@
    <script type="text/javascript" src="distrib/utils.js"></script>
    <!-- Uncomment the line below to enable GLaDOS testing. -->
    <script type="text/javascript" src="http://alanclasses.github.io/TSOS/test/glados-ip0.js"></script>
+
+    <!-- host display -->
+    <script>
+      function updateDateTime() {
+         const currentDate = new Date().toLocaleDateString();
+         const currentTime = new Date().toLocaleTimeString();
+         document.getElementById("currentDate").textContent = currentDate;
+         document.getElementById("currentTime").textContent = currentTime;
+      }
+   
+      // Call the updateDateTime function when the document loads and then every second
+      onload = function () {
+         onDocumentLoad();
+         updateDateTime();
+         setInterval(updateDateTime, 1000);
+      };
+   </script>
+
+   
    
 </head>
 
 <body onload="onDocumentLoad()">
 
+   
 <div id="divMain" style="width:100%;">
 
    <div id="divButtonBar" style="margin:4px;">
@@ -65,6 +85,13 @@
              value="Reset"
              tabindex="2"
              onclick="TSOS.Control.hostBtnReset_click(this);">
+   </div>
+
+   <div id="headerBar" >
+      <p>Date: <span id="currentdate"></span></p>
+      <p>Time: <span id = "currenttime"></span></p>
+      <p>Status: <span id="status"></span></p>
+      <p>Youssef's Machine</p>
    </div>
 
    <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left;">
