@@ -84,7 +84,7 @@
       onload = function () {
          onDocumentLoad();
          updateDateTime();
-         setInterval(updateDateTime, 1000);  // The point of the (1000) is just a time interval  to continuously update the displayed date and time on the webpage.
+         setInterval(updateDateTime, 1000);  // The point of the (1000) is just a time interval to continuously update the displayed date and time on the webpage.
       };
    </script>
    
@@ -93,10 +93,12 @@
    <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left;">
       <canvas id="display"
               width="500px"
-              height="500px"
+              height="800px"
               tabindex="3">
       </canvas>
    </div>
+  
+
 
    <div id="divLog" style="margin-left:520px;">
       <label>
