@@ -55,3 +55,8 @@ h3 {
     overflow: auto;  /*Scroll Bar*/
 }
 
+
+#consoleContent {
+  overflow: auto; /* SHould FIx the scrolling  */
+  flex: 1; /* Expands I think */
+}
