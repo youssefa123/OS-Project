@@ -94,7 +94,7 @@ module TSOS {
                     this.clearScreen();  
                     
                     // And then... redraw the remaining text 
-                    location.reload(); //
+                    location.reload(); //revist this
                 }
             }
 
