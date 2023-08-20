@@ -63,7 +63,7 @@ var TSOS;
                 this.currentXPosition = this.currentXPosition + offset;
             }
         }
-        advanceLine() {
+        advanceLine(scroll = true) {
             this.currentXPosition = 0;
             /*
              * Font size measures from the baseline to the highest point in the font.
@@ -73,6 +73,17 @@ var TSOS;
             this.currentYPosition += _DefaultFontSize +
                 _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                 _FontHeightMargin;
+            // Please just scroll 
+            // Possible solution. When the text goes beyond the visible canvas area, simulate scrolling.
+            // What scroll amount is doing is that it's finding how much text is going beyond the visible area on the canvas 
+            if (this.currentYPosition > _Canvas.height) { // if the text exceeds the height of the canvas 
+                if (scroll) {
+                    const scrollAmount = this.currentYPosition - _Canvas.height; //Value should be positive when the text exceeds the canvas, then simulate scrolling
+                    const imageData = _DrawingContext.getImageData(0, scrollAmount, _Canvas.width, _Canvas.height - scrollAmount);
+                    //Simulating scrolling by clearing the canvas
+                    this.clearScreen();
+                }
+            }
             // TODO: Handle scrolling. (iProject 1)
         }
     }
