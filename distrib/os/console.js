@@ -81,8 +81,6 @@ var TSOS;
                     const scrollAmount = this.currentYPosition - _Canvas.height; //Value should be positive when the text exceeds the canvas, then simulate scrolling
                     const imageData = _DrawingContext.getImageData(0, scrollAmount, _Canvas.width, _Canvas.height - scrollAmount);
                     //Simulating scrolling by clearing the canvas
-                    this.clearScreen();
-                    // Scroll by Adjusting the canvas Y position
                     _DrawingContext.translate(0, -scrollAmount);
                 }
             }
