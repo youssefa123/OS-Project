@@ -82,6 +82,8 @@ var TSOS;
                     const imageData = _DrawingContext.getImageData(0, scrollAmount, _Canvas.width, _Canvas.height - scrollAmount);
                     //Simulating scrolling by clearing the canvas
                     this.clearScreen();
+                    // Scroll by Adjusting the canvas Y position
+                    _DrawingContext.translate(0, -scrollAmount);
                 }
             }
             // TODO: Handle scrolling. (iProject 1)
