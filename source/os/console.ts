@@ -91,9 +91,10 @@ module TSOS {
                     const imageData = _DrawingContext.getImageData(0, scrollAmount,  _Canvas.width, _Canvas.height - scrollAmount);
                      
                     //Simulating scrolling by clearing the canvas
-                    _DrawingContext.translate(0, -scrollAmount);
-
-                
+                    this.clearScreen();  
+                    
+                    // And then... redraw the remaining text 
+                    location.reload(); //
                 }
             }
 

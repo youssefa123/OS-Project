@@ -81,7 +81,9 @@ var TSOS;
                     const scrollAmount = this.currentYPosition - _Canvas.height; //Value should be positive when the text exceeds the canvas, then simulate scrolling
                     const imageData = _DrawingContext.getImageData(0, scrollAmount, _Canvas.width, _Canvas.height - scrollAmount);
                     //Simulating scrolling by clearing the canvas
-                    _DrawingContext.translate(0, -scrollAmount);
+                    this.clearScreen();
+                    // And then... redraw the remaining text 
+                    location.reload(); //
                 }
             }
             // TODO: Handle scrolling. (iProject 1)
