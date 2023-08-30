@@ -96,8 +96,11 @@ module TSOS {
                     // And then... redraw the remaining text 
                     location.reload(); //revist this
                 }
-            }
-
+            } //ChatGPT answer: Calculates both scrollAmountY and scrollAmountX which represent how much content exceeds the canvas height and width respectively.
+            //Calculate both scrollAmountY and scrollAmountX which represent how much content exceeds the canvas height and width respectively.
+            //Clear the entire canvas.
+            //Restore the saved content using putImageData but shifted up by scrollAmount.
+            //Update currentYPosition to be at the bottom of the visible area after scrolling.
             // TODO: Handle scrolling. (iProject 1)
         }
     }
