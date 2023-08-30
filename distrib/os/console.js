@@ -83,7 +83,7 @@ var TSOS;
                     //Simulating scrolling by clearing the canvas
                     this.clearScreen();
                     // And then... redraw the remaining text 
-                    location.reload(); //
+                    location.reload(); //revist this
                 }
             }
             // TODO: Handle scrolling. (iProject 1)

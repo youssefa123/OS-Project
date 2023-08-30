@@ -40,11 +40,12 @@ var TSOS;
                 _KernelInputQueue.enqueue(chr);
             }
             else if (((keyCode >= 48) && (keyCode <= 57)) || // digits
-                (keyCode == 32) || // space
+                (keyCode == 32) && (keyCode === 8) || // space, backspace in Acsii is 8
                 (keyCode == 13)) { // enter
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }
+            //numbers 
         }
     }
     TSOS.DeviceDriverKeyboard = DeviceDriverKeyboard;

@@ -69,7 +69,7 @@ module TSOS {
             }
          }
 
-        public advanceLine(scroll = true): void {  //Changed to a boolean value so if true it scrolls and if false then not 
+        public advanceLine(scroll = true): void {  //Changed to a boolean value so if true it scrolls and if false, >never built off this.
             this.currentXPosition = 0;
 
             /*
