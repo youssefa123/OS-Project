@@ -76,14 +76,17 @@ var TSOS;
             // Please just scroll 
             // Possible solution. When the text goes beyond the visible canvas area, simulate scrolling.
             // What scroll amount is doing is that it's finding how much text is going beyond the visible area on the canvas 
-            if (this.currentYPosition > _Canvas.height) { // if the text exceeds the height of the canvas 
+            if (this.currentYPosition > _Canvas.height || this.currentXPosition > _Canvas.width) { // if the text exceeds the height of the canvas 
                 if (scroll) {
-                    const scrollAmount = this.currentYPosition - _Canvas.height; //Value should be positive when the text exceeds the canvas, then simulate scrolling
-                    const imageData = _DrawingContext.getImageData(0, scrollAmount, _Canvas.width, _Canvas.height - scrollAmount);
+                    const scrollAmountY = Math.max(0, this.currentYPosition - _Canvas.height);
+                    const scrollAmountX = Math.max(0, this.currentYPosition - _Canvas.height);
+                    const imageData = _DrawingContext.getImageData(scrollAmountX, scrollAmountY, _Canvas.height - scrollAmountX, _Canvas.height - scrollAmountY);
                     //Simulating scrolling by clearing the canvas
                     this.clearScreen();
                     // And then... redraw the remaining text 
-                    location.reload(); //revist this
+                    _DrawingContext.putImageData(imageData, 0, 0);
+                    this.currentYPosition = Math.min(_Canvas.height, this.currentYPosition - scrollAmountY);
+                    this.currentXPosition = Math.min(_Canvas.width, this.currentXPosition - scrollAmountX);
                 }
             } //ChatGPT answer: Calculates both scrollAmountY and scrollAmountX which represent how much content exceeds the canvas height and width respectively.
             //Calculate both scrollAmountY and scrollAmountX which represent how much content exceeds the canvas height and width respectively.
