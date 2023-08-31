@@ -70,36 +70,35 @@ module TSOS {
          }
 
         public advanceLine(scroll = true): void {  //Changed to a boolean value so if true it scrolls and if false, >never built off this.
-            this.currentXPosition = 0;
+            const lineHeight = _DefaultFontSize +
+                       _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                       _FontHeightMargin;
 
+            const totalLines = Math.floor(_Canvas.height / lineHeight);
+        
             /*
              * Font size measures from the baseline to the highest point in the font.
              * Font descent measures from the baseline to the lowest point in the font.
              * Font height margin is extra spacing between the lines.
              */
-            this.currentYPosition += _DefaultFontSize + 
-                                     _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
-                                     _FontHeightMargin;
             
             // Please just scroll 
             // Possible solution. When the text goes beyond the visible canvas area, simulate scrolling.
             // What scroll amount is doing is that it's finding how much text is going beyond the visible area on the canvas 
-            if(this.currentYPosition > _Canvas.height || this.currentXPosition > _Canvas.width) {  // if the text exceeds the height of the canvas 
-                if(scroll) {  
-                    const scrollAmountY = Math.max(0, this.currentYPosition - _Canvas.height);
-                    const scrollAmountX = Math.max(0, this.currentYPosition - _Canvas.height);
-                     
-                    
-                    const imageData = _DrawingContext.getImageData(scrollAmountX,  scrollAmountY, _Canvas.height - scrollAmountX, _Canvas.height - scrollAmountY);
-                     
-                    //Simulating scrolling by clearing the canvas
-                    this.clearScreen();  
-                    
-                    // And then... redraw the remaining text 
-                    _DrawingContext.putImageData(imageData, 0, 0);
+            if(scroll) {
+                const imageData = _DrawingContext.getImageData(0, lineHeight, _Canvas.width, _Canvas.height - lineHeight);
 
-                    this.currentYPosition = Math.min(_Canvas.height, this.currentYPosition + scrollAmountY);
-                    this.currentXPosition = Math.min(_Canvas.width, this.currentXPosition + scrollAmountX);
+                _DrawingContext.clearRect(0,0, _Canvas.width, _Canvas.height);
+                _DrawingContext.putImageData(imageData, 0, 0);
+                
+                _DrawingContext.clearRect(0, _Canvas.height - lineHeight, _Canvas.width, lineHeight);
+                
+                this.currentYPosition = _Canvas.height - lineHeight;
+            } else {
+                this.currentYPosition += lineHeight;
+            }
+
+                this.currentXPosition = 0;
 
                 }
             } //ChatGPT answer: Calculates both scrollAmountY and scrollAmountX which represent how much content exceeds the canvas height and width respectively.
@@ -109,5 +108,5 @@ module TSOS {
             //Update currentYPosition to be at the bottom of the visible area after scrolling.
             // TODO: Handle scrolling. (iProject 1)
         }
-    }
- }
+
+
