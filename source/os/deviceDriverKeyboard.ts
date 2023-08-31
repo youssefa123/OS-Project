@@ -55,7 +55,7 @@ module TSOS {
             } else if (isShifted) {
                 switch (keyCode) {
                     case 1: chr = "☺"; break; //Testing the smiley face
-
+                    case 49: chr = "!"; break;
                         
                         break;
                 
@@ -66,4 +66,4 @@ module TSOS {
 
             //numbers 
         
-        
+        }}}
