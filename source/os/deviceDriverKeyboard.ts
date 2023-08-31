@@ -52,7 +52,18 @@ module TSOS {
             ) { 
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
-            }
+            } else if (isShifted) {
+                switch (keyCode) {
+                    case 1: chr = "☺"; break; //Testing the smiley face
+
+                        
+                        break;
+                
+                    default:
+                        break;
+                }
+            } //Special Charachters 
+
             //numbers 
-        }
-    }}
+        
+        
