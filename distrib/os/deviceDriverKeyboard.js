@@ -23,7 +23,6 @@ var TSOS;
             // More?
         }
         krnKbdDispatchKeyPress(params) {
-            // Parse the params.  TODO: Check that the params are valid and osTrapError if not.
             var keyCode = params[0];
             var isShifted = params[1];
             _Kernel.krnTrace("Key code:" + keyCode + " shifted:" + isShifted);
@@ -39,29 +38,28 @@ var TSOS;
                 // TODO: Check for caps-lock and handle as shifted if so.
                 _KernelInputQueue.enqueue(chr);
             }
-            else if ((keyCode >= 48) && (keyCode <= 57) || // digits
-                (keyCode === 32) || // space
-                (keyCode === 13) || // enter
-                (keyCode === 10) || //Line Feed 
-                (keyCode === 8) // Backspace 
-            ) {
+            else if (((keyCode >= 48) && (keyCode <= 57)) || // digits
+                (keyCode == 32) || // space
+                (keyCode == 13)) { // enter
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }
-            else if (isShifted) {
+            else if (isShifted === true) {
+                // Handle special characters when Shift key is pressed
                 switch (keyCode) {
-                    case 1:
-                        chr = "☺";
-                        break; //Testing the smiley face
-                        console.log("Smile Face");
+                    case 48:
+                        chr = ")";
                         break;
                     case 49:
                         chr = "!";
-                        console.log("Exclamation");
                         break;
+                    case 50:
+                        chr = "@";
+                        break;
+                    // Add more cases for other special characters as needed
                 }
-            } //Special Charachters 
-            //numbers 
+                _KernelInputQueue.enqueue(chr);
+            }
         }
     }
     TSOS.DeviceDriverKeyboard = DeviceDriverKeyboard;
