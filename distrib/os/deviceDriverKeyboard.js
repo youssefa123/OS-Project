@@ -53,11 +53,11 @@ var TSOS;
                     case 1:
                         chr = "☺";
                         break; //Testing the smiley face
+                        console.log("Smile Face");
+                        break;
                     case 49:
                         chr = "!";
-                        break;
-                        break;
-                    default:
+                        console.log("Exclamation");
                         break;
                 }
             } //Special Charachters 

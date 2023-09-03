@@ -33,6 +33,8 @@ module TSOS {
             var isShifted = params[1];
             _Kernel.krnTrace("Key code:" + keyCode + " shifted:" + isShifted);
             var chr = "";
+
+            var spe
             // Check to see if we even want to deal with the key that was pressed.
             if ((keyCode >= 65) && (keyCode <= 90)) { // letter
                 if (isShifted === true) { 
@@ -42,28 +44,32 @@ module TSOS {
                 }
                 // TODO: Check for caps-lock and handle as shifted if so.
                 _KernelInputQueue.enqueue(chr);
-            } else if (
-                (keyCode >= 48) && (keyCode <= 57) ||   // digits
-                (keyCode === 32) ||   // space
-                (keyCode === 13) ||   // enter
-                (keyCode === 10) ||  //Line Feed 
-                (keyCode === 8)   // Backspace 
+            } else if ((keyCode >= 48) && (keyCode <= 57) ||   // digits
+                        (keyCode === 32) ||   // space
+                        (keyCode === 13) ||   // enter
+                        (keyCode === 10) ||  //Line Feed 
+                        (keyCode === 8)   // Backspace 
 
             ) { 
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             } else if (isShifted) {
                 switch (keyCode) {
-                    case 1: chr = "☺"; break; //Testing the smiley face
-                    case 49: chr = "!"; break;
+                    case 1: 
+                        chr = "☺"; break; //Testing the smiley face
+                        console.log("Smile Face");
+                        break;
+                    case 49: 
+                        chr = "!";         
+                        console.log("Exclamation");
+                        break;
+            
                         
-                        break;
-                
-                    default:
-                        break;
                 }
             } //Special Charachters 
 
             //numbers 
         
-        }}}
+        }
+    }
+}
