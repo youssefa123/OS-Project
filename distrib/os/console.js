@@ -90,12 +90,8 @@ var TSOS;
             //Removes the weird indent that happens with scrolling 
             this.currentXPosition = 0;
         }
-    } //ChatGPT answer: Calculates both scrollAmountY and scrollAmountX which represent how much content exceeds the canvas height and width respectively.
+    }
     TSOS.Console = Console;
-    //Calculate both scrollAmountY and scrollAmountX which represent how much content exceeds the canvas height and width respectively.
-    //Clear the entire canvas.
-    //Restore the saved content using putImageData but shifted up by scrollAmount.
-    //Update currentYPosition to be at the bottom of the visible area after scrolling.
     // TODO: Handle scrolling. (iProject 1)
 })(TSOS || (TSOS = {}));
 //# sourceMappingURL=console.js.map
