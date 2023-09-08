@@ -47,9 +47,13 @@
                         case 49: chr = "!"; break;  //!
                         case 50: chr = "@"; break;  // @
                         case 51: chr = "#"; break;  // #
-                        case 52: chr = "$"; break;
-                        case 53: chr = "%"; break;
-                        case 54: chr = "^"; break;
+                        case 52: chr = "$"; break;  // $ MONEY MONEY MONEY
+                        case 53: chr = "%"; break;  // %
+                        case 54: chr = "^"; break;  // ^
+                        case 55: chr = "&"; break;  // &
+                        case 56: chr = "*"; break;  // You get the point 
+                        case 57: chr = "("; break;
+                        case 58: chr = ")"; break;
                         default: chr = String.fromCharCode(keyCode);
                     }
                 } else {
