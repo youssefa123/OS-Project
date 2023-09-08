@@ -98,14 +98,24 @@
                 _KernelInputQueue.enqueue(chr);
             }
 
-            else if (keyCode == 221) {
+            else if (keyCode == 188) {
                 if (isShifted) {
-                    chr = "}";   
+                    chr = ">";   
                 } else {
-                    chr = "]";
+                    chr = ",";
                 }
                 _KernelInputQueue.enqueue(chr);
             }
+
+            else if (keyCode == 190) {
+                if (isShifted) {
+                    chr = ">";   
+                } else {
+                    chr = ".";
+                }
+                _KernelInputQueue.enqueue(chr);
+            }
+
             
             
             else if (keyCode == 32 || keyCode == 13) {  // space or enter
