@@ -89,6 +89,16 @@
                 _KernelInputQueue.enqueue(chr)
             }
             
+            else if (keyCode == 221) {
+                if (isShifted) {
+                    chr = "}";   
+                } else {
+                    chr = "]";
+                }
+                _KernelInputQueue.enqueue(chr);
+            }
+            
+
 
 
             
