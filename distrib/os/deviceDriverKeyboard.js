@@ -39,6 +39,7 @@ var TSOS;
             else if ((keyCode >= 48) && (keyCode <= 57)) { // digits
                 if (isShifted) {
                     switch (keyCode) {
+                        //Mapping numbers to special charachters, simplest approach
                         case 49:
                             chr = "!";
                             break; //!
@@ -48,6 +49,15 @@ var TSOS;
                         case 51:
                             chr = "#";
                             break; // #
+                        case 52:
+                            chr = "$";
+                            break;
+                        case 53:
+                            chr = "%";
+                            break;
+                        case 54:
+                            chr = "^";
+                            break;
                         default: chr = String.fromCharCode(keyCode);
                     }
                 }
