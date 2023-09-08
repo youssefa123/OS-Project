@@ -43,7 +43,7 @@
             } else if ((keyCode >= 48) && (keyCode <= 57)) { // digits
                 if (isShifted) {
                     switch (keyCode) {
-                        //Used this website to create the special characters btw, https://theasciicode.com.ar
+                        //Used this website to create the special characters btw. Put you on ! https://www.toptal.com/developers/keycode
                         //Mapping numbers to special charachters, simplest approach
                         case 49: chr = "!"; break;  //!
                         case 50: chr = "@"; break;  // @
@@ -61,8 +61,8 @@
                     chr = String.fromCharCode(keyCode);
                 }
                 _KernelInputQueue.enqueue(chr);
-            } // get ready for a 100 else if statements
-            
+            } 
+            // get ready for a 100 else if statements
             else if (keyCode == 189) {
                 if (isShifted) {
                     chr = "_";
@@ -97,10 +97,16 @@
                 }
                 _KernelInputQueue.enqueue(chr);
             }
+
+            else if (keyCode == 221) {
+                if (isShifted) {
+                    chr = "}";   
+                } else {
+                    chr = "]";
+                }
+                _KernelInputQueue.enqueue(chr);
+            }
             
-
-
-
             
             else if (keyCode == 32 || keyCode == 13) {  // space or enter
                 chr = String.fromCharCode(keyCode);

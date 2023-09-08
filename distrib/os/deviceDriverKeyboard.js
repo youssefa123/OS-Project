@@ -106,6 +106,15 @@ var TSOS;
                 }
                 _KernelInputQueue.enqueue(chr);
             }
+            else if (keyCode == 221) {
+                if (isShifted) {
+                    chr = "}";
+                }
+                else {
+                    chr = "]";
+                }
+                _KernelInputQueue.enqueue(chr);
+            }
             else if (keyCode == 32 || keyCode == 13) { // space or enter
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
