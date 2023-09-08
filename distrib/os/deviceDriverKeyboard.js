@@ -158,7 +158,11 @@ var TSOS;
                 }
                 _KernelInputQueue.enqueue(chr);
             }
-            if (isShifted && keyCode !== 32 && keyCode !== 8 && keyCode !== 13 && keyCode !== 9) {
+            //Backspace 
+            else if (keyCode == 8) { // backspace
+                _KernelInputQueue.dequeue(); //hopefully removes the last charachter 
+            }
+            else if (keyCode == 32 || keyCode == 13) { // space or enter
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }
