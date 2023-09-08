@@ -32,6 +32,8 @@
             var isShifted = params[1];
             _Kernel.krnTrace("Key code:" + keyCode + " shifted:" + isShifted);
             var chr = "";
+
+        
         
             if ((keyCode >= 65) && (keyCode <= 90)) { // letter
                 if (isShifted) {
@@ -139,6 +141,11 @@
                     chr = "/";
                 }
                 _KernelInputQueue.enqueue(chr);
+            }
+
+            //Backspace 
+            else if (keyCode == 8) { // backspace
+                _KernelInputQueue.dequeue(); //hopefully removes the last charachter 
             }
 
             

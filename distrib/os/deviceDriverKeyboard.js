@@ -158,7 +158,7 @@ var TSOS;
                 }
                 _KernelInputQueue.enqueue(chr);
             }
-            else if (keyCode == 32 || keyCode == 13) { // space or enter
+            if (isShifted && keyCode !== 32 && keyCode !== 8 && keyCode !== 13 && keyCode !== 9) {
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }
