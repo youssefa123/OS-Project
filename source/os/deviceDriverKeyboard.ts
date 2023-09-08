@@ -90,6 +90,15 @@
                 }
                 _KernelInputQueue.enqueue(chr)
             }
+
+            else if (keyCode == 220) {
+                if (isShifted) {
+                    chr = "|";   
+                } else {
+                    chr = "";
+                }
+                _KernelInputQueue.enqueue(chr)
+            }
             
             else if (keyCode == 221) {
                 if (isShifted) {
@@ -142,12 +151,6 @@
                 }
                 _KernelInputQueue.enqueue(chr);
             }
-
-            //Backspace 
-            else if (keyCode == 8) { // backspace
-                _KernelInputQueue.dequeue(); //hopefully removes the last charachter 
-            }
-
             
             
             else if (keyCode == 32 || keyCode == 13) {  // space or enter
