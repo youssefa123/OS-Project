@@ -116,6 +116,15 @@ var TSOS;
                 }
                 _KernelInputQueue.enqueue(chr);
             }
+            else if (keyCode == 186) {
+                if (isShifted) {
+                    chr = ":";
+                }
+                else {
+                    chr = ";";
+                }
+                _KernelInputQueue.enqueue(chr);
+            }
             else if (keyCode == 188) {
                 if (isShifted) {
                     chr = ">";
@@ -131,6 +140,15 @@ var TSOS;
                 }
                 else {
                     chr = ".";
+                }
+                _KernelInputQueue.enqueue(chr);
+            }
+            else if (keyCode == 191) {
+                if (isShifted) {
+                    chr = "?";
+                }
+                else {
+                    chr = "/";
                 }
                 _KernelInputQueue.enqueue(chr);
             }

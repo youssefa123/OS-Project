@@ -98,9 +98,25 @@
                 _KernelInputQueue.enqueue(chr);
             }
 
+            else if (keyCode == 222) { //the number 222 represents faith, trust and harmony.
+                if (isShifted) {
+                    chr = " ' ";   
+                }
+                _KernelInputQueue.enqueue(chr);
+            }
+
+            else if (keyCode == 186) {
+                if (isShifted) {
+                    chr = ":";   
+                } else {
+                    chr = ";";
+                }
+                _KernelInputQueue.enqueue(chr);
+            }
+
             else if (keyCode == 188) {
                 if (isShifted) {
-                    chr = ">";   
+                    chr = "<";   
                 } else {
                     chr = ",";
                 }
