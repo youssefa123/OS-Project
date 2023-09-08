@@ -43,6 +43,7 @@
             } else if ((keyCode >= 48) && (keyCode <= 57)) { // digits
                 if (isShifted) {
                     switch (keyCode) {
+                        //Used this website to create the special characters btw, https://theasciicode.com.ar
                         //Mapping numbers to special charachters, simplest approach
                         case 49: chr = "!"; break;  //!
                         case 50: chr = "@"; break;  // @
