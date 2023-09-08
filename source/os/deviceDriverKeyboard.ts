@@ -53,7 +53,7 @@
                         case 55: chr = "&"; break;  // &
                         case 56: chr = "*"; break;  // You get the point 
                         case 57: chr = "("; break;
-                        case 58: chr = ")"; break;  //Does not work 
+                        case 48: chr = ")"; break;  //works 
                         default: chr = String.fromCharCode(keyCode);
                     }
                 } else {
