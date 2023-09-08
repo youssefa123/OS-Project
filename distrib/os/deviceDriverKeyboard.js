@@ -23,6 +23,7 @@ var TSOS;
             // More?
         }
         krnKbdDispatchKeyPress(params) {
+            // Parse the params.  TODO: Check that the params are valid and osTrapError if not.
             var keyCode = params[0];
             var isShifted = params[1];
             _Kernel.krnTrace("Key code:" + keyCode + " shifted:" + isShifted);
@@ -39,27 +40,10 @@ var TSOS;
                 _KernelInputQueue.enqueue(chr);
             }
             else if (((keyCode >= 48) && (keyCode <= 57)) || // digits
-                (keyCode == 32) || // space
-                (keyCode == 13)) { // enter
-                chr = String.fromCharCode(keyCode);
-                _KernelInputQueue.enqueue(chr);
+                (keyCode == 32) || (keyCode == 33) || // space
+                (keyCode == 13)) {
             }
-            else if (isShifted === true) {
-                // Handle special characters when Shift key is pressed
-                switch (keyCode) {
-                    case 48:
-                        chr = ")";
-                        break;
-                    case 49:
-                        chr = "!";
-                        break;
-                    case 50:
-                        chr = "@";
-                        break;
-                    // Add more cases for other special characters as needed
-                }
-                _KernelInputQueue.enqueue(chr);
-            }
+            _KernelInputQueue.enqueue(chr);
         }
     }
     TSOS.DeviceDriverKeyboard = DeviceDriverKeyboard;
