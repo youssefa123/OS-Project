@@ -116,6 +116,15 @@
                 _KernelInputQueue.enqueue(chr);
             }
 
+            else if (keyCode == 191) {
+                if (isShifted) {
+                    chr = "?";   
+                } else {
+                    chr = "/";
+                }
+                _KernelInputQueue.enqueue(chr);
+            }
+
             
             
             else if (keyCode == 32 || keyCode == 13) {  // space or enter
