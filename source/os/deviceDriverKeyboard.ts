@@ -1,16 +1,30 @@
-module TSOS {
+/* ----------------------------------
+   DeviceDriverKeyboard.ts
+
+   The Kernel Keyboard Device Driver.
+   ---------------------------------- */
+
+   module TSOS {
 
     // Extends DeviceDriver
     export class DeviceDriverKeyboard extends DeviceDriver {
 
         constructor() {
+            // Override the base method pointers.
+
+            // The code below cannot run because "this" can only be
+            // accessed after calling super.
+            // super(this.krnKbdDriverEntry, this.krnKbdDispatchKeyPress);
+            // So instead...
             super();
             this.driverEntry = this.krnKbdDriverEntry;
             this.isr = this.krnKbdDispatchKeyPress;
         }
 
         public krnKbdDriverEntry() {
+            // Initialization routine for this, the kernel-mode Keyboard Device Driver.
             this.status = "loaded";
+            // More?
         }
 
         public krnKbdDispatchKeyPress(params) {
@@ -18,33 +32,35 @@ module TSOS {
             var isShifted = params[1];
             _Kernel.krnTrace("Key code:" + keyCode + " shifted:" + isShifted);
             var chr = "";
-            
-            if ((keyCode >= 65) && (keyCode <= 90)) { 
-                if (isShifted) { 
-                    chr = String.fromCharCode(keyCode);
+        
+            if ((keyCode >= 65) && (keyCode <= 90)) { // letter
+                if (isShifted) {
+                    chr = String.fromCharCode(keyCode); // Uppercase A-Z
                 } else {
-                    chr = String.fromCharCode(keyCode + 32);
+                    chr = String.fromCharCode(keyCode + 32); // Lowercase a-z
                 }
                 _KernelInputQueue.enqueue(chr);
-            } else {
-                chr = this.getSpecialCharacter(keyCode, isShifted);
-                if (chr !== null) {
-                    _KernelInputQueue.enqueue(chr);
+            } else if ((keyCode >= 48) && (keyCode <= 57)) { // digits
+                if (isShifted) {
+                    switch (keyCode) {
+                        //Mapping numbers to special charachters, simplest approach
+                        case 49: chr = "!"; break;  //!
+                        case 50: chr = "@"; break;  // @
+                        case 51: chr = "#"; break;  // #
+                        case 52: chr = "$"; break;
+                        case 53: chr = "%"; break;
+                        case 54: chr = "^"; break;
+                        default: chr = String.fromCharCode(keyCode);
+                    }
+                } else {
+                    chr = String.fromCharCode(keyCode);
                 }
+                _KernelInputQueue.enqueue(chr);
+            } else if (keyCode == 32 || keyCode == 13) {  // space or enter
+                chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
             }
-        }
-
-        private getSpecialCharacter(keyCode, isShifted): string {
-            let specialCharsMap = {
-                48: isShifted ? ')' : '0',
-                49: isShifted ? '!' : '1',
-                // ... you can continue to add more mappings here
-                32: ' ', // space
-                33: '!', // exclamation mark
-                13: '\n' // Enter
-            };
             
-            return specialCharsMap[keyCode] || null;
         }
     }
 }
