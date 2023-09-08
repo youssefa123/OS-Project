@@ -61,7 +61,27 @@
                     chr = String.fromCharCode(keyCode);
                 }
                 _KernelInputQueue.enqueue(chr);
-            } else if (keyCode == 32 || keyCode == 13) {  // space or enter
+            } // get ready for a 100 else if statements
+            
+            else if (keyCode == 189) {
+                if (isShifted) {
+                    chr = "_";
+                } else {
+                    chr = "-";
+                }
+                _KernelInputQueue.enqueue(chr)
+            }
+            else if (keyCode == 187) {
+                if (isShifted) {
+                    chr = "+";   
+                } else {
+                    chr = "=";
+                }
+                _KernelInputQueue.enqueue(chr)
+
+            }
+            
+            else if (keyCode == 32 || keyCode == 13) {  // space or enter
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }
