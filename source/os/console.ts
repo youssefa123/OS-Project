@@ -41,6 +41,11 @@ module TSOS {
                     _OsShell.handleInput(this.buffer);
                     // ... and reset our buffer.
                     this.buffer = "";
+                
+                } else if (chr === String.fromCharCode(8)) {  // the Backspace key
+                    this.backspace();
+                
+                    
                 } else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
