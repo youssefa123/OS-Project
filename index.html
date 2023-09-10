@@ -80,10 +80,15 @@
          document.getElementById("currentdate").textContent = currentDate;
          document.getElementById("currenttime").textContent = currentTime;
       }
+
+      function setStatus() {
+        document.getElementById("status").textContent = " Welcome back. Your currently 🟢 Online";
+      }
    
       onload = function () {
          onDocumentLoad();
          updateDateTime();
+         setStatus();
          setInterval(updateDateTime, 1000);  // The point of the (1000) is just a time interval to continuously update the displayed date and time on the webpage.
       };
    </script>
@@ -96,6 +101,13 @@
               tabindex="3"> 
       </canvas>
    </div>
+
+   <script>
+      function updateStatus(message) {
+         document.getElementById("The current status is").textContent = "The current status is " + message
+      }
+      updateStatus("🟢Online")  //Status messgae 
+   </script>
   
 
 
