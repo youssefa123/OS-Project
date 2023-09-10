@@ -51,15 +51,18 @@ var TSOS;
             }
         }
         backspace() {
-            if (this.buffer.length > 0) {
-                // 1. Update the buffer
-                const lastChar = this.buffer[this.buffer.length - 1]; // get the last character
-                this.buffer = this.buffer.substring(0, this.buffer.length - 1); // remove the last character
-                // 2. Clear the area on the canvas where the last character was displayed
-                const offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, lastChar);
-                this.currentXPosition -= offset; // move X position back
-                _DrawingContext.clearRect(this.currentXPosition, this.currentYPosition - this.currentFontSize, offset, this.currentFontSize + _FontHeightMargin);
-                // No need to redraw text, because we're essentially erasing the last character
+            if (this.buffer.length > 0) { //Check if there is any letters in the buffer
+                const lastChar = this.buffer[this.buffer.length - 1]; // if there is then take the last letter from the buffer.  
+                //Then you take away the last like it was never there 
+                this.buffer = this.buffer.substring(0, this.buffer.length - 1);
+                // But I need to find how much space the letter is going to take, becuase every letter has a different width 
+                const charWidth = _DrawingContext.measureText(this.currentFont, this.currentFontSize, lastChar);
+                //Then we go back after that 
+                this.currentXPosition -= charWidth;
+                //Start by erasing from the top-left corner of the last character
+                // Then Use currentXPosition for the horizontal start and adjust currentYPosition for the vertical start.
+                // The width to erase is the character's width, and height includes the font and margin, that's how clerrect erases the exact space of the last character.
+                _DrawingContext.clearRect(this.currentXPosition, this.currentYPosition - this.currentFontSize, charWidth, this.currentFontSize + _FontHeightMargin);
             }
         }
         putText(text) {
