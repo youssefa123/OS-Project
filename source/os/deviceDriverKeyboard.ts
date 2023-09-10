@@ -82,6 +82,11 @@
                 _KernelInputQueue.enqueue(chr)
             }
 
+            else if (keyCode == 8) {  // please work 
+                chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
+            }
+
             else if (keyCode == 219) {
                 if (isShifted) {
                     chr = "{";   

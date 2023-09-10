@@ -37,6 +37,9 @@ var TSOS;
                     // ... and reset our buffer.
                     this.buffer = "";
                 }
+                else if (chr === String.fromCharCode(8)) { // the Backspace key
+                    this.backspace();
+                }
                 else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
@@ -45,6 +48,18 @@ var TSOS;
                     this.buffer += chr;
                 }
                 // TODO: Add a case for Ctrl-C that would allow the user to break the current program.
+            }
+        }
+        backspace() {
+            if (this.buffer.length > 0) {
+                // 1. Update the buffer
+                const lastChar = this.buffer[this.buffer.length - 1]; // get the last character
+                this.buffer = this.buffer.substring(0, this.buffer.length - 1); // remove the last character
+                // 2. Clear the area on the canvas where the last character was displayed
+                const offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, lastChar);
+                this.currentXPosition -= offset; // move X position back
+                _DrawingContext.clearRect(this.currentXPosition, this.currentYPosition - this.currentFontSize, offset, this.currentFontSize + _FontHeightMargin);
+                // No need to redraw text, because we're essentially erasing the last character
             }
         }
         putText(text) {
