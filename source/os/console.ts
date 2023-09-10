@@ -45,6 +45,10 @@ module TSOS {
                 
                 } else if (chr === String.fromCharCode(8)) {  // the Backspace key
                     this.backspace();
+
+                else if (chr === String.fromCharCode(9)) { //Tab key time
+                    this.tab();
+                }
                 
                     
                 } else {
