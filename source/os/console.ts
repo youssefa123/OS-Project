@@ -8,6 +8,7 @@
 module TSOS {
 
     export class Console {
+        
 
         constructor(public currentFont = _DefaultFontFamily,
                     public currentFontSize = _DefaultFontSize,
@@ -56,6 +57,14 @@ module TSOS {
                 // TODO: Add a case for Ctrl-C that would allow the user to break the current program.
             }
         }
+        
+        
+        
+        public backspace(): void { //
+            \
+
+        
+        
 
         public putText(text): void {
             /*  My first inclination here was to write two functions: putChar() and putString().
