@@ -92,7 +92,10 @@ module TSOS {
                 "p": "rompt",
                 "pr": "ompt",
                 "pro": "mpt",
-                "prom": "pt"   // Took your advice and listened to Squeeze - Tempted. Interesting 
+                "prom": "pt",   // Took your advice and listened to Squeeze - Tempted. Interesting 
+                "h": "elp",
+                "he": "lp",
+                "hel": "p"
             };
         
             const autoCompleteText = autoCompleteOptions[this.buffer];

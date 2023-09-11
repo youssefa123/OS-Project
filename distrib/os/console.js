@@ -68,6 +68,26 @@ var TSOS;
                 "w": "hereami",
                 "wh": "ereami",
                 "whe": "reami",
+                "s": "hutdown",
+                "sh": "utdown",
+                "shu": "tdown",
+                "shut": "down",
+                "c": "ls",
+                "cl": "s",
+                "m": "an",
+                "ma": "n",
+                "tr": "ace",
+                "tra": "ce",
+                "r": "ot13",
+                "ro": "t13",
+                "rot": "13",
+                "p": "rompt",
+                "pr": "ompt",
+                "pro": "mpt",
+                "prom": "pt",
+                "h": "elp",
+                "he": "lp",
+                "hel": "p"
             };
             const autoCompleteText = autoCompleteOptions[this.buffer];
             if (autoCompleteText) {
