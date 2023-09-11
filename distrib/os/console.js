@@ -57,8 +57,17 @@ var TSOS;
             const autoCompleteOptions = {
                 "v": "er",
                 "ve": "r",
-                "wheream": "i"
-                // Add more options as needed.
+                "d": "ate",
+                "da": "te",
+                "dat": "e",
+                "t": "herapy",
+                "th": "erapy",
+                "the": "rapy",
+                "ther": "apy",
+                "wheream": "i",
+                "w": "hereami",
+                "wh": "ereami",
+                "whe": "reami",
             };
             const autoCompleteText = autoCompleteOptions[this.buffer];
             if (autoCompleteText) {

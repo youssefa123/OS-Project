@@ -65,8 +65,34 @@ module TSOS {
             const autoCompleteOptions = {  //Smarter option
                 "v": "er",
                 "ve": "r",
-                "wheream": "i"
-               
+                "d": "ate",
+                "da": "te",
+                "dat": "e",
+                "t": "herapy",
+                "th": "erapy",
+                "the": "rapy",
+                "ther": "apy",
+                "wheream": "i",
+                "w":  "hereami",
+                "wh": "ereami",
+                "whe": "reami",
+                "s": "hutdown",
+                "sh": "utdown",
+                "shu": "tdown",
+                "shut": "down",
+                "c": "ls",
+                "cl": "s",
+                "m": "an",
+                "ma": "n",
+                "tr": "ace",
+                "tra": "ce",
+                "r": "ot13",
+                "ro": "t13",
+                "rot": "13",
+                "p": "rompt",
+                "pr": "ompt",
+                "pro": "mpt",
+                "prom": "pt"   // Took your advice and listened to Squeeze - Tempted. Interesting 
             };
         
             const autoCompleteText = autoCompleteOptions[this.buffer];
