@@ -46,11 +46,9 @@ module TSOS {
                 } else if (chr === String.fromCharCode(8)) {  // the Backspace key
                     this.backspace();
 
-                else if (chr === String.fromCharCode(9)) { //Tab key time
+                } else if (chr === String.fromCharCode(9)) { //Tab key time
                     this.tab();
-                }
-                
-                    
+                  
                 } else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
@@ -63,6 +61,18 @@ module TSOS {
         }
         
         
+        public tab(): void {
+            // If the buffer is "v", then auto-complete to the comment block
+            if (this.buffer === "v") {
+                const autoCompleteText = `er`;
+                //I am going to do a million if else statements for this tab function
+                //Is there a smarter way to do it ? Probably, but i'm going to listen to Travis scott while I write this
+                
+                this.putText(autoCompleteText);
+                this.buffer += autoCompleteText;
+            }
+            
+        }
         
         public backspace(): void {
             

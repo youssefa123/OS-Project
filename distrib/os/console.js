@@ -40,6 +40,9 @@ var TSOS;
                 else if (chr === String.fromCharCode(8)) { // the Backspace key
                     this.backspace();
                 }
+                else if (chr === String.fromCharCode(9)) { //Tab key time
+                    this.tab();
+                }
                 else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
@@ -48,6 +51,14 @@ var TSOS;
                     this.buffer += chr;
                 }
                 // TODO: Add a case for Ctrl-C that would allow the user to break the current program.
+            }
+        }
+        tab() {
+            // If the buffer is "v", then auto-complete to the comment block
+            if (this.buffer === "v") {
+                const autoCompleteText = `er`;
+                this.putText(autoCompleteText);
+                this.buffer += autoCompleteText;
             }
         }
         backspace() {

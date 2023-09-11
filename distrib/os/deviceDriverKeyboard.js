@@ -98,6 +98,11 @@ var TSOS;
                 }
                 _KernelInputQueue.enqueue(chr);
             }
+            // ... [other parts of the code]
+            else if (keyCode == 9) { // Tab key
+                chr = "\t";
+                _KernelInputQueue.enqueue(chr);
+            }
             else if (keyCode == 8) { // please work 
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
