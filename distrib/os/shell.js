@@ -42,6 +42,9 @@ var TSOS;
             // cls
             sc = new TSOS.ShellCommand(this.shellCls, "cls", "- Clears the screen and resets the cursor position.");
             this.commandList[this.commandList.length] = sc;
+            // freeze
+            sc = new TSOS.ShellCommand(this.bsod, "bsod", "-Break the OS");
+            this.commandList[this.commandList.length] = sc;
             // man <topic>
             sc = new TSOS.ShellCommand(this.shellMan, "man", "<topic> - Displays the MANual page for <topic>.");
             this.commandList[this.commandList.length] = sc;
@@ -198,6 +201,13 @@ var TSOS;
             console.log("shellTherapy function called");
             const randomMessage = "Hello this is Youssef, a virtual AI Therapist, currently in development be back soon!";
             _StdOut.putText(randomMessage);
+        }
+        bsod(args) {
+            _StdOut.clearScreen(); // Clear the screen.
+            _StdOut.putText("The OS ran into a system error! It's dying.");
+            _StdOut.advanceLine();
+            _StdOut.putText("Please contact 845-337-5479.");
+            _Kernel.krnShutdown();
         }
         shellHelp(args) {
             _StdOut.putText("Commands:");

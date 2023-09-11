@@ -73,6 +73,11 @@ module TSOS {
                 "-Break the OS");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(this.shellLoad,
+                "load",
+                "- Verifies user code and will load it.");
+            this.commandList[this.commandList.length] = sc;
+
 
             // man <topic>
             sc = new ShellCommand(this.shellMan,
@@ -248,6 +253,11 @@ module TSOS {
         
             _StdOut.putText("The date is: " + CDate + " The time is: " + CurrentTime);
         }
+
+        public shellLoad(args: string[]) {  //
+            _StdOut.putText("Unable to load");
+        }
+        
         
         public shellWhereAmI(args: string[]) {
             console.log("shellWhereAmI function");
