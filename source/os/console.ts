@@ -70,8 +70,11 @@ module TSOS {
                 
                 this.putText(autoCompleteText);
                 this.buffer += autoCompleteText;
-            }
-            
+            } else if (this.buffer === "ve") {  //I think you know where I'm going with this 
+                const autoCompleteText = "r";
+                this.putText(autoCompleteText);
+                this.buffer += autoCompleteText;
+            }    
         }
         
         public backspace(): void {
