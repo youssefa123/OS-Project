@@ -62,20 +62,20 @@ module TSOS {
         
         
         public tab(): void {
-            // If the buffer is "v", then auto-complete to the comment block
-            if (this.buffer === "v") {
-                const autoCompleteText = `er`;
-                //I am going to do a million if else statements for this tab function
-                //Is there a smarter way to do it ? Probably, but i'm going to listen to Travis scott while I write this
-                
+            const autoCompleteOptions = {  //Smarter option
+                "v": "er",
+                "ve": "r",
+                "wheream": "i"
+               
+            };
+        
+            const autoCompleteText = autoCompleteOptions[this.buffer];
+            if (autoCompleteText) {
                 this.putText(autoCompleteText);
                 this.buffer += autoCompleteText;
-            } else if (this.buffer === "ve") {  //I think you know where I'm going with this 
-                const autoCompleteText = "r";
-                this.putText(autoCompleteText);
-                this.buffer += autoCompleteText;
-            }    
+            }
         }
+        
         
         public backspace(): void {
             

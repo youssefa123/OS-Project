@@ -54,9 +54,14 @@ var TSOS;
             }
         }
         tab() {
-            // If the buffer is "v", then auto-complete to the comment block
-            if (this.buffer === "v") {
-                const autoCompleteText = `er`;
+            const autoCompleteOptions = {
+                "v": "er",
+                "ve": "r",
+                "wheream": "i"
+                // Add more options as needed.
+            };
+            const autoCompleteText = autoCompleteOptions[this.buffer];
+            if (autoCompleteText) {
                 this.putText(autoCompleteText);
                 this.buffer += autoCompleteText;
             }
