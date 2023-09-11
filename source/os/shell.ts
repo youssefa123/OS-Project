@@ -67,6 +67,13 @@ module TSOS {
                                   "- Clears the screen and resets the cursor position.");
             this.commandList[this.commandList.length] = sc;
 
+            // freeze
+            sc = new ShellCommand(this.bsod,
+                "bsod",
+                "-Break the OS");
+            this.commandList[this.commandList.length] = sc;
+
+
             // man <topic>
             sc = new ShellCommand(this.shellMan,
                                   "man",
@@ -200,6 +207,8 @@ module TSOS {
             }
         }
 
+
+
         public shellCurse() {
             _StdOut.putText("Oh, so that's how it's going to be, eh? Fine.");
             _StdOut.advanceLine();
@@ -253,6 +262,16 @@ module TSOS {
             const randomMessage = "Hello this is Youssef, a virtual AI Therapist, currently in development be back soon!"
             _StdOut.putText(randomMessage);
         }
+
+        public bsod(args: string[]) {
+            _StdOut.clearScreen();  // Clear the screen.
+            _StdOut.putText("The OS ran into a system error! It's dying.");
+            _StdOut.advanceLine();
+            _StdOut.putText("Please contact 845-337-5479.");
+        
+            _Kernel.krnShutdown();
+        }
+        
         
 
         public shellHelp(args: string[]) {
