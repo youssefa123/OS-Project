@@ -254,9 +254,19 @@ module TSOS {
             _StdOut.putText("The date is: " + CDate + " The time is: " + CurrentTime);
         }
 
-        public shellLoad(args: string[]) {  //
-            _StdOut.putText("Unable to load");
+        public shellLoad(args: string[]) {
+            let input: string = (<HTMLTextAreaElement>document.getElementById("taProgramInput")).value;
+            
+           
+            let isloadValid = /^^[0-9a-fA-F\s]*$/.test(input);  //matching hex digits
+            if(isloadValid) {
+                _StdOut.putText("Valid hex input");
+                
+            } else {
+                _StdOut.putText("Unable to load: Input is not in hex");
+            }
         }
+        
         
         
         public shellWhereAmI(args: string[]) {

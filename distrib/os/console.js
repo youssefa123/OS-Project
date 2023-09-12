@@ -89,7 +89,7 @@ var TSOS;
                 "he": "lp",
                 "hel": "p"
             };
-            const autoCompleteText = autoCompleteOptions[this.buffer];
+            const autoCompleteText = autoCompleteOptions[this.buffer]; ////If the current buffer's content matches any of the keys in the dictionary, the system will autocomplete it based on the associated value from the dictionary.
             if (autoCompleteText) {
                 this.putText(autoCompleteText);
                 this.buffer += autoCompleteText;
@@ -155,6 +155,5 @@ var TSOS;
         }
     }
     TSOS.Console = Console;
-    // TODO: Handle scrolling. (iProject 1)
 })(TSOS || (TSOS = {}));
 //# sourceMappingURL=console.js.map
