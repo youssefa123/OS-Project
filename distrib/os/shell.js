@@ -195,8 +195,11 @@ var TSOS;
             _StdOut.putText("The date is: " + CDate + " The time is: " + CurrentTime);
         }
         shellLoad(args) {
-            let input = document.getElementById("taProgramInput").value;
-            let isloadValid = /^^[0-9a-fA-F\s]*$/.test(input); //matching hex digits
+            // Get the text area element and its value
+            const userinput = document.getElementById("taProgramInput");
+            const input = userinput.value; // Use 'userinput' instead of 'textArea'
+            // Use regex to test if the input contains only hex digits and spaces
+            let isloadValid = /^[0-9a-fA-F\s]*$/.test(input); // Removed extra caret (^)
             if (isloadValid) {
                 _StdOut.putText("Valid hex input");
             }

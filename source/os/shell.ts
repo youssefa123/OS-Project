@@ -255,19 +255,20 @@ module TSOS {
         }
 
         public shellLoad(args: string[]) {
-            let input: string = (<HTMLTextAreaElement>document.getElementById("taProgramInput")).value;
-            
-           
-            let isloadValid = /^^[0-9a-fA-F\s]*$/.test(input);  //matching hex digits
+            // Get the text area element and its value
+            const userinput = document.getElementById("taProgramInput") as HTMLTextAreaElement;
+            const input = userinput.value;
+        
+            // only hex digits and spaces
+            let isloadValid = /^[0-9a-fA-F ]*$/.test(input); //
+        
             if(isloadValid) {
                 _StdOut.putText("Valid hex input");
-                
             } else {
                 _StdOut.putText("Unable to load: Input is not in hex");
             }
         }
-        
-        
+         
         
         public shellWhereAmI(args: string[]) {
             console.log("shellWhereAmI function");
