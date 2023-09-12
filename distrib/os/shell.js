@@ -45,6 +45,8 @@ var TSOS;
             // freeze
             sc = new TSOS.ShellCommand(this.bsod, "bsod", "-Break the OS");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellLoad, "load", "- Verifies user code and will load it.");
+            this.commandList[this.commandList.length] = sc;
             // man <topic>
             sc = new TSOS.ShellCommand(this.shellMan, "man", "<topic> - Displays the MANual page for <topic>.");
             this.commandList[this.commandList.length] = sc;
@@ -191,6 +193,9 @@ var TSOS;
             console.log("Current date:", CDate);
             console.log("Current time:", CurrentTime);
             _StdOut.putText("The date is: " + CDate + " The time is: " + CurrentTime);
+        }
+        shellLoad(args) {
+            _StdOut.putText("Unable to load");
         }
         shellWhereAmI(args) {
             console.log("shellWhereAmI function");

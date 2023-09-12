@@ -62,7 +62,7 @@ module TSOS {
         
         
         public tab(): void {
-            const autoCompleteOptions = {  //Smarter option
+            const autoCompleteOptions = {  //a list of partial inputs as keys and their corresponding autocompleted endings as values. 
                 "v": "er",
                 "ve": "r",
                 "d": "ate",
@@ -98,12 +98,13 @@ module TSOS {
                 "hel": "p"
             };
         
-            const autoCompleteText = autoCompleteOptions[this.buffer];
+            const autoCompleteText = autoCompleteOptions[this.buffer];  ////If the current buffer's content matches any of the keys in the dictionary, the system will autocomplete it based on the associated value from the dictionary.
+           
             if (autoCompleteText) {
                 this.putText(autoCompleteText);
                 this.buffer += autoCompleteText;
             }
-        }
+        } 
         
         
         public backspace(): void {
@@ -181,7 +182,7 @@ module TSOS {
 
                 }
             } 
-            // TODO: Handle scrolling. (iProject 1)
+            
         }
 
 
