@@ -260,7 +260,7 @@ module TSOS {
             const input = userinput.value;
         
             // only hex digits and spaces
-            let isloadValid = /^[0-9a-fA-F ]*$/.test(input); //
+            let isloadValid = /^[0-9a-fA-F ]+$/.test(input); //it kept testing as valid even when it was empty so I added a plus so that one valid character is present to be valid
         
             if(isloadValid) {
                 _StdOut.putText("Valid hex input");

@@ -197,9 +197,9 @@ var TSOS;
         shellLoad(args) {
             // Get the text area element and its value
             const userinput = document.getElementById("taProgramInput");
-            const input = userinput.value; // Use 'userinput' instead of 'textArea'
-            // Use regex to test if the input contains only hex digits and spaces
-            let isloadValid = /^[0-9a-fA-F\s]*$/.test(input); // Removed extra caret (^)
+            const input = userinput.value;
+            // only hex digits and spaces
+            let isloadValid = /^[0-9a-fA-F ]+$/.test(input); //it kept testing as valid even when it was empty so I added a plus so that one valid character is present to be valid
             if (isloadValid) {
                 _StdOut.putText("Valid hex input");
             }
