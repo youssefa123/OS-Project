@@ -8,6 +8,7 @@
 module TSOS {
 
     export class Console {
+        
 
         constructor(public currentFont = _DefaultFontFamily,
                     public currentFontSize = _DefaultFontSize,
@@ -41,6 +42,13 @@ module TSOS {
                     _OsShell.handleInput(this.buffer);
                     // ... and reset our buffer.
                     this.buffer = "";
+                
+                } else if (chr === String.fromCharCode(8)) {  // the Backspace key
+                    this.backspace();
+
+                } else if (chr === String.fromCharCode(9)) { //Tab key time
+                    this.tab();
+                  
                 } else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
@@ -51,6 +59,76 @@ module TSOS {
                 // TODO: Add a case for Ctrl-C that would allow the user to break the current program.
             }
         }
+        
+        
+        public tab(): void {
+            const autoCompleteOptions = {  //a list of partial inputs as keys and their corresponding autocompleted endings as values. 
+                "v": "er",
+                "ve": "r",
+                "d": "ate",
+                "da": "te",
+                "dat": "e",
+                "t": "herapy",
+                "th": "erapy",
+                "the": "rapy",
+                "ther": "apy",
+                "wheream": "i",
+                "w":  "hereami",
+                "wh": "ereami",
+                "whe": "reami",
+                "s": "hutdown",
+                "sh": "utdown",
+                "shu": "tdown",
+                "shut": "down",
+                "c": "ls",
+                "cl": "s",
+                "m": "an",
+                "ma": "n",
+                "tr": "ace",
+                "tra": "ce",
+                "r": "ot13",
+                "ro": "t13",
+                "rot": "13",
+                "p": "rompt",
+                "pr": "ompt",
+                "pro": "mpt",
+                "prom": "pt",   // Took your advice and listened to Squeeze - Tempted. Interesting 
+                "h": "elp",
+                "he": "lp",
+                "hel": "p"
+            };
+        
+            const autoCompleteText = autoCompleteOptions[this.buffer];  ////If the current buffer's content matches any of the keys in the dictionary, the system will autocomplete it based on the associated value from the dictionary.
+           
+            if (autoCompleteText) {
+                this.putText(autoCompleteText);
+                this.buffer += autoCompleteText;
+            }
+        } 
+        
+        
+        public backspace(): void {
+            
+            if (this.buffer.length > 0 ) {  //Check if there is any letters in the buffer
+                
+                const lastChar = this.buffer[this.buffer.length - 1]; // if there is then take the last letter from the buffer.  
+
+                //Then you take away the last like it was never there 
+                this.buffer = this.buffer.substring(0, this.buffer.length - 1);
+
+                // But I need to find how much space the letter is going to take, becuase every letter has a different width 
+                const charWidth = _DrawingContext.measureText(this.currentFont, this.currentFontSize, lastChar);
+                
+                //Then we go back after that 
+                this.currentXPosition -= charWidth;
+
+                //Start by erasing from the top-left corner of the last character
+                // Then Use currentXPosition for the horizontal start and adjust currentYPosition for the vertical start.
+                // The width to erase is the character's width, and height includes the font and margin, that's how clerrect erases the exact space of the last character.
+                _DrawingContext.clearRect(this.currentXPosition, this.currentYPosition - this.currentFontSize, charWidth, this.currentFontSize + _FontHeightMargin);
+            }
+        }
+            
 
         public putText(text): void {
             /*  My first inclination here was to write two functions: putChar() and putString().
@@ -70,35 +148,41 @@ module TSOS {
          }
 
         public advanceLine(scroll = true): void {  //Changed to a boolean value so if true it scrolls and if false, >never built off this.
-            this.currentXPosition = 0;
+            const lineHeight = _DefaultFontSize +  // Line heght is just the height of the single line text 
+                       _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                       _FontHeightMargin;
 
+            const totalLines = Math.floor(_Canvas.height / lineHeight);  // totalLines represents the number of line that fit in the canvas  
+        
             /*
              * Font size measures from the baseline to the highest point in the font.
              * Font descent measures from the baseline to the lowest point in the font.
              * Font height margin is extra spacing between the lines.
              */
-            this.currentYPosition += _DefaultFontSize + 
-                                     _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
-                                     _FontHeightMargin;
             
-            // Please just scroll 
-            // Possible solution. When the text goes beyond the visible canvas area, simulate scrolling.
-            // What scroll amount is doing is that it's finding how much text is going beyond the visible area on the canvas 
-            if(this.currentYPosition > _Canvas.height) {  // if the text exceeds the height of the canvas 
-                if(scroll) {  
-                    const scrollAmount = this.currentYPosition - _Canvas.height;  //Value should be positive when the text exceeds the canvas, then simulate scrolling
-                    
-                    const imageData = _DrawingContext.getImageData(0, scrollAmount,  _Canvas.width, _Canvas.height - scrollAmount);
-                     
-                    //Simulating scrolling by clearing the canvas
-                    this.clearScreen();  
-                    
-                    // And then... redraw the remaining text 
-                    location.reload(); //revist this
-                }
-            }
+            //OpenAI. 2021. "Simulating Scrollable Console in JavaScript." Response generated by ChatGPT. Accessed August 30, 2023. https://www.openai.com. 
+            if(scroll) {  // If scrolling is required then move up the entire content one line up. This is simulated with...
+                const imageData = _DrawingContext.getImageData(0, lineHeight, _Canvas.width, _Canvas.height - lineHeight); // THIS
+                
+                _DrawingContext.clearRect(0,0, _Canvas.width, _Canvas.height);
+                _DrawingContext.putImageData(imageData, 0, 0);
+                
+                // Draws a blank line at the bottom to simulate scrolling
+                _DrawingContext.clearRect(0, _Canvas.height - lineHeight, _Canvas.width, lineHeight);
+                
+                // adjusts the canvas to the bottom of the visible area 
+                this.currentYPosition = _Canvas.height - lineHeight;
+            } else {
 
-            // TODO: Handle scrolling. (iProject 1)
+                // Moves the next line without scrolling 
+                this.currentYPosition += lineHeight;
+            }
+                //Removes the weird indent that happens with scrolling 
+                this.currentXPosition = 0;
+
+                }
+            } 
+            
         }
-    }
- }
+
+

@@ -67,6 +67,18 @@ module TSOS {
                                   "- Clears the screen and resets the cursor position.");
             this.commandList[this.commandList.length] = sc;
 
+            // freeze
+            sc = new ShellCommand(this.bsod,
+                "bsod",
+                "-Break the OS");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellLoad,
+                "load",
+                "- Verifies user code and will load it.");
+            this.commandList[this.commandList.length] = sc;
+
+
             // man <topic>
             sc = new ShellCommand(this.shellMan,
                                   "man",
@@ -200,6 +212,8 @@ module TSOS {
             }
         }
 
+
+
         public shellCurse() {
             _StdOut.putText("Oh, so that's how it's going to be, eh? Fine.");
             _StdOut.advanceLine();
@@ -239,6 +253,22 @@ module TSOS {
         
             _StdOut.putText("The date is: " + CDate + " The time is: " + CurrentTime);
         }
+
+        public shellLoad(args: string[]) {
+            // Get the text area element and its value
+            const userinput = document.getElementById("taProgramInput") as HTMLTextAreaElement;
+            const input = userinput.value;
+        
+            // only hex digits and spaces
+            let isloadValid = /^[0-9a-fA-F ]+$/.test(input); //it kept testing as valid even when it was empty so I added a plus so that one valid character is present to be valid
+        
+            if(isloadValid) {
+                _StdOut.putText("Valid hex input");
+            } else {
+                _StdOut.putText("Unable to load: Input is not in hex");
+            }
+        }
+         
         
         public shellWhereAmI(args: string[]) {
             console.log("shellWhereAmI function");
@@ -253,6 +283,16 @@ module TSOS {
             const randomMessage = "Hello this is Youssef, a virtual AI Therapist, currently in development be back soon!"
             _StdOut.putText(randomMessage);
         }
+
+        public bsod(args: string[]) {
+            _StdOut.clearScreen();  // Clear the screen.
+            _StdOut.putText("The OS ran into a system error! It's dying.");
+            _StdOut.advanceLine();
+            _StdOut.putText("Please contact 845-337-5479.");
+        
+            _Kernel.krnShutdown();
+        }
+        
         
 
         public shellHelp(args: string[]) {
