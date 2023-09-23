@@ -78,6 +78,13 @@ module TSOS {
                 "- Verifies user code and will load it.");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(this.shellrun,
+                "run",
+                "Pid");
+            this.commandList[this.commandList.length] = sc;
+
+
+
 
             // man <topic>
             sc = new ShellCommand(this.shellMan,
@@ -260,16 +267,32 @@ module TSOS {
             const input = userinput.value.trim(); //Removes the whitespaces 
         
             // only hex digits and spaces
-            let isloadValid = /^[0-9a-fA-F ]+$/.test(input); //it kept testing as valid even when it was empty so I added a plus so that one valid character is present to be valid
+            let isloadValid = /^[0-9a-fA-F ]+$/.test(input) && input.length % 2 === 0;  //it kept testing as valid even when it was empty so I added a plus so that one valid character is present to be valid
         
-            if(!isloadValid) {
-                _StdOut.putText("Valid hex input");
-            } else {
-                _StdOut.putText("Unable to load: Input is not in hex");
+            if(isloadValid) {
+                
+                // Split the input into individual bytes
+                const bytes = input.match(/.{1,2}/g);
+
+               if (bytes && bytes.length > 0) {
+            //Memory instance
+            const memory = new TSOS.Memory();
+
+            // Write each byte to memory starting at location $0000
+            for (let i = 0; i < bytes.length; i++) {
+                const byte = parseInt(bytes[i], 16); // Convert the hex string to a number
+                memory.write({ address: i, value: byte });
             }
+
+            _StdOut.putText("Program loaded into memory.");
+        } else {
+            _StdOut.putText("Unable to load: Input is not in valid format");
         }
-         
-        
+    } else {
+        _StdOut.putText("Unable to load: Input is not in hex or length is odd");
+    }
+}
+    
         public shellWhereAmI(args: string[]) {
             console.log("shellWhereAmI function");
 

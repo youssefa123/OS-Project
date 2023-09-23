@@ -1,5 +1,5 @@
-namespace TSOS {
-    export class MemoryAccessor {
+module TSOS {
+    export class MemoryManger {
         constructor() {
             
         }
