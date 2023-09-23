@@ -5,31 +5,40 @@ module TSOS {
     //memory array 
     export class Memory {
         
-        //array to represent memory
-        private data: Uint8Array;
+        //array to represent main memory
+        private memoryarray: Uint8Array;
 
-        // Memory space that can be fully addressed using a 16-bit address bus.
-        constructor(size: number = 0x10000) {
-            this.data = new Uint8Array(size);
+       
+        private mar: number = 0x0000;
+        private mdr: number = 0x00;  
+
+
+        private static memoryaddressspace = 65536;  //65536 because thats how many individual memory locations there are. 
+
+        //initilaize memory 
+        constructor() {
+            this.memoryarray = new Uint8Array(Memory.memoryaddressspace);
+            this.memoryarray.fill(0x00);
+        }
+        
+        //Read 
+
+        public read(address: number): number {
+            this.mar = address;
+            //setting the memory address register the mar adress
+            this.mdr = this.memoryarray[this.mar];
+           
+            return this.mdr;   //Return the data that's being read 
         }
 
-        // Reads a byte from the specified address.
-        // address: The memory address from which to read.
-        // Returns: The byte value at the given address.
-        read(address: number): number {
-            return this.data[address];
+        public write({ address, value }: { address: number; value: number; }): void {
+            this.mar = address;               
+            this.mdr = value;                 // Setting the Memory Data Register to the value to be written.
+            this.memoryarray[this.mar] = this.mdr; 
         }
 
-        // Writes a byte to the specified address.
-        // address: The memory address to which to write.
-        // value: The byte value to write.
-        write(address: number, value: number): void {
-            this.data[address] = value;
-        }
     }
-
 }
-
         
     
 

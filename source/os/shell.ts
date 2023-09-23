@@ -257,12 +257,12 @@ module TSOS {
         public shellLoad(args: string[]) {
             // Get the text area element and its value
             const userinput = document.getElementById("taProgramInput") as HTMLTextAreaElement;
-            const input = userinput.value;
+            const input = userinput.value.trim(); //Removes the whitespaces 
         
             // only hex digits and spaces
             let isloadValid = /^[0-9a-fA-F ]+$/.test(input); //it kept testing as valid even when it was empty so I added a plus so that one valid character is present to be valid
         
-            if(isloadValid) {
+            if(!isloadValid) {
                 _StdOut.putText("Valid hex input");
             } else {
                 _StdOut.putText("Unable to load: Input is not in hex");
