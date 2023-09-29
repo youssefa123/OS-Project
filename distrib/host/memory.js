@@ -3,23 +3,27 @@ var TSOS;
 (function (TSOS) {
     //memory array 
     class Memory {
-        // Memory space that can be fully addressed using a 16-bit address bus.
-        constructor(size = 0x10000) {
-            this.data = new Uint8Array(size);
+        //initilaize memory 
+        constructor() {
+            this.mar = 0x0000;
+            this.mdr = 0x00;
+            this.memoryarray = new Uint8Array(Memory.memoryaddressspace);
+            this.memoryarray.fill(0x00);
         }
-        // Reads a byte from the specified address.
-        // address: The memory address from which to read.
-        // Returns: The byte value at the given address.
+        //Read 
         read(address) {
-            return this.data[address];
+            this.mar = address;
+            //setting the memory address register the mar adress
+            this.mdr = this.memoryarray[this.mar];
+            return this.mdr; //Return the data that's being read 
         }
-        // Writes a byte to the specified address.
-        // address: The memory address to which to write.
-        // value: The byte value to write.
-        write(address, value) {
-            this.data[address] = value;
+        write({ address, value }) {
+            this.mar = address;
+            this.mdr = value; // Setting the Memory Data Register to the value to be written.
+            this.memoryarray[this.mar] = this.mdr;
         }
     }
+    Memory.memoryaddressspace = 65536; //65536 because thats how many individual memory locations there are. 
     TSOS.Memory = Memory;
 })(TSOS || (TSOS = {}));
 //# sourceMappingURL=memory.js.map
