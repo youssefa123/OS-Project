@@ -11,34 +11,39 @@
      Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5
      ------------ */
 
-module TSOS {
+     module TSOS {
 
-    export class Cpu {
+        export class Cpu {
+    
+            private instructionRegister: number = 0; // To store the  opcode
+            
+            // Memory instance to the CPU class
+            private _Memory: Memory = new Memory();
+    
+            constructor(public PC: number = 0,
+                        public Acc: number = 0,
+                        public Xreg: number = 0,
+                        public Yreg: number = 0,
+                        public Zflag: number = 0,
+                        public clockcount: number = 0,
+                        public isExecuting: boolean = false) {
+            }
+    
+            
+    
+            private fetch(): void {
+                
+                this.instructionRegister = this._Memory.read(this.PC);
+                this.PC++;  // Increment the program counter
+            }
+    
+            private decode(): void {
 
-        public 
-
-        constructor(public PC: number = 0,
-                    public Acc: number = 0,
-                    public Xreg: number = 0,
-                    public Yreg: number = 0,
-                    public Zflag: number = 0,
-                    public isExecuting: boolean = false) {
-
-        }
-
-        public init(): void {
-            this.PC = 0;
-            this.Acc = 0;
-            this.Xreg = 0;
-            this.Yreg = 0;
-            this.Zflag = 0;
-            this.isExecuting = false;
-        }
-
-        public cycle(): void {
-            _Kernel.krnTrace('CPU cycle');
-            // TODO: Accumulate CPU usage and profiling statistics here.
-            // Do the real work here. Be sure to set this.isExecuting appropriately.
+                console.log("Decoded opcode:", this.instructionRegister);
+            }
+            
+            // ... Todo
+    
         }
     }
-}
+    

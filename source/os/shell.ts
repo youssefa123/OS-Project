@@ -78,10 +78,7 @@ module TSOS {
                 "- Verifies user code and will load it.");
             this.commandList[this.commandList.length] = sc;
 
-            sc = new ShellCommand(this.shellrun,
-                "run",
-                "Pid");
-            this.commandList[this.commandList.length] = sc;
+            
 
 
 
