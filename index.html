@@ -101,25 +101,42 @@
               height="420px"   
               tabindex="3"> 
       </canvas>
-   </div>
+  </div>
 
 
   
 
 
-   <div id="divLog" style="margin-left:520px;">
-      <label>
-         Host Log
-         <br>
-         <textarea name="taHostLog"
-                   id  ="taHostLog"
-                   rows="26"
-                   cols="48"
-         ></textarea>
-      </label>
-   </div>
+  <div id="divLog" style="float:left; margin-left:20px;"> <!-- Removed the absolute positioning and added float:left -->
+   <label>
+      Host Log
+      <br>
+      <textarea name="taHostLog"
+                id  ="taHostLog"
+                rows="26"
+                cols="48"
+      ></textarea>
+   </label>
+</div>
 
-   <div id="divUserProgramInput" style="margin-left:520px;">
+<div id="divMemoryTable" style="float:left; margin-left:20px; max-height:300px; overflow-y:auto;"> <!-- Removed the absolute positioning and added float:left -->
+   <h5>Memory</h5>
+   <table id="memorytable">
+       <tbody>
+           <tr>
+               <td></td>
+               <td></td>
+           </tr>
+           <tr>
+               <td></td>
+               <td></td>
+           </tr>
+       </tbody>
+   </table>
+</div>
+
+
+   <div id="divUserProgramInput" style="margin-left:520px; ">
       <label>
          User Program Input
          <br>
@@ -132,21 +149,6 @@
    </div>
 </div>
 
-   
-   <div id="divMemoryTable" >
-      <h5>Memory</h5>
-      <table id = "memorytable" >
-         <tbody> 
-            <tr>
-               <td></td>
-               <td></td>
-            </tr>
-            <tr>
-               <td></td>
-               <td></td>
-            </tr>
-         </tbody>
-   
 
 
 <p class="footerText" style="clear:both;">
