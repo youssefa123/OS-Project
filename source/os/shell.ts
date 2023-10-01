@@ -278,9 +278,8 @@ module TSOS {
             // Write each byte to memory starting at location $0000
             for (let i = 0; i < bytes.length; i++) {
                 const byte = parseInt(bytes[i], 16); // Convert the hex string to a number
-                memory.write({ address: i, value: byte });
-            }
-
+                
+            } 
             _StdOut.putText("Program loaded into memory.");
         } else {
             _StdOut.putText("Unable to load: Input is not in valid format");

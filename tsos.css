@@ -60,3 +60,20 @@ h3 {
   overflow: auto; /* SHould FIx the scrolling  */
   flex: 1; /* Expands I think */
 }
+
+#memorytable {
+  border-collapse: collapse;
+  width: 100%;
+ 
+}
+
+#memorytable th, #divmemorytable td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  border: 1px solid #dddddd;
+}
+
+#memorytable tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+

@@ -1,29 +1,34 @@
 // Main memory for the system.
 var TSOS;
 (function (TSOS) {
-    //memory array 
     class Memory {
-        //initilaize memory 
-        constructor() {
-            this.mar = 0x0000;
-            this.mdr = 0x00;
-            this.memoryarray = new Uint8Array(Memory.memoryaddressspace);
-            this.memoryarray.fill(0x00);
-        }
-        //Read 
-        read(address) {
-            this.mar = address;
-            //setting the memory address register the mar adress
-            this.mdr = this.memoryarray[this.mar];
-            return this.mdr; //Return the data that's being read 
-        }
-        write({ address, value }) {
-            this.mar = address;
-            this.mdr = value; // Setting the Memory Data Register to the value to be written.
-            this.memoryarray[this.mar] = this.mdr;
+        constructor() { }
+        // Initializes the memory in html by adding a table with the memory adressessssss......
+        init() {
+            // main part of our table where the memory rows will 
+            const tableBody = document.getElementById("memorytable").getElementsByTagName('tbody')[0];
+            // starting point for our memory addresses. We'll display this and increase
+            let address = 0;
+            // 32 rows in this table becuase every project in the HOF has 32 rows
+            for (let i = 0; i < 32; i++) {
+                // new row in our table for memory data
+                let row = tableBody.insertRow(i);
+                // address header with  8 cells after the address, each containing the value "00"
+                let headerCell = row.insertCell(0);
+                // Also the address in hexadecimal form
+                headerCell.innerHTML = "0x" + address.toString(16).toUpperCase().padStart(3, '0');
+                // Loop 8 times to create 8 data cells in each row.
+                for (let j = 1; j <= 8; j++) {
+                    // Insert a new cell for data.
+                    let dataCell = row.insertCell(j);
+                    // the default value for each memory cell to is "00".
+                    dataCell.innerHTML = "00";
+                }
+                // Increasing the memory address by 8 for the next row.
+                address += 8;
+            }
         }
     }
-    Memory.memoryaddressspace = 65536; //65536 because thats how many individual memory locations there are. 
     TSOS.Memory = Memory;
 })(TSOS || (TSOS = {}));
 //# sourceMappingURL=memory.js.map
