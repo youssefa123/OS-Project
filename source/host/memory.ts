@@ -2,9 +2,16 @@
 module TSOS {
 
     export class Memory {
+        private static instance: Memory;
+        public memoryArray: number[] = Array(256).fill(0); //Main Memory with 256 bytes starts with 0. 
         
         
-        constructor() { }
+        public static getInstance(): Memory {
+            if (!Memory.instance) {
+                Memory.instance = new Memory();
+            }
+            return Memory.instance;
+        }
 
         // Initializes the memory in html by adding a table with the memory adressessssss......
         public init(): void {
@@ -40,6 +47,19 @@ module TSOS {
                 // Increasing the memory address by 8 for the next row.
                 address += 8;
             }
+        } public setMemoryValue(index: number, value: number): void {
+            this.memoryArray[index] = value;
+
+            const tableBody = document.getElementById("memorytable").getElementsByTagName('tbody')[0];
+            const rowIndex = Math.floor(index / 8);
+            const cellIndex = (index % 8) + 1;  // +1 because 0th cell is for address
+            tableBody.rows[rowIndex].cells[cellIndex].innerHTML = value.toString(16).toUpperCase().padStart(2, '0');
+        }
+
+        public getMemoryValue(index: number): number {
+            return this.memoryArray[index];
         }
     }
 }
+    
+

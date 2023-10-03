@@ -209,17 +209,17 @@ var TSOS;
                     // Write each byte to memory starting at location $0000
                     for (let i = 0; i < bytes.length; i++) {
                         const byte = parseInt(bytes[i], 16); // Convert the hex string to a number
-                        // Here you might want to write the byte to memory.
+                        // TODO make the the byte to memory.
                     }
-                    _pidCounter++; // Increment the PID counter
-                    _StdOut.putText(`Program loaded into memory with PID ${_pidCounter}.`);
+                    _StdOut.putText(`Program loaded into memory, PID ${_pidCounter}.`);
+                    _pidCounter++; // Moved the pid counter here so that it starts from 0
                 }
                 else {
-                    _StdOut.putText("Unable to load: Input is not in valid format");
+                    _StdOut.putText("Unable to load: Your Input is not in valid format, try ");
                 }
             }
             else {
-                _StdOut.putText("Unable to load: Input is not in hex or length is odd");
+                _StdOut.putText("Unable to load: Your Input is not in hex or length is odd");
             }
         }
         shellWhereAmI(args) {

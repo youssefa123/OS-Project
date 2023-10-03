@@ -272,7 +272,7 @@ module TSOS {
         
                 if (bytes && bytes.length > 0) {
                     //Memory instance
-                    const memory = new TSOS.Memory();
+                    const memory = TSOS.Memory.getInstance();
         
                     // Write each byte to memory starting at location $0000
                     for (let i = 0; i < bytes.length; i++) {
