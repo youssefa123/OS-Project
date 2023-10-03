@@ -6,11 +6,11 @@ module TSOS {
         public memoryArray: number[] = Array(256).fill(0); //Main Memory with 256 bytes starts with 0. 
         
         
-        public static getInstance(): Memory {
-            if (!Memory.instance) {
+        public static getInstance(): Memory { // Checks to see if a instance of the `Memory` class already exists.
+            if (!Memory.instance) {  // If it doesn't create a new instance.
                 Memory.instance = new Memory();
             }
-            return Memory.instance;
+            return Memory.instance;  //return the other instance. 
         }
 
         // Initializes the memory in html by adding a table with the memory adressessssss......
