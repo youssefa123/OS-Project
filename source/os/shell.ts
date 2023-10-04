@@ -261,7 +261,7 @@ module TSOS {
         public shellLoad(args: string[]) {
             // Get the text area element and its value
             const userinput = document.getElementById("taProgramInput") as HTMLTextAreaElement;
-            const input = userinput.value.trim(); // Removes the whitespaces 
+            const input = userinput.value; // Removes the whitespaces 
         
             // only hex digits and spaces
             let isloadValid = /^[0-9a-fA-F ]+$/.test(input) && input.length % 2 === 0;
@@ -271,14 +271,21 @@ module TSOS {
                 const bytes = input.match(/.{1,2}/g);
         
                 if (bytes && bytes.length > 0) {
-                    //Memory instance
-                    const memory = TSOS.Memory.getInstance();
+                    if (bytes.length > 256) {  // Memory size is 256 bytes
+                        _StdOut.putText("Program is too large to fit in memory.");
+                        return;
+                    }
+                    
+                    
         
                     // Write each byte to memory starting at location $0000
                     for (let i = 0; i < bytes.length; i++) {
                         const byte = parseInt(bytes[i], 16); // Convert the hex string to a number
+                        _Memory.setMemoryValue(i, byte);
                         // TODO make the the byte to memory.
                     }
+
+                    
         
                     
                     _StdOut.putText(`Program loaded into memory, PID ${_pidCounter}.`);

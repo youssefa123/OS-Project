@@ -42,6 +42,19 @@ var TSOS;
             }
             return retVal;
         }
+        static formatHex(value, requiredLength, prependPrefix) {
+            // Convert number to uppercase hexadecimal representation
+            let formattedHex = value.toString(16).toUpperCase();
+            // Ensure it's of the desired length by adding leading zeroes if needed
+            while (formattedHex.length < requiredLength) {
+                formattedHex = '0' + formattedHex;
+            }
+            // this will add the  the '0x' 
+            if (prependPrefix) {
+                formattedHex = '0x' + formattedHex;
+            }
+            return formattedHex;
+        }
     }
     TSOS.Utils = Utils;
 })(TSOS || (TSOS = {}));

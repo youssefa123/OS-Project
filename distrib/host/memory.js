@@ -3,13 +3,7 @@ var TSOS;
 (function (TSOS) {
     class Memory {
         constructor() {
-            this.memoryArray = Array(256).fill(0); //Main Memory with 256 bytes starts with 0. 
-        }
-        static getInstance() {
-            if (!Memory.instance) { // If it doesn't create a new instance.
-                Memory.instance = new Memory();
-            }
-            return Memory.instance; //return the other
+            this._ram = new Uint8Array(256); // memory size of 256 bytes
         }
         // Initializes the memory in html by adding a table with the memory adressessssss......
         init() {
@@ -37,14 +31,28 @@ var TSOS;
             }
         }
         setMemoryValue(index, value) {
-            this.memoryArray[index] = value;
+            this._ram[index] = value;
             const tableBody = document.getElementById("memorytable").getElementsByTagName('tbody')[0];
             const rowIndex = Math.floor(index / 8);
             const cellIndex = (index % 8) + 1; // +1 because 0th cell is for address
             tableBody.rows[rowIndex].cells[cellIndex].innerHTML = value.toString(16).toUpperCase().padStart(2, '0');
         }
         getMemoryValue(index) {
-            return this.memoryArray[index];
+            return this._ram[index];
+        }
+        refreshDataTable() {
+            // Select the data table from the document using its ID
+            const dataTable = document.getElementById("memorytable").getElementsByTagName('tbody')[0];
+            // Loop through each row of the table
+            for (let rowIndex = 0; rowIndex < dataTable.rows.length; rowIndex++) {
+                // Get the current row
+                let currentRow = dataTable.rows[rowIndex];
+                // The actual data resides in cells from index 1 to 8
+                for (let cellIndex = 1; cellIndex <= 8; cellIndex++) {
+                    // Update cell's content using utility method
+                    currentRow.children[cellIndex].innerHTML = TSOS.Utils.formatHex(this._ram[rowIndex * 8 + cellIndex - 1], 2, false);
+                }
+            }
         }
     }
     TSOS.Memory = Memory;
