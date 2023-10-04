@@ -10,7 +10,7 @@ module TSOS {
             if (!Memory.instance) {  // If it doesn't create a new instance.
                 Memory.instance = new Memory();
             }
-            return Memory.instance;  //return the other instance. 
+            return Memory.instance;  //return the other
         }
 
         // Initializes the memory in html by adding a table with the memory adressessssss......

@@ -2,7 +2,15 @@
 var TSOS;
 (function (TSOS) {
     class Memory {
-        constructor() { }
+        constructor() {
+            this.memoryArray = Array(256).fill(0); //Main Memory with 256 bytes starts with 0. 
+        }
+        static getInstance() {
+            if (!Memory.instance) { // If it doesn't create a new instance.
+                Memory.instance = new Memory();
+            }
+            return Memory.instance; //return the other
+        }
         // Initializes the memory in html by adding a table with the memory adressessssss......
         init() {
             // main part of our table where the memory rows will 
@@ -27,6 +35,16 @@ var TSOS;
                 // Increasing the memory address by 8 for the next row.
                 address += 8;
             }
+        }
+        setMemoryValue(index, value) {
+            this.memoryArray[index] = value;
+            const tableBody = document.getElementById("memorytable").getElementsByTagName('tbody')[0];
+            const rowIndex = Math.floor(index / 8);
+            const cellIndex = (index % 8) + 1; // +1 because 0th cell is for address
+            tableBody.rows[rowIndex].cells[cellIndex].innerHTML = value.toString(16).toUpperCase().padStart(2, '0');
+        }
+        getMemoryValue(index) {
+            return this.memoryArray[index];
         }
     }
     TSOS.Memory = Memory;

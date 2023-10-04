@@ -205,7 +205,7 @@ var TSOS;
                 const bytes = input.match(/.{1,2}/g);
                 if (bytes && bytes.length > 0) {
                     //Memory instance
-                    const memory = new TSOS.Memory();
+                    const memory = TSOS.Memory.getInstance();
                     // Write each byte to memory starting at location $0000
                     for (let i = 0; i < bytes.length; i++) {
                         const byte = parseInt(bytes[i], 16); // Convert the hex string to a number
