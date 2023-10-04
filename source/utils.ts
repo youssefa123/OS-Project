@@ -21,7 +21,7 @@ module TSOS {
             */
         }
 
-             
+        
         
     
         public static rot13(str: string): string {
@@ -47,6 +47,24 @@ module TSOS {
             return retVal;
    
         }
+
+        public static formatHex(value: number, requiredLength: number, prependPrefix: boolean): string {
+            // Convert number to uppercase hexadecimal representation
+            let formattedHex = value.toString(16).toUpperCase();
+        
+            // Ensure it's of the desired length by adding leading zeroes if needed
+            while (formattedHex.length < requiredLength) {
+                formattedHex = '0' + formattedHex;
+            }
+        
+            // this will add the  the '0x' 
+            if (prependPrefix) {
+                formattedHex = '0x' + formattedHex;
+            }
+            
+            return formattedHex;
+        }
+        
         
     }
 }
