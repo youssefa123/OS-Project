@@ -17,6 +17,17 @@ var TSOS;
             this.Yreg = 0;
             this.instructionRegister = 0;
         }
+        static addProcessToTable(pcbInstance) {
+            const tableBody = document.getElementById("processTable").getElementsByTagName('tbody')[0];
+            let row = tableBody.insertRow();
+            row.id = `pid-${pcbInstance.id}`;
+            let pidCell = row.insertCell(0);
+            pidCell.textContent = pcbInstance.id.toString();
+            let pcCell = row.insertCell(1);
+            pcCell.textContent = pcbInstance.PC.toString();
+            let locationCell = row.insertCell(9);
+            locationCell.textContent = "Memory"; // Update based on PCB location
+        }
     }
     pcb.currentPID = 0; //Current state that were in 
     TSOS.pcb = pcb;

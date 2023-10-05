@@ -219,6 +219,9 @@ var TSOS;
                         _Memory.setMemoryValue(i, byte);
                         // TODO make the the byte to memory.
                     }
+                    let newPCB = new TSOS.pcb(_pidCounter); // Assuming memory segment is the pid, change as necessary
+                    _ProcessTable.push(newPCB);
+                    TSOS.pcb.addProcessToTable(newPCB);
                     _StdOut.putText(`Program loaded into memory, PID ${_pidCounter}.`);
                     _pidCounter++; // Moved the pid counter here so that it starts from 0
                 }
