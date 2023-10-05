@@ -61,15 +61,13 @@ h3 {
   flex: 1; /* Expands I think */
 }
 
-#divMemoryTable {
-  margin-top: 20px;
-}
 
 #memorytable {
-  border-collapse: collapse;
-  width: 100%;
-  border: 2px solid #333;
+  width: 200px;
+  height: 100px;
+  float: right;
 }
+
 
 #memorytable th, #memorytable td {
   border: 1px solid #666;
@@ -81,21 +79,18 @@ h3 {
   background-color: #ddd;
 }
 
-#divMemoryTable h5 {
-  text-align: center;
-  margin-bottom: 10px;
-}
+/*#divMemoryTable h5*/ 
+  /*text-align: center;*/
+  /*margin-bottom: 10px;*/
+/*}*/
 
 /*Process Table */
 
 #processTable {
-    background-color: lightgrey;
-    width: 300px;
-    border: 15px solid green;
-    padding: 50px;
-    margin: 20px;
+    width: 100px;
+    height: 100px;
+    float: inline-end;
   }
-
 
 #processTable th, #processTable td {
   border: 1px solid #888;      
