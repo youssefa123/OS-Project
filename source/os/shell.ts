@@ -78,7 +78,15 @@ module TSOS {
                 "- Verifies user code and will load it.");
             this.commandList[this.commandList.length] = sc;
 
+            //Pid 
+            sc = new ShellCommand(this.shellRun,
+                "run",
+                "<pid> - Executes the program with the specified PID from memory.");
+            this.commandList[this.commandList.length] = sc;
+
+
             
+
 
 
 
@@ -287,6 +295,7 @@ module TSOS {
             
             _StdOut.putText(`Program loaded into memory, PID ${_pidCounter}.`);
             _pidCounter++;  // Moved the pid counter here so that it starts from 0
+            
         } else {
             _StdOut.putText("Unable to load: Your Input is not in valid format, try ");
         }
