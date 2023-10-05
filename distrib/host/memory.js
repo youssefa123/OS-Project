@@ -1,4 +1,3 @@
-// Main memory for the system.
 var TSOS;
 (function (TSOS) {
     class Memory {

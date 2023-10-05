@@ -197,7 +197,7 @@ var TSOS;
         shellLoad(args) {
             // Get the text area element and its value
             const userinput = document.getElementById("taProgramInput");
-            const input = userinput.value;
+            const input = userinput.value; // Removes the whitespaces 
             // only hex digits and spaces
             let isloadValid = /^[0-9a-fA-F ]+$/.test(input) && input.length % 2 === 0;
             if (isloadValid) {
@@ -208,24 +208,21 @@ var TSOS;
                         _StdOut.putText("Program is too large to fit in memory.");
                         return;
                     }
-                    // Create an instance of MemoryAccessor
-                    const memoryAccessor = new TSOS.MemoryAccessor(_Memory);
-                    // Writing each byte to memory starting at location $0000 using MemoryAccessor
+                    // Write each byte to memory starting at location $0000
                     for (let i = 0; i < bytes.length; i++) {
                         const byte = parseInt(bytes[i], 16); // Convert the hex string to a number
-                        memoryAccessor.writeByte(i, byte);
+                        _Memory.setMemoryValue(i, byte);
+                        // TODO make the the byte to memory.
                     }
-                    // PCB for the loaded program
-                    const newProcess = new TSOS.pcb(0); // segment 0 for now
                     _StdOut.putText(`Program loaded into memory, PID ${_pidCounter}.`);
-                    _pidCounter++; // Increment the pid counter
+                    _pidCounter++; // Moved the pid counter here so that it starts from 0
                 }
                 else {
-                    _StdOut.putText("Unable to load: Your Input is not in valid format, try again.");
+                    _StdOut.putText("Unable to load: Your Input is not in valid format, try ");
                 }
             }
             else {
-                _StdOut.putText("Unable to load: Your Input is not in hex or length is odd.");
+                _StdOut.putText("Unable to load: Your Input is not in hex or length is odd");
             }
         }
         shellWhereAmI(args) {
