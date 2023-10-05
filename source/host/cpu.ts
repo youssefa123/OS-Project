@@ -16,8 +16,14 @@
         WRITEBACK
     }
 
+    
+
     export class Cpu {
         public pipelineState: PipelineState;
+
+        private currentInstruction: number;
+        private currentOpcode: number;
+        private memoryAccessor: MemoryAccessor; // To interface with memory
 
         constructor(
             public PC: number = 0,
@@ -27,9 +33,11 @@
             public Zflag: number = 0,
             public clockcount: number = 0,
             public isExecuting: boolean = false
-        ) {}
-
-        public init(): void {
+        ) {
+            this.memoryAccessor = new MemoryAccessor(new Memory()); // Initialize the MemoryAccessor with a new memory instance
+        }
+        
+            public init(): void {
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
