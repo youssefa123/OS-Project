@@ -8,7 +8,7 @@ var TSOS;
             this.Xreg = 0; // X register
             this.Yreg = 0; // Y register
             this.Zflag = 0; // Z flag
-            this.id = pcb.currentPID++; // assigninging the  next available PID
+            this.memorySegment = segment; // initialize  the memory Segment
             //cpu variables initalized
             this.PC = 0;
             this.Acc = 0;

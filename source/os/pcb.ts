@@ -3,6 +3,8 @@ module TSOS {
         
         private static currentPID = 0; //Current state that were in 
 
+        
+
 
         public id: number;
         public PC: number = 0; // Program counter
@@ -15,7 +17,7 @@ module TSOS {
         
         
         constructor(segment: number) {
-            this.id = pcb.currentPID++; // assigninging the  next available PID
+            this.memorySegment = segment; // initialize  the memory Segment
 
             //cpu variables initalized
             this.PC = 0;
