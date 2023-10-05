@@ -48,10 +48,8 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellLoad, "load", "- Verifies user code and will load it.");
             this.commandList[this.commandList.length] = sc;
             //Pid 
-            //sc = new ShellCommand(this.shellRun,
-            //"run",
-            // "<pid> - Executes the program with the specified PID from memory.");
-            //this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellRun, "run", "<pid> - Executes the program with the specified PID from memory.");
+            this.commandList[this.commandList.length] = sc;
             // man <topic>
             sc = new TSOS.ShellCommand(this.shellMan, "man", "<topic> - Displays the MANual page for <topic>.");
             this.commandList[this.commandList.length] = sc;
@@ -219,9 +217,6 @@ var TSOS;
                         _Memory.setMemoryValue(i, byte);
                         // TODO make the the byte to memory.
                     }
-                    let newPCB = new TSOS.pcb(_pidCounter); // Assuming memory segment is the pid, change as necessary
-                    _ProcessTable.push(newPCB);
-                    TSOS.pcb.addProcessToTable(newPCB);
                     _StdOut.putText(`Program loaded into memory, PID ${_pidCounter}.`);
                     _pidCounter++; // Moved the pid counter here so that it starts from 0
                 }
@@ -231,6 +226,28 @@ var TSOS;
             }
             else {
                 _StdOut.putText("Unable to load: Your Input is not in hex or length is odd");
+            }
+        }
+        shellRun(args) {
+            if (args.length === 0) {
+                _StdOut.putText("Usage: run <pid>  Please specify a PID.");
+                return;
+            }
+            let pid = parseInt(args[0]);
+            if (isNaN(pid)) {
+                _StdOut.putText("Please specify a valid PID.");
+                return;
+            }
+            let found = false;
+            for (let i = 0; i < _ProcessTable.length; i++) {
+                if (_ProcessTable[i].id === pid) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                _StdOut.putText(`No process found with PID ${pid}.`);
+                return;
             }
         }
         shellWhereAmI(args) {

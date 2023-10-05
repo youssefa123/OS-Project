@@ -40,9 +40,34 @@
             this.pipelineState = PipelineState.FETCH;
         }
 
-        public cycle(): void {
+        public cycle(): void { //run a program in the CPU file.
             _Kernel.krnTrace('CPU cycle');
-
+            switch (this.pipelineState) {
+                case PipelineState.FETCH:
+                    this.fetch();
+                    this.pipelineState = PipelineState.DECODE;
+                    break;
+                case PipelineState.DECODE:
+                    this.decode();
+                    this.pipelineState = PipelineState.EXECUTE;
+                    break;
+                case PipelineState.EXECUTE:
+                    this.execute();
+                    this.pipelineState = PipelineState.FETCH;
+                    break;
+                default:
+                    this.pipelineState = PipelineState.FETCH;
+                    break;
+            }
+        }
+        execute() {
+            throw new Error("Method not implemented.");
+        }
+        decode() {
+            throw new Error("Method not implemented.");
+        }
+        fetch() {
+            throw new Error("Method not implemented.");
         }
     }
 }
