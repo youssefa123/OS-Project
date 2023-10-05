@@ -17,7 +17,8 @@ module TSOS {
         
         
         constructor(segment: number) {
-            this.memorySegment = segment; // initialize  the memory Segment
+            this.id = pcb.currentPID++; // initialize  the memory Segment
+            this.memorySegment = segment; // Assign the memory segment
 
             //cpu variables initalized
             this.PC = 0;
@@ -26,7 +27,7 @@ module TSOS {
             this.Yreg = 0;
             this.instructionRegister = 0;
 
-            //mem segment 
+           
 
 
 

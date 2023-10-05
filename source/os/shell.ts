@@ -79,10 +79,10 @@ module TSOS {
             this.commandList[this.commandList.length] = sc;
 
             //Pid 
-            sc = new ShellCommand(this.shellRun,
-                "run",
-                "<pid> - Executes the program with the specified PID from memory.");
-            this.commandList[this.commandList.length] = sc;
+            //sc = new ShellCommand(this.shellRun,
+                //"run",
+               // "<pid> - Executes the program with the specified PID from memory.");
+            //this.commandList[this.commandList.length] = sc;
 
 
             

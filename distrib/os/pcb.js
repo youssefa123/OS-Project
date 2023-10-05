@@ -8,14 +8,14 @@ var TSOS;
             this.Xreg = 0; // X register
             this.Yreg = 0; // Y register
             this.Zflag = 0; // Z flag
-            this.memorySegment = segment; // initialize  the memory Segment
+            this.id = pcb.currentPID++; // initialize  the memory Segment
+            this.memorySegment = segment; // Assign the memory segment
             //cpu variables initalized
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
             this.Yreg = 0;
             this.instructionRegister = 0;
-            //mem segment 
         }
     }
     pcb.currentPID = 0; //Current state that were in 

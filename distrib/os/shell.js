@@ -47,6 +47,11 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellLoad, "load", "- Verifies user code and will load it.");
             this.commandList[this.commandList.length] = sc;
+            //Pid 
+            //sc = new ShellCommand(this.shellRun,
+            //"run",
+            // "<pid> - Executes the program with the specified PID from memory.");
+            //this.commandList[this.commandList.length] = sc;
             // man <topic>
             sc = new TSOS.ShellCommand(this.shellMan, "man", "<topic> - Displays the MANual page for <topic>.");
             this.commandList[this.commandList.length] = sc;
