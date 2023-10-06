@@ -1,34 +1,46 @@
 module TSOS {
     export class MemoryManager {
+
+        // forgot to reference to the Memory object
+        private _memory: Memory;
+
+
         
-        constructor(private memory: Memory) {}
 
-        //Load a program onto memory:
-        public loadProgram(input: string): number | null {
-            const bytes = input.match(/.{1,2}/g);
-            
-            if (bytes && bytes.length <= 256) {
-                for (let i = 0; i < bytes.length; i++) {
-                    const byte = parseInt(bytes[i], 16);
-                    this.memory.setMemoryValue(i, byte);
-                }
-                return _pidCounter++;  // Return the PID and then increment it
-            } else {
-                return null;  // Return null if the program couldn't be loaded
+        // Assuming we only have 1 segment for now, which is the entire memory.
+        public isSegmentOccupied: boolean = false;
+
+        constructor(memory: Memory) {
+            this._memory = memory;
+        }
+
+        public loadProgram(input: string): boolean {
+            const bytes = input.match(/.{1,2}/g)?.map(byte => parseInt(byte, 16));
+
+            // Validate the bytes
+            if (!bytes || bytes.length > 256) {
+                return false;  // Invalid input or too big for memory
             }
+
+            // If the segment is not occupied or occupied load the new program
+            if (!this.isSegmentOccupied) {
+                for (let i = 0; i < bytes.length; i++) {
+                    this._memory.setMemoryValue(i, bytes[i]);
+                }
+                this.isSegmentOccupied = true;
+                return true;
+            }
+
+            // If the segment is occupied by an active program, return false
+            return false;
         }
 
-        // Read a byte from memory
-        public readByte(index: number): number {
-            return this.memory.getMemoryValue(index);
-        }
-
-        // Write a byte to memory
-        public writeByte(index: number, value: number): void {
-            this.memory.setMemoryValue(index, value);
+        public clearMemory(): void {
+            // Clear the memory segment and mark it as unoccupied
+            for (let i = 0; i < 256; i++) {
+                this._memory.setMemoryValue(i, 0);
+            }
+            this.isSegmentOccupied = false;
         }
     }
 }
-            
-    
-
