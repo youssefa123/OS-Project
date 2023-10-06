@@ -2,29 +2,34 @@ var TSOS;
 (function (TSOS) {
     class MemoryManager {
         constructor(memory) {
-            this.memory = memory;
+            // Assuming we only have 1 segment for now, which is the entire memory.
+            this.isSegmentOccupied = false;
+            this._memory = memory;
         }
-        //Load a program onto memory:
         loadProgram(input) {
-            const bytes = input.match(/.{1,2}/g);
-            if (bytes && bytes.length <= 256) {
+            var _a;
+            const bytes = (_a = input.match(/.{1,2}/g)) === null || _a === void 0 ? void 0 : _a.map(byte => parseInt(byte, 16));
+            // Validate the bytes
+            if (!bytes || bytes.length > 256) {
+                return false; // Invalid input or too big for memory
+            }
+            // If the segment is not occupied or occupied load the new program
+            if (!this.isSegmentOccupied) {
                 for (let i = 0; i < bytes.length; i++) {
-                    const byte = parseInt(bytes[i], 16);
-                    this.memory.setMemoryValue(i, byte);
+                    this._memory.setMemoryValue(i, bytes[i]);
                 }
-                return _pidCounter++; // Return the PID and then increment it
+                this.isSegmentOccupied = true;
+                return true;
             }
-            else {
-                return null; // Return null if the program couldn't be loaded
+            // If the segment is occupied by an active program, return false
+            return false;
+        }
+        clearMemory() {
+            // Clear the memory segment and mark it as unoccupied
+            for (let i = 0; i < 256; i++) {
+                this._memory.setMemoryValue(i, 0);
             }
-        }
-        // Read a byte from memory
-        readByte(index) {
-            return this.memory.getMemoryValue(index);
-        }
-        // Write a byte to memory
-        writeByte(index, value) {
-            this.memory.setMemoryValue(index, value);
+            this.isSegmentOccupied = false;
         }
     }
     TSOS.MemoryManager = MemoryManager;

@@ -48,8 +48,10 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellLoad, "load", "- Verifies user code and will load it.");
             this.commandList[this.commandList.length] = sc;
             //Pid 
-            sc = new TSOS.ShellCommand(this.shellRun, "run", "<pid> - Executes the program with the specified PID from memory.");
-            this.commandList[this.commandList.length] = sc;
+            //sc = new ShellCommand(this.shellRun,
+            //"run",
+            //"<pid> - Executes the program with the specified PID from memory.");
+            //this.commandList[this.commandList.length] = sc;
             // man <topic>
             sc = new TSOS.ShellCommand(this.shellMan, "man", "<topic> - Displays the MANual page for <topic>.");
             this.commandList[this.commandList.length] = sc;
@@ -200,57 +202,21 @@ var TSOS;
         shellLoad(args) {
             // Get the text area element and its value
             const userinput = document.getElementById("taProgramInput");
-            const input = userinput.value; // Removes the whitespaces 
-            // only hex digits and spaces
-            let isloadValid = /^[0-9a-fA-F ]+$/.test(input) && input.length % 2 === 0;
-            if (isloadValid) {
-                // Split the input into individual bytes
-                const bytes = input.match(/.{1,2}/g);
-                if (bytes && bytes.length > 0) {
-                    if (bytes.length > 256) { // Memory size is 256 bytes
-                        _StdOut.putText("Program is too large to fit in memory.");
-                        return;
-                    }
-                    // Create PCB for the loaded program
-                    let newPCB = new TSOS.pcb(_pidCounter);
-                    _ProcessTable.push(newPCB); //Push the pcb onto the table 
-                    // Write each byte to memory starting at location $0000
-                    for (let i = 0; i < bytes.length; i++) {
-                        const byte = parseInt(bytes[i], 16); // Convert the hex string to a number
-                        _Memory.setMemoryValue(i, byte);
-                        // TODO make the the byte to memory.
-                    }
-                    _StdOut.putText(`Program loaded into memory, PID ${_pidCounter}.`);
-                    _pidCounter++; // Moved the pid counter here so that it starts from 0
+            const input = userinput.value.trim();
+            // Only hex digits and spaces and ensure even length for byte pairs
+            let isLoadValid = /^[0-9a-fA-F ]+$/.test(input) && input.length % 2 === 0;
+            if (isLoadValid) {
+                // If the MemoryManager successfully loads the program... then 
+                if (_MemoryManager.loadProgram(input)) {
+                    _StdOut.putText(`Program loaded into memory with PID ${_pidCounter}.`);
+                    _pidCounter++;
                 }
                 else {
-                    _StdOut.putText("Unable to load: Your Input is not in valid format, try ");
+                    _StdOut.putText("Unable to load: Memory segment is occupied.");
                 }
             }
             else {
-                _StdOut.putText("Unable to load: Your Input is not in hex or length is odd");
-            }
-        }
-        shellRun(args) {
-            if (args.length === 0) {
-                _StdOut.putText("Usage: run <pid>  Please specify a PID.");
-                return;
-            }
-            let pid = parseInt(args[0]);
-            if (isNaN(pid)) {
-                _StdOut.putText("Please specify a valid PID.");
-                return;
-            }
-            let found = false;
-            for (let i = 0; i < _ProcessTable.length; i++) {
-                if (_ProcessTable[i].id === pid) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                _StdOut.putText(`No process found with PID ${pid}.`);
-                return;
+                _StdOut.putText("Unable to load: Your Input is not in hex or length is odd.");
             }
         }
         shellWhereAmI(args) {
