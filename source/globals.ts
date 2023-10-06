@@ -32,6 +32,9 @@ var _MemoryAccessor: TSOS.MemoryAccessor;
 
 var _ProcessTable: TSOS.pcb[] = [];
 
+var _MemoryManager: TSOS.MemoryManager;
+
+
 var _OSclock: number = 0;  // Page 23.
 var _pidCounter: number = 0; //Pid counter 
 

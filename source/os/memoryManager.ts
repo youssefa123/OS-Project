@@ -1,5 +1,5 @@
 module TSOS {
-    export class MemoryManger {
+    export class MemoryManager {
         
         constructor(private memory: Memory) {}
 

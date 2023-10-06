@@ -91,7 +91,7 @@ module TSOS {
             _Memory = new Memory();
             _Memory.init();
 
-            
+            _MemoryManager = new TSOS.MemoryManager(_Memory);
             
 
             // ... then set the host clock pulse ...
