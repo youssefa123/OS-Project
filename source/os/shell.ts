@@ -279,6 +279,11 @@ module TSOS {
                     return;
                 
                 }
+
+            // Create PCB for the loaded program
+            let newPCB = new TSOS.pcb(_pidCounter);
+
+            _ProcessTable.push(newPCB); //Push the pcb onto the table 
             
             // Write each byte to memory starting at location $0000
             for (let i = 0; i < bytes.length; i++) {

@@ -37,6 +37,49 @@ var TSOS;
         }
         cycle() {
             _Kernel.krnTrace('CPU cycle');
+            switch (this.pipelineState) {
+                case PipelineState.FETCH:
+                    this.fetch();
+                    this.pipelineState = PipelineState.DECODE;
+                    break;
+                case PipelineState.DECODE:
+                    this.decode();
+                    this.pipelineState = PipelineState.EXECUTE;
+                    break;
+                case PipelineState.EXECUTE:
+                    this.execute();
+                    this.pipelineState = PipelineState.FETCH;
+                    break;
+                default:
+                    this.pipelineState = PipelineState.FETCH;
+                    break;
+            }
+        }
+        fetch() {
+            this.currentInstruction = this.memoryAccessor.readByte(this.PC);
+            this.PC++;
+        }
+        decode() {
+            // for now it'll be one-byte opcodes without operands... FOR NOW 
+            this.currentOpcode = this.currentInstruction;
+        }
+        execute() {
+            switch (this.currentOpcode) {
+                case 0xA9: // (Load Accumulator with a constant)
+                    this.Acc = this.memoryAccessor.readByte(this.PC);
+                    this.PC++;
+                    break;
+                case 0x8D: // (Store Accumulator in memory)
+                    let address = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
+                    this.memoryAccessor.writeByte(address, this.Acc);
+                    this.PC += 2;
+                    break;
+                // ... TODO more cases
+                default:
+                    _Kernel.krnTrace(`Not recognized opcode: ${this.currentOpcode}`);
+                    this.isExecuting = false;
+                    break;
+            }
         }
     }
     TSOS.Cpu = Cpu;

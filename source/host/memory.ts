@@ -2,50 +2,47 @@ module TSOS {
 
     export class Memory {
         
-        //Ram memory 
+        //The main memory (RAM) of our system.
         private _ram: Uint8Array;
         
         constructor() {
-            this._ram = new Uint8Array(256);  // memory size of 256 bytes
+            this._ram = new Uint8Array(256);  // Initializes memory with a size of 256 bytes
         }
         
         
-    
-        // Initializes the memory in html by adding a table with the memory adressessssss......
+        // Displaying the memory as a table in the UI.
         public init(): void {
             
-            // main part of our table where the memory rows will 
+            // Grabbing the memory table from the UI.
             const tableBody = document.getElementById("memorytable").getElementsByTagName('tbody')[0];
             
-            // starting point for our memory addresses. We'll display this and increase
+            // sSetting the starting point for memory addresses
             let address = 0;
             
-            // 32 rows in this table becuase every project in the HOF has 32 rows
+            // Making table rows one for each block of memory.
             for(let i = 0; i < 32; i++) {
                 
-                // new row in our table for memory data
+                // Create a new row to represent a block of memory
                 let row = tableBody.insertRow(i);
                 
                 // address header with  8 cells after the address, each containing the value "00"
                 let headerCell = row.insertCell(0);
-                
-                // Also the address in hexadecimal form
                 headerCell.innerHTML = "0x" + address.toString(16).toUpperCase().padStart(3, '0');
                 
-                // Loop 8 times to create 8 data cells in each row.
+                // Filling up the row with memory value "00". 
                 for(let j = 1; j <= 8; j++) {
-                    
-                    // Insert a new cell for data.
                     let dataCell = row.insertCell(j);
-                    
-                    // the default value for each memory cell to is "00".
                     dataCell.innerHTML = "00";
                 }
                 
                 // Increasing the memory address by 8 for the next row.
                 address += 8;
             }
-        } public setMemoryValue(index: number, value: number): void {
+          
+        } 
+        
+        // setting a specific value in memory 
+        public setMemoryValue(index: number, value: number): void {
             this._ram[index] = value;
 
             const tableBody = document.getElementById("memorytable").getElementsByTagName('tbody')[0];
@@ -54,10 +51,12 @@ module TSOS {
             tableBody.rows[rowIndex].cells[cellIndex].innerHTML = value.toString(16).toUpperCase().padStart(2, '0');
         }
 
+        // Then we need to retrieving a specific value from memor
         public getMemoryValue(index: number): number {
             return this._ram[index];
         }
 
+        //Update the data table to show the current state of memory.
         public refreshDataTable(): void {
             // Select the data table from the document using its ID
             const dataTable= document.getElementById("memorytable").getElementsByTagName('tbody')[0];           

@@ -34,7 +34,7 @@
             public clockcount: number = 0,
             public isExecuting: boolean = false
         ) {
-            this.memoryAccessor = new MemoryAccessor(new Memory()); // Initialize the MemoryAccessor with a new memory instance
+            
         }
         
             public init(): void {
@@ -68,14 +68,35 @@
                     break;
             }
         }
-        execute() {
-            throw new Error("Method not implemented.");
+        
+        private fetch(): void { //Fetch the instruction from memory using the current PC and the memoryAccessor
+            
+            this.currentInstruction = this.memoryAccessor.readByte(this.PC);
+            this.PC++;
         }
-        decode() {
-            throw new Error("Method not implemented.");
+
+        private decode(): void {
+            // for now it'll be one-byte opcodes without operands... FOR NOW 
+            this.currentOpcode = this.currentInstruction;
         }
-        fetch() {
-            throw new Error("Method not implemented.");
+        
+        private execute(): void {
+            switch (this.currentOpcode) {
+                case 0xA9: // (Load Accumulator with a constant)
+                    this.Acc = this.memoryAccessor.readByte(this.PC);
+                    this.PC++;
+                    break;
+                case 0x8D: // (Store Accumulator in memory)
+                    let address = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
+                    this.memoryAccessor.writeByte(address, this.Acc);
+                    this.PC += 2;
+                    break;
+                // ... TODO more cases
+                default:
+                    _Kernel.krnTrace(`Not recognized opcode: ${this.currentOpcode}`);
+                    this.isExecuting = false;
+                    break;
+            }
         }
     }
 }
