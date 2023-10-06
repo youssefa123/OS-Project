@@ -49,6 +49,13 @@ module TSOS {
             const rowIndex = Math.floor(index / 8);
             const cellIndex = (index % 8) + 1;  // +1 because 0th cell is for address
             tableBody.rows[rowIndex].cells[cellIndex].innerHTML = value.toString(16).toUpperCase().padStart(2, '0');
+            
+            //Error check 
+            if (index < 0 || index >= this._ram.length) {
+                console.error(`Memory index ${index} out of bounds.`);
+                return;
+            }
+            this._ram[index] = value;
         }
 
         // Then we need to retrieving a specific value from memor
