@@ -81,6 +81,15 @@ var TSOS;
                     break;
             }
         }
+        //Process control block process to execute
+        executeProcess(pcb) {
+            this.PC = pcb.PC;
+            this.Acc = pcb.Acc;
+            this.Xreg = pcb.Xreg;
+            this.Yreg = pcb.Yreg;
+            this.Zflag = pcb.Zflag;
+            this.isExecuting = true;
+        }
     }
     TSOS.Cpu = Cpu;
 })(TSOS || (TSOS = {}));

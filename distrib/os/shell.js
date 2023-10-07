@@ -206,7 +206,7 @@ var TSOS;
             // Only hex digits and spaces and ensure even length for byte pairs
             let isLoadValid = /^[0-9a-fA-F ]+$/.test(input) && input.length % 2 === 0;
             if (isLoadValid) {
-                // If the MemoryManager successfully loads the program... then 
+                // loads the program into memory 
                 if (_MemoryManager.loadProgram(input)) {
                     _StdOut.putText(`Program loaded into memory with PID ${_pidCounter}.`);
                     _pidCounter++;
@@ -217,6 +217,21 @@ var TSOS;
             }
             else {
                 _StdOut.putText("Unable to load: Your Input is not in hex or length is odd.");
+            }
+        }
+        ShellRun(args) {
+            //Get Pid from argument
+            const pid = parseInt(args[0], 10);
+            // Locate the associated PCB
+            const targetPCB = _ProcessTable.find(pcb => pcb.id === pid);
+            if (targetPCB) {
+                // Update PCB state to running
+                targetPCB.state = TSOS.ProcessState.RUNNING;
+                // Inform the CPU to execute the target process 
+                _CPU.executeProcess(targetPCB);
+            }
+            else {
+                _StdOut.putText("Invalid PID provided.");
             }
         }
         shellWhereAmI(args) {
