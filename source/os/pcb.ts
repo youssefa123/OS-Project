@@ -43,6 +43,17 @@ module TSOS {
                 }
             }
 
+            // Update the row cells with PCB's details.
+            targetRow.cells[0].textContent = this.id.toString();
+            targetRow.cells[1].textContent = this.PC.toString();
+            targetRow.cells[2].textContent = this.instructionRegister.toString();
+            targetRow.cells[3].textContent = this.Acc.toString();
+            targetRow.cells[4].textContent = this.Xreg.toString();
+            targetRow.cells[5].textContent = this.Yreg.toString();
+            targetRow.cells[6].textContent = this.Zflag.toString();
+            
+            targetRow.cells[8].textContent = this.state;
+            targetRow.cells[9].textContent = "Memory"; // all processes are in memory for now.
             
         }
     }

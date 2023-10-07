@@ -298,12 +298,16 @@ module TSOS {
             const targetPCB = _ProcessTable.find(pcb => pcb.id === pid);
 
             if (targetPCB) {
+                _StdOut.putText(`Running program with PID ${pid}...`);
                 
+                targetPCB.state = TSOS.ProcessState.RUNNING; // // Update the PCB state to running
+
                 // Informs the CPU to execute the target process 
-                _CPU.executeProcess(targetPCB);
-                // Update the PCB in the process table hopefully
                 targetPCB.updateProcessInTable();
+                
+                // Update the PCB in the process table hopefully
                 _CPU.executeProcess(targetPCB);
+                _StdOut.putText("Program execution complete.");
             } else {
                 _StdOut.putText("Invalid PID provided.");
             }
