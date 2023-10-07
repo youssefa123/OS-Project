@@ -92,7 +92,17 @@
                     this.memoryAccessor.writeByte(address, this.Acc);
                     this.PC += 2;
                     break;
-                // ... TODO more cases
+                case 0x6D: // Add with carry
+                    let sumAddress = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
+                    this.Acc += this.memoryAccessor.readByte(sumAddress);
+                    this.PC += 2;
+                    break;
+                case 0xA2: // Load the X register with a constant
+                    this.Xreg = this.memoryAccessor.readByte(this.PC);
+                    this.PC++;
+                    break;
+                
+        
                 default:
                     _Kernel.krnTrace(`Not recognized opcode: ${this.currentOpcode}`);
                     this.isExecuting = false;
