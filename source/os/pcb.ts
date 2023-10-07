@@ -30,31 +30,17 @@ module TSOS {
         }
     }
 
-        // Added a Enum for process states
-        export enum ProcessState {
+    public updateProcessInTable(): void {
+        const tableBody = document.getElementById("processTable").getElementsByTagName('tbody')[0];
+    }
+
+     // Added a Enum for process states
+     export enum ProcessState {
         READY = "ready",
         RUNNING = "running",
         WAITING = "waiting",
         TERMINATED = "terminated"
     }
-
-        //public static addProcessToTable(pcbInstance: pcb): void {
-            //const tableBody = document.getElementById("processTable").getElementsByTagName('tbody')[0];
-
-            //let row = tableBody.insertRow();
-            //row.id = `pid-${pcbInstance.id}`;
-    
-           // let pidCell = row.insertCell(0);
-           // pidCell.textContent = pcbInstance.id.toString();
-
-          // let pcCell = row.insertCell(1);
-          //  pcCell.textContent = pcbInstance.PC.toString();
-    
-            
-
-          //  let locationCell = row.insertCell(9);
-            //locationCell.textContent = "Memory"; // Update based on PCB location
-       // }
 }
 
     
