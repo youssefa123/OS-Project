@@ -14,18 +14,18 @@ module TSOS {
         public Xreg: number = 0; // X register
         public Yreg: number = 0; // Y register
         public Zflag: number = 0; // Z flag
+        public state: ProcessState; 
         
         
         constructor(segment: number) {
             this.id = pcb.currentPID++; // initialize  the memory Segment
             this.memorySegment = segment; // Assign the memory segment
-
-            //cpu variables initalized
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
             this.Yreg = 0;
             this.instructionRegister = 0;
+            this.state = ProcessState.READY;
 
         }
     }
