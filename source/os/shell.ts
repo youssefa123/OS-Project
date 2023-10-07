@@ -79,10 +79,10 @@ module TSOS {
             this.commandList[this.commandList.length] = sc;
 
             //Pid 
-            //sc = new ShellCommand(this.shellRun,
-                //"run",
-                //"<pid> - Executes the program with the specified PID from memory.");
-            //this.commandList[this.commandList.length] = sc;
+            sc = new ShellCommand(this.shellRun,
+                "run",
+                "<pid> - Executes the program with the specified PID from memory.");
+            this.commandList[this.commandList.length] = sc;
 
 
             // man <topic>
@@ -284,7 +284,7 @@ module TSOS {
             }
         }
 
-        public ShellRun(args: string []): void {
+        public shellRun(args: string []): void {
             //Get Pid from argument
             const pid = parseInt(args[0], 10);
 
