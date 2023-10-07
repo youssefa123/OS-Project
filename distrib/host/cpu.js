@@ -24,6 +24,7 @@ var TSOS;
             this.Zflag = Zflag;
             this.clockcount = clockcount;
             this.isExecuting = isExecuting;
+            this.currentPCB = null; //  current running PCB
         }
         init() {
             this.PC = 0;
@@ -74,11 +75,64 @@ var TSOS;
                     this.memoryAccessor.writeByte(address, this.Acc);
                     this.PC += 2;
                     break;
-                // ... TODO more cases
+                case 0x6D: // Add with carry
+                    let sumAddress = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
+                    this.Acc += this.memoryAccessor.readByte(sumAddress);
+                    this.PC += 2;
+                    break;
+                case 0xA2: // Load the X register with a constant
+                    this.Xreg = this.memoryAccessor.readByte(this.PC);
+                    this.PC++;
+                    break;
+                case 0xAE: // Load the X register from memory
+                    let xAddress = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
+                    this.Xreg = this.memoryAccessor.readByte(xAddress);
+                    this.PC += 2;
+                    break;
+                case 0xA0: // Load the Y register with a constant
+                    this.Yreg = this.memoryAccessor.readByte(this.PC);
+                    this.PC++;
+                    break;
+                case 0xAC: // Load the Y register from memory
+                    let yAddress = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
+                    this.Yreg = this.memoryAccessor.readByte(yAddress);
+                    this.PC += 2;
+                    break;
+                case 0xEA: // No Operation
+                    break;
+                case 0x00:
+                    this.isExecuting = false;
+                    break;
+                case 0xEC: // Compare byte in memory to X reg
+                    let compareAddress = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
+                    this.Zflag = (this.memoryAccessor.readByte(compareAddress) === this.Xreg) ? 1 : 0; //If the byte at the computed address is equal to the value in the X register, set Zflag to 1, otherwise set Zflag to 0
+                    this.PC += 2; // Increment the program counter to skip the two bytes 
+                    break;
+                case 0xEE: // Increment the value of a byte
+                    let incrementAddress = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
+                    //Fetches the current value of the byte
+                    let value = this.memoryAccessor.readByte(incrementAddress);
+                    //Increment the fetched value by 1 and store it back to the same address in memory
+                    this.memoryAccessor.writeByte(incrementAddress, value + 1);
+                    //Increment the program counter to skip the two bytes 
+                    this.PC += 2;
+                    break;
                 default:
                     _Kernel.krnTrace(`Not recognized opcode: ${this.currentOpcode}`);
                     this.isExecuting = false;
                     break;
+            }
+            // After executing any instruction we need to update the PCB of the running process
+            this.updateCurrentPCB();
+        }
+        // Update the current running PCB with the latest state of the CPU after executing an instruction
+        updateCurrentPCB() {
+            if (this.currentPCB) {
+                this.currentPCB.PC = this.PC;
+                this.currentPCB.Acc = this.Acc;
+                this.currentPCB.Xreg = this.Xreg;
+                this.currentPCB.Yreg = this.Yreg;
+                this.currentPCB.Zflag = this.Zflag;
             }
         }
         //Process control block process to execute

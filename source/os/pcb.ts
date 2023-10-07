@@ -28,11 +28,25 @@ module TSOS {
             this.state = ProcessState.READY;
 
         }
+
+
+        public updateProcessInTable(): void {
+            const tableBody = document.getElementById("processTable").getElementsByTagName('tbody')[0];
+            let targetRow: HTMLTableRowElement | undefined;
+
+            // Look for the row with the PCB's PID, and loop through the table rows to find the row 
+            for (let i = 0; i < tableBody.rows.length; i++) {
+                const row = tableBody.rows[i];
+                if (row.cells[0].textContent === this.id.toString()) {
+                    targetRow = row;
+                    break;
+                }
+            }
+
+            
+        }
     }
 
-    public updateProcessInTable(): void {
-        const tableBody = document.getElementById("processTable").getElementsByTagName('tbody')[0];
-    }
 
      // Added a Enum for process states
      export enum ProcessState {

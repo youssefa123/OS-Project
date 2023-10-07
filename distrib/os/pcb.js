@@ -17,6 +17,18 @@ var TSOS;
             this.instructionRegister = 0;
             this.state = ProcessState.READY;
         }
+        updateProcessInTable() {
+            const tableBody = document.getElementById("processTable").getElementsByTagName('tbody')[0];
+            let targetRow;
+            // Look for the row with the PCB's PID, and loop through the table rows to find the row 
+            for (let i = 0; i < tableBody.rows.length; i++) {
+                const row = tableBody.rows[i];
+                if (row.cells[0].textContent === this.id.toString()) {
+                    targetRow = row;
+                    break;
+                }
+            }
+        }
     }
     pcb.currentPID = 0; //Current state that were in 
     TSOS.pcb = pcb;
@@ -28,16 +40,5 @@ var TSOS;
         ProcessState["WAITING"] = "waiting";
         ProcessState["TERMINATED"] = "terminated";
     })(ProcessState = TSOS.ProcessState || (TSOS.ProcessState = {}));
-    //public static addProcessToTable(pcbInstance: pcb): void {
-    //const tableBody = document.getElementById("processTable").getElementsByTagName('tbody')[0];
-    //let row = tableBody.insertRow();
-    //row.id = `pid-${pcbInstance.id}`;
-    // let pidCell = row.insertCell(0);
-    // pidCell.textContent = pcbInstance.id.toString();
-    // let pcCell = row.insertCell(1);
-    //  pcCell.textContent = pcbInstance.PC.toString();
-    //  let locationCell = row.insertCell(9);
-    //locationCell.textContent = "Memory"; // Update based on PCB location
-    // }
 })(TSOS || (TSOS = {}));
 //# sourceMappingURL=pcb.js.map

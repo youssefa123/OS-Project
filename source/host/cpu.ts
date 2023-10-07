@@ -25,6 +25,8 @@
         private currentOpcode: number;
         private memoryAccessor: MemoryAccessor; // To interface with memory
 
+        
+
         constructor(
             public PC: number = 0,
             public Acc: number = 0,
