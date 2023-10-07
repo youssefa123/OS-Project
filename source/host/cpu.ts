@@ -16,10 +16,10 @@
         WRITEBACK
     }
 
-    
-
     export class Cpu {
         public pipelineState: PipelineState;
+
+        public currentPCB: pcb | null = null; //  current running PCB
 
         private currentInstruction: number;
         private currentOpcode: number;
@@ -75,6 +75,7 @@
             this.PC++;
         }
 
+
         private decode(): void {
             // for now it'll be one-byte opcodes without operands... FOR NOW 
             this.currentOpcode = this.currentInstruction;
@@ -96,6 +97,17 @@
                     _Kernel.krnTrace(`Not recognized opcode: ${this.currentOpcode}`);
                     this.isExecuting = false;
                     break;
+            }         
+        }
+
+        // Update the current running PCB with the latest state of the CPU after executing an instruction
+        private updateCurrentPCB(): void {
+            if (this.currentPCB) {
+                this.currentPCB.PC = this.PC;
+                this.currentPCB.Acc = this.Acc;
+                this.currentPCB.Xreg = this.Xreg;
+                this.currentPCB.Yreg = this.Yreg;
+                this.currentPCB.Zflag = this.Zflag;
             }
         }
 

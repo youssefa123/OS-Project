@@ -266,13 +266,18 @@ module TSOS {
         public shellLoad(args: string[]): void {
             // Get the text area element and its value
             const userinput = document.getElementById("taProgramInput") as HTMLTextAreaElement;
-            const input = userinput.value.trim();
+            
+            // user input trimmed of any leading or trailing spaces
+            let input = userinput.value.trim();
         
-            // Only hex digits and spaces and ensure even length for byte pairs
-            let isLoadValid = /^[0-9a-fA-F ]+$/.test(input) && input.length % 2 === 0;
+            //  "A9 A6" can be read as  "A9A6"
+            input = input.replace(/\s+/g, '');
+        
+            // Validate that it contains only hex digits and has an even length for byte pairs
+            let isLoadValid = /^[0-9a-fA-F]+$/.test(input) && input.length % 2 === 0;
         
             if (isLoadValid) {
-                // loads the program into memory 
+                // Load the program into memory 
                 if (_MemoryManager.loadProgram(input)) {
                     _StdOut.putText(`Program loaded into memory with PID ${_pidCounter}.`);
                     _pidCounter++;
@@ -283,6 +288,7 @@ module TSOS {
                 _StdOut.putText("Unable to load: Your Input is not in hex or length is odd.");
             }
         }
+        
 
         public shellRun(args: string []): void {
             //Get Pid from argument
@@ -292,8 +298,8 @@ module TSOS {
             const targetPCB = _ProcessTable.find(pcb => pcb.id === pid);
 
             if (targetPCB) {
-                // Update PCB state to running
-                targetPCB.state = ProcessState.RUNNING;
+                // Update PCB state to running //TODO tie it in the html 
+                targetPCB.state = TSOS.ProcessState.RUNNING;
                 // Inform the CPU to execute the target process 
                 _CPU.executeProcess(targetPCB);
             } else {

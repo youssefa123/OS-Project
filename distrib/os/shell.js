@@ -200,11 +200,14 @@ var TSOS;
         shellLoad(args) {
             // Get the text area element and its value
             const userinput = document.getElementById("taProgramInput");
-            const input = userinput.value.trim();
-            // Only hex digits and spaces and ensure even length for byte pairs
-            let isLoadValid = /^[0-9a-fA-F ]+$/.test(input) && input.length % 2 === 0;
+            // user input trimmed of any leading or trailing spaces
+            let input = userinput.value.trim();
+            //  "A9 A6" can be read as  "A9A6"
+            input = input.replace(/\s+/g, '');
+            // Validate that it contains only hex digits and has an even length for byte pairs
+            let isLoadValid = /^[0-9a-fA-F]+$/.test(input) && input.length % 2 === 0;
             if (isLoadValid) {
-                // loads the program into memory 
+                // Load the program into memory 
                 if (_MemoryManager.loadProgram(input)) {
                     _StdOut.putText(`Program loaded into memory with PID ${_pidCounter}.`);
                     _pidCounter++;
