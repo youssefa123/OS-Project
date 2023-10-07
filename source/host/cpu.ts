@@ -101,7 +101,43 @@
                     this.Xreg = this.memoryAccessor.readByte(this.PC);
                     this.PC++;
                     break;
+
+                case 0xAE: // Load the X register from memory
+                    let xAddress = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
+                    this.Xreg = this.memoryAccessor.readByte(xAddress);
+                    this.PC += 2;
+                    break;
                 
+                case 0xA0: // Load the Y register with a constant
+                    this.Yreg = this.memoryAccessor.readByte(this.PC);
+                    this.PC++;
+                    break;
+                
+                case 0xAC: // Load the Y register from memory
+                    let yAddress = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
+                    this.Yreg = this.memoryAccessor.readByte(yAddress);
+                    this.PC += 2;
+                    break;
+
+                case 0xEA: // No Operation
+                    break;
+
+                    case 0x00: 
+                    this.isExecuting = false;
+                    break;
+        
+                case 0xEC: // Compare byte in memory to X reg
+                    let compareAddress = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
+                    this.Zflag = (this.memoryAccessor.readByte(compareAddress) === this.Xreg) ? 1 : 0;
+                    this.PC += 2;
+                    break;
+        
+                case 0xEE: // Increment the value of a byte
+                    let incrementAddress = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
+                    let value = this.memoryAccessor.readByte(incrementAddress);
+                    this.memoryAccessor.writeByte(incrementAddress, value + 1);
+                    this.PC += 2;
+                    break;
         
                 default:
                     _Kernel.krnTrace(`Not recognized opcode: ${this.currentOpcode}`);
