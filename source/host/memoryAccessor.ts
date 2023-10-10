@@ -15,7 +15,8 @@ module TSOS {
         
 
         public readByte(address: number): number {
-            if (address < 0 || address >= 256) {
+            if (address < 0 || address >= 512) { // Added more memory for testing 
+
                 // Invalid memory address
                 throw new Error("Invalid memory address.");
             }

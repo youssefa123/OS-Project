@@ -1,7 +1,7 @@
 var TSOS;
 (function (TSOS) {
     class PCB {
-        constructor(pid) {
+        constructor(pid, priority = 0) {
             this.PC = 0; // Program counter
             this.instructionRegister = 0;
             this.Acc = 0; // Accumulator
@@ -9,12 +9,13 @@ var TSOS;
             this.Yreg = 0; // Y register
             this.Zflag = 0; // Z flag
             this.id = pid;
-            this.memorySegment = 0; // Assign the memory segment
+            this.memorySegment = 0; //Assign the memory segment
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
             this.Yreg = 0;
             this.instructionRegister = 0;
+            this.priority = priority;
             this.state = ProcessState.RESIDENT;
             //PCB added onto table 
             this.updateProcessInTable();
@@ -45,7 +46,8 @@ var TSOS;
             targetRow.cells[4].textContent = this.Xreg.toString();
             targetRow.cells[5].textContent = this.Yreg.toString();
             targetRow.cells[6].textContent = this.Zflag.toString();
-            targetRow.cells[8].textContent = this.state;
+            targetRow.cells[8].textContent = this.state.toString();
+            targetRow.cells[7].textContent = this.priority.toString();
             targetRow.cells[9].textContent = "Memory"; // all processes are in memory for now.
         }
     }

@@ -12,7 +12,7 @@ var TSOS;
             this._memory.setMemoryValue(address, value); // Use the getMemoryValue method of the Memory instance to read the value
         }
         readByte(address) {
-            if (address < 0 || address >= 256) {
+            if (address < 0 || address >= 512) { // Added more memory for testing 
                 // Invalid memory address
                 throw new Error("Invalid memory address.");
             }

@@ -54,6 +54,7 @@ var TSOS;
                 default:
                     this.pipelineState = PipelineState.FETCH;
                     break;
+                    this.updateCurrentPCB();
             }
         }
         fetch() {
@@ -124,6 +125,9 @@ var TSOS;
             }
             // After executing any instruction we need to update the PCB of the running process
             this.updateCurrentPCB();
+            if (this.currentPCB) {
+                this.currentPCB.updateProcessInTable();
+            }
         }
         // Update the current running PCB with the latest state of the CPU after executing an instruction
         updateCurrentPCB() {
@@ -133,15 +137,18 @@ var TSOS;
                 this.currentPCB.Xreg = this.Xreg;
                 this.currentPCB.Yreg = this.Yreg;
                 this.currentPCB.Zflag = this.Zflag;
+                this.currentPCB.updateProcessInTable();
             }
         }
         //Process control block process to execute
         executeProcess(pcb) {
+            this.currentPCB = pcb;
             this.PC = pcb.PC;
             this.Acc = pcb.Acc;
             this.Xreg = pcb.Xreg;
             this.Yreg = pcb.Yreg;
             this.Zflag = pcb.Zflag;
+            pcb.updateProcessInTable();
             this.isExecuting = true;
         }
     }

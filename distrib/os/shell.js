@@ -198,28 +198,28 @@ var TSOS;
             console.log("Current time:", CurrentTime);
             _StdOut.putText("The date is: " + CDate + " The time is: " + CurrentTime);
         }
-        shellLoad(args) {
-            // Get the text area element and its value
-            const userinput = document.getElementById("taProgramInput");
-            // user input trimmed of any leading or trailing spaces
-            let input = userinput.value.trim();
-            //  "A9 A6" can be read as  "A9A6"
-            input = input.replace(/\s+/g, '');
-            // Validate that it contains only hex digits and has an even length for byte pairs
-            let isLoadValid = /^[0-9a-fA-F]+$/.test(input) && input.length % 2 === 0;
-            if (isLoadValid) {
-                let programID = _MemoryManager.loadProgram(input);
-                console.log(programID);
-                // Load the program into memory 
-                if (programID !== null) {
-                    _StdOut.putText(`Program loaded into memory with PID ${programID}.`);
-                }
-                else {
-                    _StdOut.putText("Unable to load: Memory segment is occupied.");
-                }
+        shellLoad() {
+            const hexDigitAndSpaceRegex = /^[0-9a-fA-F\s]+$/;
+            let user = (document.getElementById("taProgramInput")).value;
+            let userInput = user.split(" ").map((byte) => parseInt(byte, 16)); //16 bites 
+            if (userInput.length == 0) {
+                _StdOut.putText("User Program Input is Empty!");
             }
             else {
-                _StdOut.putText("Unable to load: Your Input is not in hex or length is odd.");
+                if (hexDigitAndSpaceRegex.test(user)) {
+                    let pid = _MemoryManager.loadProgram(userInput);
+                    if (pid !== -1) {
+                        _Kernel.krnTrace("Created PID " + pid);
+                        _StdOut.putText("Program loaded in Memory with Process ID: " + pid);
+                    }
+                    else {
+                        _Kernel.krnTrace("Memory Full ");
+                        _StdOut.putText("Memory Full");
+                    }
+                }
+                else {
+                    _StdOut.putText("Program input is not valid hexidecimal ");
+                }
             }
         }
         shellRun(args) {
@@ -228,29 +228,22 @@ var TSOS;
                 _StdOut.putText("Please provide a PID.");
                 return;
             }
-            function Locate(ip) {
-                for (let pcb of _PCBQueue.accessor()) {
-                    if (pcb.id === ip) {
-                        return pcb;
-                    }
-                    return null;
-                }
-            }
             // Try to convert the argument to an integer PID
-            const pid = parseInt(args[0], 10);
+            const pid = parseInt(args[0]);
             // Check if the parsed PID is a valid number
             if (isNaN(pid)) {
                 _StdOut.putText("Invalid PID provided.");
                 return;
             }
             // Locate the associated PCB
-            const targetPCB = Locate(pid);
+            const targetPCB = this.Locate(pid);
             if (targetPCB) {
                 _StdOut.putText(`Running program with PID ${targetPCB.id}...`);
                 // Update the PCB state to running
                 targetPCB.state = TSOS.ProcessState.RUNNING;
-                // If there's a method to update the process in some table, call it
-                // Note: Ensure this method exists and is necessary here
+                targetPCB.updateProcessInTable();
+                _CPU.executeProcess(targetPCB);
+                // Update the process in the process table
                 targetPCB.updateProcessInTable();
                 // Informs the CPU to execute the target process
                 _CPU.executeProcess(targetPCB);
@@ -259,6 +252,15 @@ var TSOS;
             else {
                 _StdOut.putText("No program found with the given PID.");
             }
+        }
+        // Moved the Locate function outside shellRun, making it an instance method for better organization and reuse
+        Locate(pid) {
+            for (let pcb of _PCBQueue.accessor()) {
+                if (pcb.id === pid) {
+                    return pcb;
+                }
+            }
+            return null;
         }
         shellWhereAmI(args) {
             console.log("shellWhereAmI function");

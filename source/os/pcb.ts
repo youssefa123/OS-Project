@@ -10,8 +10,11 @@ module TSOS {
         public Yreg: number = 0; // Y register
         public Zflag: number = 0; // Z flag
         public state: ProcessState; 
+        public priority: number; //Prioty
+
+
         
-        constructor(pid: number) {
+        constructor(pid: number, priority: number = 0) {
             this.id = pid;
             this.memorySegment = 0; //Assign the memory segment
             this.PC = 0;
@@ -19,6 +22,7 @@ module TSOS {
             this.Xreg = 0;
             this.Yreg = 0;
             this.instructionRegister = 0;
+            this.priority = priority;
             this.state = ProcessState.RESIDENT;
 
             //PCB added onto table 
@@ -56,7 +60,8 @@ module TSOS {
             targetRow.cells[4].textContent = this.Xreg.toString();
             targetRow.cells[5].textContent = this.Yreg.toString();
             targetRow.cells[6].textContent = this.Zflag.toString();
-            targetRow.cells[8].textContent = this.state;
+            targetRow.cells[8].textContent = this.state.toString();
+            targetRow.cells[7].textContent = this.priority.toString();
             targetRow.cells[9].textContent = "Memory"; // all processes are in memory for now.
             
         }
