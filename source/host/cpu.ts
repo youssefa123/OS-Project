@@ -19,7 +19,7 @@
     export class Cpu {
         public pipelineState: PipelineState;
 
-        public currentPCB: pcb | null = null; //  current running PCB
+        public currentPCB: PCB | null = null; //  current running PCB
 
         private currentInstruction: number;
         private currentOpcode: number;
@@ -171,7 +171,7 @@
         }
 
         //Process control block process to execute
-        public executeProcess(pcb: pcb): void {
+        public executeProcess(pcb: PCB): void {
             this.PC = pcb.PC;
             this.Acc = pcb.Acc;
             this.Xreg = pcb.Xreg;

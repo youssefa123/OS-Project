@@ -16,6 +16,7 @@ module TSOS {
         public commandList = [];
         public curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
         public apologies = "[sorry]";
+        public programID: Number = 0;
 
         constructor() {
         }
@@ -277,10 +278,13 @@ module TSOS {
             let isLoadValid = /^[0-9a-fA-F]+$/.test(input) && input.length % 2 === 0;
         
             if (isLoadValid) {
+
+                let programID = _MemoryManager.loadProgram(input);
+                console.log(programID);
                 // Load the program into memory 
-                if (_MemoryManager.loadProgram(input)) {
-                    _StdOut.putText(`Program loaded into memory with PID ${_pidCounter}.`);
-                    _pidCounter++;
+                if (programID !== null) {
+                    _StdOut.putText(`Program loaded into memory with PID ${programID}.`);
+                    
                 } else {
                     _StdOut.putText("Unable to load: Memory segment is occupied.");
                 }
@@ -290,30 +294,54 @@ module TSOS {
         }
         
 
-        public shellRun(args: string []): void {
-            //Get Pid from argument
+        public shellRun(args: string[]): void {
+            // Check if an argument was provided
+            if (args.length === 0) {
+                _StdOut.putText("Please provide a PID.");
+                return;
+            }
+
+            function Locate(ip: number){
+                for(let pcb of _PCBQueue.accessor()){
+                    if(pcb.id === ip){
+                        return pcb; 
+                    } 
+                    return null;
+                }
+            }
+        
+            // Try to convert the argument to an integer PID
             const pid = parseInt(args[0], 10);
-
+        
+            // Check if the parsed PID is a valid number
+            if (isNaN(pid)) {
+                _StdOut.putText("Invalid PID provided.");
+                return;
+            }
+        
             // Locate the associated PCB
-            const targetPCB = _ProcessTable.find(pcb => pcb.id === pid);
-
+            const targetPCB = Locate(pid);
+        
             if (targetPCB) {
-                _StdOut.putText(`Running program with PID ${pid}...`);
+                _StdOut.putText(`Running program with PID ${targetPCB.id}...`);
                 
-                targetPCB.state = TSOS.ProcessState.RUNNING; // // Update the PCB state to running
-
-                // Informs the CPU to execute the target process 
+                // Update the PCB state to running
+                targetPCB.state = TSOS.ProcessState.RUNNING; 
+        
+                // If there's a method to update the process in some table, call it
+                // Note: Ensure this method exists and is necessary here
                 targetPCB.updateProcessInTable();
                 
-                // Update the PCB in the process table hopefully
+                // Informs the CPU to execute the target process
                 _CPU.executeProcess(targetPCB);
+        
                 _StdOut.putText("Program execution complete.");
             } else {
-                _StdOut.putText("Invalid PID provided.");
+                _StdOut.putText("No program found with the given PID.");
             }
         }
-
         
+
         
         public shellWhereAmI(args: string[]) {
             console.log("shellWhereAmI function");

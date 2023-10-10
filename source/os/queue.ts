@@ -40,5 +40,9 @@ module TSOS {
             }
             return retVal;
         }
+
+        public accessor(){
+            return this.q;
+        }
     }
 }

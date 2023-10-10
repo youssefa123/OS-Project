@@ -1,31 +1,28 @@
 module TSOS {
-    export class pcb { 
-        
-        private static currentPID = 0; //Current state that were in 
-
-        
-
-
+    export class PCB {
+    
         public id: number;
         public PC: number = 0; // Program counter
         public memorySegment: number; //Memory segment to 
-        instructionRegister: number = 0;
+        public instructionRegister: number = 0;
         public Acc: number = 0; // Accumulator
         public Xreg: number = 0; // X register
         public Yreg: number = 0; // Y register
         public Zflag: number = 0; // Z flag
         public state: ProcessState; 
         
-        
-        constructor(segment: number) {
-            this.id = pcb.currentPID++; // initialize  the memory Segment
-            this.memorySegment = segment; // Assign the memory segment
+        constructor(pid: number) {
+            this.id = pid;
+            this.memorySegment = 0; //Assign the memory segment
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
             this.Yreg = 0;
             this.instructionRegister = 0;
-            this.state = ProcessState.READY;
+            this.state = ProcessState.RESIDENT;
+
+            //PCB added onto table 
+            this.updateProcessInTable();
 
         }
 
@@ -43,6 +40,14 @@ module TSOS {
                 }
             }
 
+            // If the row doesn't exist, create one
+            if (!targetRow) {
+                targetRow = tableBody.insertRow();
+                for (let i = 0; i < 10; i++) {
+                    targetRow.insertCell(i);
+                }
+            }
+
             // Update the row cells with PCB's details.
             targetRow.cells[0].textContent = this.id.toString();
             targetRow.cells[1].textContent = this.PC.toString();
@@ -51,7 +56,6 @@ module TSOS {
             targetRow.cells[4].textContent = this.Xreg.toString();
             targetRow.cells[5].textContent = this.Yreg.toString();
             targetRow.cells[6].textContent = this.Zflag.toString();
-            
             targetRow.cells[8].textContent = this.state;
             targetRow.cells[9].textContent = "Memory"; // all processes are in memory for now.
             
@@ -61,7 +65,7 @@ module TSOS {
 
      // Added a Enum for process states
      export enum ProcessState {
-        READY = "ready",
+        RESIDENT = "Resident",
         RUNNING = "running",
         WAITING = "waiting",
         TERMINATED = "terminated"
