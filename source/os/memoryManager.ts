@@ -63,12 +63,21 @@ module TSOS {
             return pid;
         }
         
-        public clearMemory(): void {
-            // Clear the memory segment and mark it as unoccupied
-            for (let i = 0; i < 256; i++) {
-                this._memory.setMemoryValue(i, 0);
+        // Function to clear a specified memory segment and mark it as free
+        public clearSegment(segmentIndex: number): void {
+            const offset = segmentIndex * MemoryManager.SEGMENT_SIZE;
+            for (let i = 0; i < MemoryManager.SEGMENT_SIZE; i++) {
+                this._memory.setMemoryValue(offset + i, 0);
             }
-           
+            this.segments[segmentIndex] = false;  // Mark segment as free
+        }
+
+        public clearMemory(): void {
+            // Clear all memory segments
+            for (let segmentIndex = 0; segmentIndex < MemoryManager.MAX_SEGMENTS; segmentIndex++) {
+                this.clearSegment(segmentIndex);
+            }
         }
     }
 }
+        
