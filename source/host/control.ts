@@ -89,9 +89,12 @@ module TSOS {
             //_CPU.init();       //       There's more to do, like dealing with scheduling and such, but this would be a start. Pretty cool.
             
             _Memory = new Memory();
-            _Memory.init();
 
-            _MemoryManager = new TSOS.MemoryManager(_Memory);
+            
+            _MemoryAccessor = new MemoryAccessor();
+           
+
+           
             
 
             // ... then set the host clock pulse ...

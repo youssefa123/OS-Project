@@ -7,6 +7,7 @@ module TSOS {
         
         constructor() {
             this._ram = new Uint8Array(256);  // Initializes memory with a size of 256 bytes
+            this.init();
         }
         
         
@@ -41,44 +42,4 @@ module TSOS {
           
         } 
         
-        // setting a specific value in memory 
-        public setMemoryValue(index: number, value: number): void {
-            this._ram[index] = value;
-
-            const tableBody = document.getElementById("memorytable").getElementsByTagName('tbody')[0];
-            const rowIndex = Math.floor(index / 8);
-            const cellIndex = (index % 8) + 1;  // +1 because 0th cell is for address
-            tableBody.rows[rowIndex].cells[cellIndex].innerHTML = value.toString(16).toUpperCase().padStart(2, '0');
-            
-            //Error check 
-            if (index < 0 || index >= this._ram.length) {
-                console.error(`Memory index ${index} out of bounds.`);
-                return;
-            }
-            this._ram[index] = value;
-        }
-
-        // Then we need to retrieving a specific value from memor
-        public getMemoryValue(index: number): number {
-            return this._ram[index];
-        }
-
-        //Update the data table to show the current state of memory.
-        public refreshDataTable(): void {
-            // Select the data table from the document using its ID
-            const dataTable= document.getElementById("memorytable").getElementsByTagName('tbody')[0];           
-            // Loop through each row of the table
-            for (let rowIndex: number = 0; rowIndex < dataTable.rows.length; rowIndex++) {
-                // Get the current row
-                let currentRow: HTMLTableRowElement = dataTable.rows[rowIndex];
-               
-                // The actual data resides in cells from index 1 to 8
-                for (let cellIndex: number = 1; cellIndex <= 8; cellIndex++) {
-                    // Update cell's content using utility method
-                    currentRow.children[cellIndex].innerHTML = Utils.formatHex(this._ram[rowIndex * 8 + cellIndex - 1], 2, false);
-                }
-            }
-        }
-       
-    }
-}
+    }}

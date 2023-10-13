@@ -35,6 +35,9 @@
             public Zflag: number = 0,
             public clockcount: number = 0,
             public isExecuting: boolean = false
+            
+            
+    
         ) {
             
         }

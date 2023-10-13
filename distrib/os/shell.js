@@ -199,27 +199,28 @@ var TSOS;
             _StdOut.putText("The date is: " + CDate + " The time is: " + CurrentTime);
         }
         shellLoad() {
-            const hexDigitAndSpaceRegex = /^[0-9a-fA-F\s]+$/;
-            let user = (document.getElementById("taProgramInput")).value;
-            let userInput = user.split(" ").map((byte) => parseInt(byte, 16)); //16 bites 
+            // Regular Expression to match hexadecimal digits and spaces
+            const hexDigitAndSpaceRegex = /^([0-9a-fA-F]{2}\s)*[0-9a-fA-F]{2}$/;
+            // Get the user input and cleaned up extra spaces with the .trim()
+            let user = (document.getElementById("taProgramInput")).value.trim();
+            // Split user input into bytes and convert them to integers
+            let userInput = user.split(/\s+/).map((byte) => parseInt(byte, 16));
             if (userInput.length == 0) {
                 _StdOut.putText("User Program Input is Empty!");
+                return;
+            }
+            if (!hexDigitAndSpaceRegex.test(user)) {
+                _StdOut.putText("Program input is not valid hexadecimal. Please ensure it's in the format: 'XX XX ...'");
+                return;
+            }
+            let pid = _MemoryManager.loadProgram(userInput);
+            if (pid !== -1) {
+                _Kernel.krnTrace(`Program loaded into memory with PID: ${pid}`);
+                _StdOut.putText(`Program loaded in Memory with Process ID: ${pid}`);
             }
             else {
-                if (hexDigitAndSpaceRegex.test(user)) {
-                    let pid = _MemoryManager.loadProgram(userInput);
-                    if (pid !== -1) {
-                        _Kernel.krnTrace("Created PID " + pid);
-                        _StdOut.putText("Program loaded in Memory with Process ID: " + pid);
-                    }
-                    else {
-                        _Kernel.krnTrace("Memory Full ");
-                        _StdOut.putText("Memory Full");
-                    }
-                }
-                else {
-                    _StdOut.putText("Program input is not valid hexidecimal ");
-                }
+                _Kernel.krnTrace("Memory Full");
+                _StdOut.putText("Memory Full");
             }
         }
         shellRun(args) {

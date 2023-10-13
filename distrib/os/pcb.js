@@ -1,7 +1,7 @@
 var TSOS;
 (function (TSOS) {
     class PCB {
-        constructor(pid, priority = 0) {
+        constructor(pid, baseAddress, priority = 0) {
             this.PC = 0; // Program counter
             this.instructionRegister = 0;
             this.Acc = 0; // Accumulator
@@ -9,7 +9,7 @@ var TSOS;
             this.Yreg = 0; // Y register
             this.Zflag = 0; // Z flag
             this.id = pid;
-            this.memorySegment = 0; //Assign the memory segment
+            this.memorySegment = baseAddress; // set the memory segment's to base address, I have no clue why I made it 0 intially
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
