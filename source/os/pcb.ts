@@ -14,9 +14,9 @@ module TSOS {
 
 
         
-        constructor(pid: number, priority: number = 0) {
+        constructor(pid: number, baseAddress: number, priority: number = 0) {
             this.id = pid;
-            this.memorySegment = 0; //Assign the memory segment
+            this.memorySegment = baseAddress; // set the memory segment's to base address, I have no clue why I made it 0 intially
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
