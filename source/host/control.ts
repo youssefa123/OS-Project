@@ -86,7 +86,7 @@ module TSOS {
 
             // ... Create and initialize the CPU (because it's part of the hardware)  ...
             _CPU = new Cpu();  // Note: We could simulate multi-core systems by instantiating more than one instance of the CPU here.
-            //_CPU.init();       //       There's more to do, like dealing with scheduling and such, but this would be a start. Pretty cool.
+            _CPU.init();       //       There's more to do, like dealing with scheduling and such, but this would be a start. Pretty cool.
             
             _Memory = new Memory(); //Step 1 initilize memory  
             _Memory.init();
@@ -120,5 +120,9 @@ module TSOS {
             // be reloaded from the server. If it is false or not specified the browser may reload the
             // page from its cache, which is not what we want.
         }
+
+        
     }
 }
+
+        

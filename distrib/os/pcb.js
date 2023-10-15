@@ -8,6 +8,7 @@ var TSOS;
             this.Xreg = 0; // X register
             this.Yreg = 0; // Y register
             this.Zflag = 0; // Z flag
+            this.processState = ''; //Fixed it to be a string 
             this.id = pid;
             this.memorySegment = baseAddress; // set the memory segment's to base address, I have no clue why I made it 0 intially
             this.PC = 0;
@@ -16,7 +17,6 @@ var TSOS;
             this.Yreg = 0;
             this.instructionRegister = 0;
             this.priority = priority;
-            this.state = ProcessState.RESIDENT;
             //PCB added onto table 
             this.updateProcessInTable();
         }
@@ -46,19 +46,10 @@ var TSOS;
             targetRow.cells[4].textContent = this.Xreg.toString();
             targetRow.cells[5].textContent = this.Yreg.toString();
             targetRow.cells[6].textContent = this.Zflag.toString();
-            targetRow.cells[8].textContent = this.state.toString();
             targetRow.cells[7].textContent = this.priority.toString();
             targetRow.cells[9].textContent = "Memory"; // all processes are in memory for now.
         }
     }
     TSOS.PCB = PCB;
-    // Added a Enum for process states
-    let ProcessState;
-    (function (ProcessState) {
-        ProcessState["RESIDENT"] = "Resident";
-        ProcessState["RUNNING"] = "running";
-        ProcessState["WAITING"] = "waiting";
-        ProcessState["TERMINATED"] = "terminated";
-    })(ProcessState = TSOS.ProcessState || (TSOS.ProcessState = {}));
 })(TSOS || (TSOS = {}));
 //# sourceMappingURL=pcb.js.map

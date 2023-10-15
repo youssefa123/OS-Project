@@ -48,9 +48,6 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellLoad, "load", "- Verifies user code and will load it.");
             this.commandList[this.commandList.length] = sc;
-            //Pid 
-            sc = new TSOS.ShellCommand(this.shellRun, "run", "<pid> - Executes the program with the specified PID from memory.");
-            this.commandList[this.commandList.length] = sc;
             // man <topic>
             sc = new TSOS.ShellCommand(this.shellMan, "man", "<topic> - Displays the MANual page for <topic>.");
             this.commandList[this.commandList.length] = sc;
@@ -202,7 +199,7 @@ var TSOS;
             // Regular Expression to match hexadecimal digits and spaces
             const hexDigitAndSpaceRegex = /^([0-9a-fA-F]{2}\s)*[0-9a-fA-F]{2}$/;
             // Get the user input and cleaned up extra spaces with the .trim()
-            let user = (document.getElementById("taProgramInput")).value.trim();
+            let userinput = (document.getElementById("taProgramInput")).value.trim();
             // Split user input into bytes and convert them to integers
             let userInput = user.split(/\s+/).map((byte) => parseInt(byte, 16));
             if (userInput.length == 0) {
@@ -221,37 +218,6 @@ var TSOS;
             else {
                 _Kernel.krnTrace("Memory Full");
                 _StdOut.putText("Memory Full");
-            }
-        }
-        shellRun(args) {
-            // Check if an argument was provided
-            if (args.length === 0) {
-                _StdOut.putText("Please provide a PID.");
-                return;
-            }
-            // Try to convert the argument to an integer PID
-            const pid = parseInt(args[0]);
-            // Check if the parsed PID is a valid number
-            if (isNaN(pid)) {
-                _StdOut.putText("Invalid PID provided.");
-                return;
-            }
-            // Locate the associated PCB
-            const targetPCB = this.Locate(pid);
-            if (targetPCB) {
-                _StdOut.putText(`Running program with PID ${targetPCB.id}...`);
-                // Update the PCB state to running
-                targetPCB.state = TSOS.ProcessState.RUNNING;
-                targetPCB.updateProcessInTable();
-                _CPU.executeProcess(targetPCB);
-                // Update the process in the process table
-                targetPCB.updateProcessInTable();
-                // Informs the CPU to execute the target process
-                _CPU.executeProcess(targetPCB);
-                _StdOut.putText("Program execution complete.");
-            }
-            else {
-                _StdOut.putText("No program found with the given PID.");
             }
         }
         // Moved the Locate function outside shellRun, making it an instance method for better organization and reuse

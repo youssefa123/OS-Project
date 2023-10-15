@@ -1,6 +1,7 @@
 module TSOS {
     export class PCB {
     
+        
         public id: number;
         public PC: number = 0; // Program counter
         public memorySegment: number; //Memory segment to 
