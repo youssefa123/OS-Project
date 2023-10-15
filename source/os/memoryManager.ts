@@ -1,16 +1,31 @@
 module TSOS {
     export class memoryManager {
-        // Instantiate the MemoryAccessor to access to our memory array.
         private memoryAccessor: MemoryAccessor = new MemoryAccessor();
+        private pidCounter: number = 0; // New PID counter
+        private pcbList: PCB[] = []; // Array to store active PCBs
 
-        // Load data into memory.
         public loadIntoMemory(data: number[]): void {
-            // Iterate over each byte in the data and set it in memory.
+            // Assign a PID
+            let newPID = this.pidCounter++;
+
+            // Determine base and limit for the new process based on its PID
+            let base = newPID * 256;
+            let limit = (newPID + 1) * 256;
+
+            // Create a PCB for the new process and add it to the pcbList
+            let newPCB = new TSOS.PCB(newPID, base, limit);
+            this.pcbList.push(newPCB);
+
+            // Load the data into memory starting from the 'base' address
             for (let i = 0; i < data.length; i++) {
-                this.memoryAccessor.setByte(i, data[i]);
+                this.memoryAccessor.setByte(base + i, data[i]);
             }
-            // Make sure these changes diplay in the visual memory display
+
+            // Update the memory display
             this.updateMemoryDisplay();
+
+            
+    
         }
 
         // Update the HTML table that displays the memory 

@@ -30,6 +30,10 @@ var _CPU: TSOS.Cpu;  // Utilize TypeScript's type annotation system to ensure th
 var _Memory: TSOS.Memory;
 var _MemoryAccessor: TSOS.MemoryAccessor;
 
+var _MemoryManager: TSOS.memoryManager;
+let _LastAssignedPID: number = 0;  // Global PID counter
+
+
 
 
 var _OSclock: number = 0;  // Page 23.

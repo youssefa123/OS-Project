@@ -211,11 +211,13 @@ var TSOS;
                 _StdOut.putText("Program input is not valid hexadecimal. Example: 'A9 08'");
                 return;
             }
-            let pid = _Memory.load(userInput);
-            _StdOut.putText(`Valid hexadecimal input. Process created with PID: ${pid}`);
+            let currentPID = _LastAssignedPID++;
+            // Display the PID
+            _StdOut.putText(`Valid hexadecimal input. Assigned PID: ${currentPID}`);
             // Update the memory display
             _Memory.load(userInput);
             _Memory.updateMemoryDisplay();
+            _StdOut.putText(this.promptStr);
         }
         shellWhereAmI(args) {
             console.log("shellWhereAmI function");

@@ -282,12 +282,23 @@ module TSOS {
                 return;
             }
 
-            // Update the memory display
+
             
+            let currentPID = _LastAssignedPID++;
+
+           
+
+            // Display the PID
+            _StdOut.putText(`Valid hexadecimal input. Assigned PID: ${currentPID}`);
+
+            // Update the memory display
             _Memory.load(userInput);
             _Memory.updateMemoryDisplay();
-        }
+             _StdOut.putText(this.promptStr + " ");  // Display the prompt
 
+        }
+        
+    
 
         
     
