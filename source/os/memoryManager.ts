@@ -5,15 +5,16 @@ module TSOS {
         private pcbList: PCB[] = []; // Array to store active PCBs
 
         public loadIntoMemory(data: number[]): void {
+            
             // Assign a PID
-            let newPID = this.pidCounter++;
+            let pid = this.getNewPID();
 
-            // Determine base and limit for the new process based on its PID
-            let base = newPID * 256;
-            let limit = (newPID + 1) * 256;
+            
+            let base = 0; 
+            let limit = 256; 
 
             // Create a PCB for the new process and add it to the pcbList
-            let newPCB = new TSOS.PCB(newPID, base, limit);
+            let newPCB = new TSOS.PCB(pid, base, limit);
             this.pcbList.push(newPCB);
 
             // Load the data into memory starting from the 'base' address
@@ -27,6 +28,13 @@ module TSOS {
             
     
         }
+
+        //Manage the assignment of PIDs 
+        public getNewPID(): number {
+            let pid = _LastAssignedPID;
+            _LastAssignedPID++;
+            return pid;
+        } 
 
         // Update the HTML table that displays the memory 
         private updateMemoryDisplay(): void {
