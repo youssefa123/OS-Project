@@ -17,6 +17,7 @@ var TSOS;
             this.curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
             this.apologies = "[sorry]";
             this.programID = 0;
+            this.pidCounter = 0;
         }
         init() {
             var sc;
@@ -210,10 +211,10 @@ var TSOS;
                 _StdOut.putText("Program input is not valid hexadecimal. Example: 'A9 08'");
                 return;
             }
-            // If the user input is valid hexadecimal:
-            _StdOut.putText("Valid hexadecimal input.");
+            let pid = _Memory.load(userInput);
+            _StdOut.putText(`Valid hexadecimal input. Process created with PID: ${pid}`);
+            // Update the memory display
             _Memory.load(userInput);
-            // Update the memory table to reflect the changes using the Memory class method
             _Memory.updateMemoryDisplay();
         }
         shellWhereAmI(args) {

@@ -17,6 +17,7 @@ module TSOS {
         public curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
         public apologies = "[sorry]";
         public programID: Number = 0;
+        private pidCounter: number = 0;
 
         constructor() {
         }
@@ -259,8 +260,8 @@ module TSOS {
         }
 
     
-
- 
+        
+        
         public shellLoad() {
             // Regular Expression to match hexadecimal digits and spaces
             const hexDigitAndSpaceRegex = /^([0-9a-fA-F]{2}\s)*[0-9a-fA-F]{2}$/;
@@ -281,15 +282,12 @@ module TSOS {
                 return;
             }
 
-            // If the user input is valid hexadecimal:
-            _StdOut.putText("Valid hexadecimal input.");
+            // Update the memory display
+            
             _Memory.load(userInput);
-
-            // Update the memory table to reflect the changes using the Memory class method
             _Memory.updateMemoryDisplay();
-
-        
         }
+
 
         
     

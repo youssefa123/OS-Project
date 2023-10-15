@@ -2,17 +2,19 @@ var TSOS;
 (function (TSOS) {
     class memoryManager {
         constructor() {
-            // Instantiate the MemoryAccessor so it can access to our memory array.
+            // Instantiate the MemoryAccessor so it can access our memory array.
             this.memoryAccessor = new TSOS.MemoryAccessor();
         }
-        // Load data into memory.
+        // Load data into memory and now return the PID number 
         loadIntoMemory(data) {
-            // Iterate over each byte in the data and set it in memory.
             for (let i = 0; i < data.length; i++) {
                 this.memoryAccessor.setByte(i, data[i]);
             }
-            // Show the the changes in the visual memory display.
+            // Get a new PID and increment for the next process
+            let pid = memoryManager.nextPid++;
+            // Show the changes in the visual memory display.
             this.updateMemoryDisplay();
+            return pid; // Return the associated PID for the loaded data.
         }
         // Update the HTML table that displays the contents of memory.
         updateMemoryDisplay() {
@@ -32,6 +34,7 @@ var TSOS;
             }
         }
     }
+    memoryManager.nextPid = 0; // Start the PID from 0.
     TSOS.memoryManager = memoryManager;
 })(TSOS || (TSOS = {}));
 //# sourceMappingURL=memoryManager.js.map

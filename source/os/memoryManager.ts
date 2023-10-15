@@ -1,6 +1,6 @@
 module TSOS {
     export class memoryManager {
-        // Instantiate the MemoryAccessor so it can access to our memory array.
+        // Instantiate the MemoryAccessor to access to our memory array.
         private memoryAccessor: MemoryAccessor = new MemoryAccessor();
 
         // Load data into memory.
@@ -9,24 +9,25 @@ module TSOS {
             for (let i = 0; i < data.length; i++) {
                 this.memoryAccessor.setByte(i, data[i]);
             }
-            // Show the the changes in the visual memory display.
+            // Make sure these changes diplay in the visual memory display
             this.updateMemoryDisplay();
         }
 
-        // Update the HTML table that displays the contents of memory.
+        // Update the HTML table that displays the memory 
         private updateMemoryDisplay(): void {
-            const memoryTable = document.getElementById("memorytable");
+            const memoryTable = <HTMLTableElement>document.getElementById("memorytable");
 
             // Clear the existing rows in the memory table.
             while (memoryTable.firstChild) {
                 memoryTable.removeChild(memoryTable.firstChild);
             }
 
-            // Iterate through our memory array and update the table to reflect the contents.
+            // Iterate through the memory array 
             for (let i = 0; i < 256; i += 2) {
-                let row = memoryTable.insertRow();       // Create a new row.
-                let cell1 = row.insertCell(0);           // Create the first cell.
-                let cell2 = row.insertCell(1);           // Create the second cell.
+                let row = memoryTable.insertRow();       
+                let cell1 = row.insertCell(0);           
+                let cell2 = row.insertCell(1);          
+                
                 // Convert the bytes to hexadecimal and set them in the cells.
                 cell1.textContent = this.memoryAccessor.getByte(i).toString(16).toUpperCase().padStart(2, '0');
                 cell2.textContent = this.memoryAccessor.getByte(i + 1).toString(16).toUpperCase().padStart(2, '0');
