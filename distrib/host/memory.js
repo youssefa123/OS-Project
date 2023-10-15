@@ -11,6 +11,19 @@ var TSOS;
             // Initialize the storage array with the size of limit of 256 bytes
             this.storage = new Array(this.limit).fill('00'); // Filling with '00' as a default memory value
         }
+        // Load data into the memory
+        load(data) {
+            // Logic to load data into the memory
+            for (let i = 0; i < data.length && i < this.limit; i++) {
+                this.storage[i] = data[i];
+            }
+        }
+        updateMemoryDisplay() {
+            const memoryTable = document.getElementById('memorytable');
+            for (let i = 0; i < this.limit; i++) {
+                memoryTable.rows[i].cells[1].innerText = this.storage[i];
+            }
+        }
     }
     TSOS.Memory = Memory;
 })(TSOS || (TSOS = {}));

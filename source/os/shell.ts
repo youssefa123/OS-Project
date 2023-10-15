@@ -268,8 +268,8 @@ module TSOS {
             // Get the user input and cleaned up extra spaces with the .trim()
             let userinput = (<HTMLInputElement>(document.getElementById("taProgramInput"))).value.trim();
         
-            // Split user input into bytes and convert them to integers
-            let userInput = userinput.split(/\s+/).map((byte) => parseInt(byte, 16));
+            /// Split user input into individual bytes (but keep them as strings)
+            let userInput = userinput.split(/\s+/);
         
             if (userInput.length == 0) {
                 _StdOut.putText("User Program Input is Empty!");
@@ -277,17 +277,22 @@ module TSOS {
             }
         
             if (!hexDigitAndSpaceRegex.test(userinput)) {
-                _StdOut.putText("Program input is not valid hexadecimal. Please ensure it's in the format: 'XX XX ...'");
+                _StdOut.putText("Program input is not valid hexadecimal. Example: 'A9 08'");
                 return;
             }
+
+            // If the user input is valid hexadecimal:
+            _StdOut.putText("Valid hexadecimal input.");
+            _Memory.load(userInput);
+
+            // Update the memory table to reflect the changes using the Memory class method
+            _Memory.updateMemoryDisplay();
+
         
         }
 
         
-        
-      
-        
-
+    
         
         public shellWhereAmI(args: string[]) {
             console.log("shellWhereAmI function");

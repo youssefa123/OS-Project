@@ -200,34 +200,21 @@ var TSOS;
             const hexDigitAndSpaceRegex = /^([0-9a-fA-F]{2}\s)*[0-9a-fA-F]{2}$/;
             // Get the user input and cleaned up extra spaces with the .trim()
             let userinput = (document.getElementById("taProgramInput")).value.trim();
-            // Split user input into bytes and convert them to integers
-            let userInput = user.split(/\s+/).map((byte) => parseInt(byte, 16));
+            /// Split user input into individual bytes (but keep them as strings)
+            let userInput = userinput.split(/\s+/);
             if (userInput.length == 0) {
                 _StdOut.putText("User Program Input is Empty!");
                 return;
             }
-            if (!hexDigitAndSpaceRegex.test(user)) {
+            if (!hexDigitAndSpaceRegex.test(userinput)) {
                 _StdOut.putText("Program input is not valid hexadecimal. Please ensure it's in the format: 'XX XX ...'");
                 return;
             }
-            let pid = _MemoryManager.loadProgram(userInput);
-            if (pid !== -1) {
-                _Kernel.krnTrace(`Program loaded into memory with PID: ${pid}`);
-                _StdOut.putText(`Program loaded in Memory with Process ID: ${pid}`);
-            }
-            else {
-                _Kernel.krnTrace("Memory Full");
-                _StdOut.putText("Memory Full");
-            }
-        }
-        // Moved the Locate function outside shellRun, making it an instance method for better organization and reuse
-        Locate(pid) {
-            for (let pcb of _PCBQueue.accessor()) {
-                if (pcb.id === pid) {
-                    return pcb;
-                }
-            }
-            return null;
+            // If the user input is valid hexadecimal:
+            _StdOut.putText("Valid hexadecimal input.");
+            _Memory.load(userInput);
+            // Update the memory table to reflect the changes using the Memory class method
+            _Memory.updateMemoryDisplay();
         }
         shellWhereAmI(args) {
             console.log("shellWhereAmI function");
