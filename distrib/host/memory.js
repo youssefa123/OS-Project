@@ -20,8 +20,10 @@ var TSOS;
         }
         updateMemoryDisplay() {
             const memoryTable = document.getElementById('memorytable');
-            for (let i = 0; i < this.limit; i++) {
-                memoryTable.rows[i].cells[1].innerText = this.storage[i];
+            for (let i = 0; i < this.limit; i += 8) {
+                for (let j = 0; j < 8; j++) {
+                    memoryTable.rows[i / 8].cells[j + 1].innerText = this.storage[i + j];
+                }
             }
         }
     }
