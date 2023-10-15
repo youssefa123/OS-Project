@@ -207,7 +207,7 @@ var TSOS;
                 return;
             }
             if (!hexDigitAndSpaceRegex.test(userinput)) {
-                _StdOut.putText("Program input is not valid hexadecimal. Please ensure it's in the format: 'XX XX ...'");
+                _StdOut.putText("Program input is not valid hexadecimal. Example: 'A9 08'");
                 return;
             }
             // If the user input is valid hexadecimal:
