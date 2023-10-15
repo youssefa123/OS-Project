@@ -269,42 +269,23 @@ module TSOS {
             let userinput = (<HTMLInputElement>(document.getElementById("taProgramInput"))).value.trim();
         
             // Split user input into bytes and convert them to integers
-            let userInput = user.split(/\s+/).map((byte) => parseInt(byte, 16));
+            let userInput = userinput.split(/\s+/).map((byte) => parseInt(byte, 16));
         
             if (userInput.length == 0) {
                 _StdOut.putText("User Program Input is Empty!");
                 return;
             }
         
-            if (!hexDigitAndSpaceRegex.test(user)) {
+            if (!hexDigitAndSpaceRegex.test(userinput)) {
                 _StdOut.putText("Program input is not valid hexadecimal. Please ensure it's in the format: 'XX XX ...'");
                 return;
             }
         
-            let pid = _MemoryManager.loadProgram(userInput);
-        
-            if (pid !== -1) {
-                _Kernel.krnTrace(`Program loaded into memory with PID: ${pid}`);
-                _StdOut.putText(`Program loaded in Memory with Process ID: ${pid}`);
-            } else {
-                _Kernel.krnTrace("Memory Full");
-                _StdOut.putText("Memory Full");
-            }
         }
-        
 
         
         
-        // Moved the Locate function outside shellRun, making it an instance method for better organization and reuse
-        private Locate(pid: number): PCB | null {
-            for (let pcb of _PCBQueue.accessor()) {
-                if (pcb.id === pid) {
-                    return pcb;
-                }
-            }
-            return null;
-        }
-        
+      
         
 
         
