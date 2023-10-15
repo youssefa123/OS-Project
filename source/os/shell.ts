@@ -266,7 +266,7 @@ module TSOS {
             const hexDigitAndSpaceRegex = /^([0-9a-fA-F]{2}\s)*[0-9a-fA-F]{2}$/;
         
             // Get the user input and cleaned up extra spaces with the .trim()
-            let user = (<HTMLInputElement>(document.getElementById("taProgramInput"))).value.trim();
+            let userinput = (<HTMLInputElement>(document.getElementById("taProgramInput"))).value.trim();
         
             // Split user input into bytes and convert them to integers
             let userInput = user.split(/\s+/).map((byte) => parseInt(byte, 16));

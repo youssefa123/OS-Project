@@ -9,7 +9,7 @@ module TSOS {
         public Xreg: number = 0; // X register
         public Yreg: number = 0; // Y register
         public Zflag: number = 0; // Z flag
-        public state: ProcessState; 
+        public processState: string = ''; //Fixed it to be a string 
         public priority: number; //Prioty
 
 
@@ -23,7 +23,7 @@ module TSOS {
             this.Yreg = 0;
             this.instructionRegister = 0;
             this.priority = priority;
-            this.state = ProcessState.RESIDENT;
+            
 
             //PCB added onto table 
             this.updateProcessInTable();
@@ -60,7 +60,7 @@ module TSOS {
             targetRow.cells[4].textContent = this.Xreg.toString();
             targetRow.cells[5].textContent = this.Yreg.toString();
             targetRow.cells[6].textContent = this.Zflag.toString();
-            targetRow.cells[8].textContent = this.state.toString();
+
             targetRow.cells[7].textContent = this.priority.toString();
             targetRow.cells[9].textContent = "Memory"; // all processes are in memory for now.
             
@@ -68,13 +68,4 @@ module TSOS {
     }
 
 
-     // Added a Enum for process states
-     export enum ProcessState {
-        RESIDENT = "Resident",
-        RUNNING = "running",
-        WAITING = "waiting",
-        TERMINATED = "terminated"
-    }
 }
-
-    
