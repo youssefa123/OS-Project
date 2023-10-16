@@ -33,7 +33,7 @@ var _MemoryAccessor: TSOS.MemoryAccessor;
 var _MemoryManager: TSOS.memoryManager;
 let _LastAssignedPID: number = 0;  // Global PID counter
 
-
+let _Utils: TSOS.Utils;
 
 
 var _OSclock: number = 0;  // Page 23.

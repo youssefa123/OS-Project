@@ -65,7 +65,7 @@ h3 {
 #memorytable {
   width: 200px;
   height: 100px;
-  float: right;
+  margin-bottom: 20px;  /* Added some spacing between memory and pcb tables */
 }
 
 
@@ -78,5 +78,28 @@ h3 {
 #memorytable tr:hover {
   background-color: #ddd;
 }
+
+#pcbtable {
+  width: 20%;  
+  border-collapse: collapse;  
+  height: 100px
+
+}
+
+#pcbtable th, #pcbtable td {
+  border: 1px solid black;  
+  padding: 8px;
+  text-align: left;
+  color: black;  
+}
+
+#pcbtable tr:hover {
+  background-color: #ff0606;  /* Green Hover Color */
+}
+
+#pcbtable th {
+  background-color: #f2f2f2;  
+}
+
 
 

@@ -1,26 +1,34 @@
 module TSOS {
     export class memoryManager {
         private memoryAccessor: MemoryAccessor = new MemoryAccessor();
-        private pidCounter: number = 0; // New PID counter
         private pcbList: PCB[] = []; // Array to store active PCBs
 
-        public loadIntoMemory(data: number[]): void {
+        public loadIntoMemory(pid:number, data: string[]): void {
             
-            // Assign a PID
-            let pid = this.getNewPID();
+            
+            let base = 256 * pid; 
+            let limit = base + 256; 
+            let Prioty = 50;
+            let IR = 0;
+            let PC = base;
+            let ACC = 0;
+            let Xreg = 0;
+            let Yreg = 0;
+            let Zflag = 0;
 
-            
-            let base = 0; 
-            let limit = 256; 
 
             // Create a PCB for the new process and add it to the pcbList
-            let newPCB = new TSOS.PCB(pid, base, limit);
-            this.pcbList.push(newPCB);
+            let newPCB = new TSOS.PCB(pid, base, limit, Prioty, IR, PC, ACC, Xreg, Yreg, Zflag );
 
             // Load the data into memory starting from the 'base' address
+            console.log("MM", data)
             for (let i = 0; i < data.length; i++) {
-                this.memoryAccessor.setByte(base + i, data[i]);
+                let d = parseInt(data[i],16);
+
+                this.memoryAccessor.setByte(base + i, d);
             }
+
+            this.pcbList.push(newPCB)
 
             // Update the memory display
             this.updateMemoryDisplay();
@@ -29,32 +37,84 @@ module TSOS {
     
         }
 
-        //Manage the assignment of PIDs 
-        public getNewPID(): number {
-            let pid = _LastAssignedPID;
-            _LastAssignedPID++;
-            return pid;
-        } 
+
 
         // Update the HTML table that displays the memory 
         private updateMemoryDisplay(): void {
-            const memoryTable = <HTMLTableElement>document.getElementById("memorytable");
+            // const memoryTable = <HTMLTableElement>document.getElementById("memorytable");
 
-            // Clear the existing rows in the memory table.
-            while (memoryTable.firstChild) {
-                memoryTable.removeChild(memoryTable.firstChild);
-            }
+            // // Clear the existing rows in the memory table.
+            // while (memoryTable.firstChild) {
+            //     memoryTable.removeChild(memoryTable.firstChild);
+            // }
 
-            // Iterate through the memory array 
-            for (let i = 0; i < 256; i += 2) {
-                let row = memoryTable.insertRow();       
-                let cell1 = row.insertCell(0);           
-                let cell2 = row.insertCell(1);          
+            // // Iterate through the memory array 
+            // for (let i = 0; i < 256; i += 2) {
+            //     let row = memoryTable.insertRow();       
+            //     let cell1 = row.insertCell(0);           
+            //     let cell2 = row.insertCell(1);          
                 
-                // Convert the bytes to hexadecimal and set them in the cells.
-                cell1.textContent = this.memoryAccessor.getByte(i).toString(16).toUpperCase().padStart(2, '0');
-                cell2.textContent = this.memoryAccessor.getByte(i + 1).toString(16).toUpperCase().padStart(2, '0');
-            }
+            //     // Convert the bytes to hexadecimal and set them in the cells.
+            //     cell1.textContent = this.memoryAccessor.getByte(i).toString(16).toUpperCase().padStart(2, '0');
+            //     cell2.textContent = this.memoryAccessor.getByte(i + 1).toString(16).toUpperCase().padStart(2, '0');
+            // }
+
+            const pcbtablebody = document.getElementById("pcbtablebody");
+            pcbtablebody.innerHTML = "";
+            /*
+            <th>PID</th>
+                  <th>Prioty</th>
+                  <th>IR</th>
+                  <th>PC</th>
+                  <th>ACC</th>
+                  <th>Xreg</th>
+                  <th>Yreg</th>
+                  <th>Zflag</th>
+                  <th>Memory Location</th>
+            */
+           for (const pcbdata of this.pcbList){
+            let row = document.createElement("tr");
+            let pid = document.createElement("td");
+            let pcell = document.createElement("td"); //Prioty cell for table 
+            let IRcell = document.createElement("td");
+            let PCcell = document.createElement("td");
+            let ACC = document.createElement("td");
+            let Xreg = document.createElement("td");
+            let Yreg = document.createElement("td");
+            let Zflag = document.createElement("td");
+            let basecell = document.createElement("td"); //Memory location for now 
+            
+            
+
+            pid.innerText = pcbdata.pid.toString();
+            pcell.innerText = pcbdata.Prioty.toString();
+            IRcell.innerText = pcbdata.IR.toString();
+            PCcell.innerText = pcbdata.PC.toString();
+            ACC.innerText = pcbdata.ACC.toString();
+            Xreg.innerText = pcbdata.Xreg.toString();
+            Yreg.innerText = pcbdata.Yreg.toString();
+            Zflag.innerText = pcbdata.Zflag.toString();
+            basecell.innerText = pcbdata.base.toString(); //Base is in decimal form needs to be hex. 
+
+
+
+
+            pcbtablebody.appendChild(row);
+            row.appendChild(pid);
+            row.appendChild(pcell);
+            row.appendChild(ACC);
+            row.appendChild(IRcell);
+            row.appendChild(PCcell);
+            row.appendChild(Xreg);
+            row.appendChild(Yreg);
+            row.appendChild(Zflag);
+            row.appendChild(basecell);
+
+
+
+           }
+
+
         }
     }
 }
