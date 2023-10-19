@@ -27,6 +27,14 @@ var TSOS;
             // Update the memory display
             this.updateMemoryDisplay();
         }
+        getPCB(pid) {
+            for (const pcbdata of this.pcbList) {
+                if (pcbdata.pid == pid) {
+                    return pcbdata;
+                }
+            }
+            return null;
+        }
         // Update the HTML table that displays the memory 
         updateMemoryDisplay() {
             // const memoryTable = <HTMLTableElement>document.getElementById("memorytable");

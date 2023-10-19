@@ -49,6 +49,8 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellLoad, "load", "- Verifies user code and will load it.");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellRun, "run", "<PID> run a program already in memory.");
+            this.commandList[this.commandList.length] = sc;
             // man <topic>
             sc = new TSOS.ShellCommand(this.shellMan, "man", "<topic> - Displays the MANual page for <topic>.");
             this.commandList[this.commandList.length] = sc;
@@ -219,6 +221,21 @@ var TSOS;
             _MemoryManager.loadIntoMemory(currentPID, userInput);
             _Memory.updateMemoryDisplay();
             _StdOut.putText(this.promptStr + " "); // Display the prompt
+        }
+        shellRun(args) {
+            console.log("shellRun Function");
+            console.log(args);
+            let pid = parseInt(args[0]);
+            console.log(pid);
+            if (Number.isNaN(pid)) {
+                _StdOut.putText("Bad input enter a number: ");
+                return;
+            }
+            let pcbdata = _MemoryManager.getPCB(pid);
+            if (pcbdata == null) {
+                _StdOut.putText("No PID number found ");
+                return;
+            }
         }
         shellWhereAmI(args) {
             console.log("shellWhereAmI function");

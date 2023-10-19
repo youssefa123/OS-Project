@@ -80,9 +80,12 @@ module TSOS {
                 "- Verifies user code and will load it.");
             this.commandList[this.commandList.length] = sc;
 
-            
-            
 
+            sc = new ShellCommand(this.shellRun,
+                "run",
+                "<PID> run a program already in memory.");
+            this.commandList[this.commandList.length] = sc;
+        
 
             // man <topic>
             sc = new ShellCommand(this.shellMan,
@@ -299,6 +302,33 @@ module TSOS {
              _StdOut.putText(this.promptStr + " ");  // Display the prompt
 
         }
+
+        public shellRun(args:string[]) {
+            console.log("shellRun Function");
+            console.log(args)
+
+             let pid : number = parseInt(args[0])
+            console.log(pid);
+             
+            if (Number.isNaN(pid)){
+                _StdOut.putText( "Bad input enter a number: ");
+                return;
+            }
+
+
+            let pcbdata = _MemoryManager.getPCB(pid);
+
+            if (pcbdata == null){
+                _StdOut.putText( "No PID number found ");
+                return;
+            }
+
+            _CPU.executeProcess(pcbdata);
+
+
+        }
+
+
         
     
 

@@ -25,7 +25,7 @@ module TSOS {
             for (let i = 0; i < data.length; i++) {
                 let d = parseInt(data[i],16);
 
-                this.memoryAccessor.setByte(base + i, d);
+                this.memoryAccessor.writeByte(base + i, d);
             }
 
             this.pcbList.push(newPCB)
@@ -37,10 +37,22 @@ module TSOS {
     
         }
 
+        public getPCB(pid: number) {
+            for (const pcbdata of this.pcbList) {
+                if (pcbdata.pid == pid ) {
+                    return pcbdata
+                }
+            }
+
+
+            return null;
+
+        }
+
 
 
         // Update the HTML table that displays the memory 
-        private updateMemoryDisplay(): void {
+        public updateMemoryDisplay(): void {
             // const memoryTable = <HTMLTableElement>document.getElementById("memorytable");
 
             // // Clear the existing rows in the memory table.

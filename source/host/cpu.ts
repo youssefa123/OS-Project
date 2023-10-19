@@ -23,7 +23,6 @@
 
         private currentInstruction: number;
         private currentOpcode: number;
-        private memoryAccessor: MemoryAccessor; // To interface with memory
 
         
 
@@ -78,7 +77,7 @@
         private fetch(): void { //Fetch the instruction from memory using the current PC and the memoryAccessor
             
             
-            this.currentInstruction = this.memoryAccessor.readByte(this.PC);
+            this.currentInstruction = _MemoryAccessor.readByte(this.PC);
             this.PC++;
         }
 
@@ -91,38 +90,38 @@
         private execute(): void {
             switch (this.currentOpcode) {
                 case 0xA9: // (Load Accumulator with a constant)
-                    this.Acc = this.memoryAccessor.readByte(this.PC);
+                    this.Acc = _MemoryAccessor.readByte(this.PC);
                     this.PC++;
                     break;
                 case 0x8D: // (Store Accumulator in memory)
-                    let address = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
-                    this.memoryAccessor.writeByte(address, this.Acc);
+                    let address = (_MemoryAccessor.readByte(this.PC) * 256) + _MemoryAccessor.readByte(this.PC + 1);
+                    _MemoryAccessor.writeByte(address, this.Acc);
                     this.PC += 2;
                     break;
                 case 0x6D: // Add with carry
-                    let sumAddress = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
-                    this.Acc += this.memoryAccessor.readByte(sumAddress);
+                    let sumAddress = (_MemoryAccessor.readByte(this.PC) * 256) + _MemoryAccessor.readByte(this.PC + 1);
+                    this.Acc += _MemoryAccessor.readByte(sumAddress);
                     this.PC += 2;
                     break;
                 case 0xA2: // Load the X register with a constant
-                    this.Xreg = this.memoryAccessor.readByte(this.PC);
+                    this.Xreg = _MemoryAccessor.readByte(this.PC);
                     this.PC++;
                     break;
 
                 case 0xAE: // Load the X register from memory
-                    let xAddress = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
-                    this.Xreg = this.memoryAccessor.readByte(xAddress);
+                    let xAddress = (_MemoryAccessor.readByte(this.PC) * 256) + _MemoryAccessor.readByte(this.PC + 1);
+                    this.Xreg = _MemoryAccessor.readByte(xAddress);
                     this.PC += 2;
                     break;
                 
                 case 0xA0: // Load the Y register with a constant
-                    this.Yreg = this.memoryAccessor.readByte(this.PC);
+                    this.Yreg = _MemoryAccessor.readByte(this.PC);
                     this.PC++;
                     break;
                 
                 case 0xAC: // Load the Y register from memory
-                    let yAddress = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
-                    this.Yreg = this.memoryAccessor.readByte(yAddress);
+                    let yAddress = (_MemoryAccessor.readByte(this.PC) * 256) + _MemoryAccessor.readByte(this.PC + 1);
+                    this.Yreg = _MemoryAccessor.readByte(yAddress);
                     this.PC += 2;
                     break;
 
@@ -134,8 +133,8 @@
                     break;
         
                 case 0xEC: // Compare byte in memory to X reg
-                    let compareAddress = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
-                    this.Zflag = (this.memoryAccessor.readByte(compareAddress) === this.Xreg) ? 1 : 0; //If the byte at the computed address is equal to the value in the X register, set Zflag to 1, otherwise set Zflag to 0
+                    let compareAddress = (_MemoryAccessor.readByte(this.PC) * 256) + _MemoryAccessor.readByte(this.PC + 1);
+                    this.Zflag = (_MemoryAccessor.readByte(compareAddress) === this.Xreg) ? 1 : 0; //If the byte at the computed address is equal to the value in the X register, set Zflag to 1, otherwise set Zflag to 0
                     
                     this.PC += 2; // Increment the program counter to skip the two bytes 
                     break;
@@ -143,13 +142,13 @@
                 case 0xEE: // Increment the value of a byte
 
                     
-                    let incrementAddress = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
+                    let incrementAddress = (_MemoryAccessor.readByte(this.PC) * 256) + _MemoryAccessor.readByte(this.PC + 1);
                     
                     //Fetches the current value of the byte
-                    let value = this.memoryAccessor.readByte(incrementAddress);
+                    let value = _MemoryAccessor.readByte(incrementAddress);
                     
                     //Increment the fetched value by 1 and store it back to the same address in memory
-                    this.memoryAccessor.writeByte(incrementAddress, value + 1);
+                    _MemoryAccessor.writeByte(incrementAddress, value + 1);
 
                     //Increment the program counter to skip the two bytes 
                     this.PC += 2;
@@ -163,7 +162,7 @@
             // After executing any instruction we need to update the PCB of the running process
             this.updateCurrentPCB();
             if (this.currentPCB) {
-                this.currentPCB.updateProcessInTable();
+                _MemoryManager.updateMemoryDisplay()
             }
             
         }
@@ -172,11 +171,11 @@
         private updateCurrentPCB(): void {
             if (this.currentPCB) {
                 this.currentPCB.PC = this.PC;
-                this.currentPCB.Acc = this.Acc;
+                this.currentPCB.ACC = this.Acc;
                 this.currentPCB.Xreg = this.Xreg;
                 this.currentPCB.Yreg = this.Yreg;
                 this.currentPCB.Zflag = this.Zflag;
-                this.currentPCB.updateProcessInTable();
+                _MemoryManager.updateMemoryDisplay()
             }
         }
 
@@ -184,11 +183,11 @@
         public executeProcess(pcb: PCB): void {
              this.currentPCB = pcb;
             this.PC = pcb.PC;
-            this.Acc = pcb.Acc;
+            this.Acc = pcb.ACC;
             this.Xreg = pcb.Xreg;
             this.Yreg = pcb.Yreg;
             this.Zflag = pcb.Zflag;
-            pcb.updateProcessInTable();
+            _MemoryManager.updateMemoryDisplay()
             this.isExecuting = true;
         }
     }

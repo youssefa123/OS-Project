@@ -2,7 +2,7 @@ module TSOS {
     export class MemoryAccessor {
         
         // Then we need to retrieve a byte from a specific address in memory
-        public getByte(address: number): number {
+        public readByte(address: number): number {
             
             // Aslo the address should be within the bounds of our memory.
             if (address < 0 || address >= _Memory.limit) {
@@ -14,7 +14,7 @@ module TSOS {
         }
 
         // Then we need to set a byte at a specific address in memory.
-        public setByte(address: number, value: number): void {
+        public writeByte(address: number, value: number): void {
             console.log("Setting byte: ", Utils.formatHex(value,2,true), "at",Utils.formatHex(address,2,true))
             if (address < 0 || address >= _Memory.limit) {
                 console.error("Invalid memory address.");
