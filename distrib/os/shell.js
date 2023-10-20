@@ -217,7 +217,6 @@ var TSOS;
             // Display the PID
             _StdOut.putText(`Valid hexadecimal input. Assigned PID: ${currentPID}`);
             // Update the memory display
-            //_Memory.load(userInput);
             _MemoryManager.loadIntoMemory(currentPID, userInput);
             _Memory.updateMemoryDisplay();
             // _StdOut.putText(this.promptStr + " ");  // Display the prompt

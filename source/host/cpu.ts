@@ -200,10 +200,6 @@
                         }
                     }
 
-                    
-                 
-    
-
                     break;
                 default:
                     console.log(`Not recognized instruction: ${this.currentOpcode}`);
