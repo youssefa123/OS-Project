@@ -31,9 +31,10 @@ h3 {
 }
 
 #display {
-  background-color:#DFDBC3;
-  border: 2px solid red;
+  background-color:#00ffff;
   cursor: default;
+  float: left;
+  overflow: auto;
 }
 
 .normal_button {
@@ -48,12 +49,6 @@ h3 {
 }
 
 
-#divConsole {
-    width: 800px;
-    height: 300px;
-    float: left;
-    overflow: auto;  /*Scroll Bar*/
-}
 
 
 #consoleContent {
@@ -61,12 +56,6 @@ h3 {
   flex: 1; /* Expands I think */
 }
 
-
-#memorytable {
-  width: 200px;
-  height: 100px;
-  margin-bottom: 20px;  /* Added some spacing between memory and pcb tables */
-}
 
 
 #memorytable th, #memorytable td {
@@ -76,7 +65,7 @@ h3 {
 }
 
 #memorytable tr:hover {
-  background-color: #ddd;
+  background-color: #f6ff00;
 }
 
 #pcbtable {
@@ -101,5 +90,15 @@ h3 {
   background-color: #f2f2f2;  
 }
 
+
+#taHostLog {
+  resize: none;  /* disables the resize handle */
+   
+}
+
+
+#UserProgramInput {
+  resize: none;
+}
 
 

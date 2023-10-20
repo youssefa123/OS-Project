@@ -75,7 +75,6 @@
    <div id="statusBar">
       <p>Date: <span id="currentdate"></span></p>
       <p>Time: <span id="currenttime"></span></p>
-      <p>Status: <span id="status"></span></p>
    </div>
    
    <script>
@@ -86,9 +85,6 @@
          document.getElementById("currenttime").textContent = currentTime;
       }
 
-      function setStatus() {
-        document.getElementById("status").textContent = " Welcome back. Your currently 🟢Online"; //Not as cool as I thought it would look 
-      }
    
       onload = function () {
          onDocumentLoad();
@@ -99,91 +95,43 @@
    </script>
    
 
-   <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left; overflow:auto;">
-      <canvas id="display"
-              width="640px"
-              height="420px"   
-              tabindex="3"> 
-      </canvas>
-  </div>
-
-
-  
-
-
-  <div id="divLog" style="float:left; margin-left:20px;"> <!-- Removed the absolute positioning and added float:left -->
-   <label>
-      Host Log
-      <br>
-      <textarea name="taHostLog"
-                id  ="taHostLog"
-                rows="26"
-                cols="48"
-      ></textarea>
-   </label>
+   <!-- Console Log -->
+<div id="divConsole" style="width:500px; height:500px; float:left;">
+   <canvas id="display"
+           width="600px"
+           height="420px" 
+           tabindex="3"> 
+   </canvas>
 </div>
 
-  <div id="divMemoryTable" style="float:left; margin-left:20px; max-height:300px; overflow-y:auto;"> <!-- Removed the absolute positioning and added float:left -->
-    <h5>Memory</h5>
-    <table id="memorytable">
-        <tbody>
-          <tr>
-              <td>0x000</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td>
-          </tr>
-          
 
-        </tbody>
-    </table>
-  </div>
+<div style="width:500px; height:auto; float:left; margin-left:120px;">
 
-  
-    <!-- PCB Table -->
-    <div id="divPCBTable" style="float:left; max-height:100px;">
-      <h5>Process Controll Table</h5>
-      <table id="pcbtable">
-          <thead>
-              <tr>
-                  <th>PID</th>
-                  <th>Prioty</th>
-                  <th>IR</th>
-                  <th>PC</th>
-                  <th>ACC</th>
-                  <th>Xreg</th>
-                  <th>Yreg</th>
-                  <th>Zflag</th>
-                  <th>Memory Location</th>
-                  <th>Running</th>
-
-              </tr>
-          </thead>
-          <tbody id = "pcbtablebody">
-             
-          </tbody>
-      </table>
-    </div>
-
-
-<!--User was indented onto memory, found this to help: https://www.w3schools.com/howto/howto_css_clearfix.asp -->
-<div class="clearfix" style="clear:both;"></div>
-
-
-   <div id="divUserProgramInput" style="margin-left:520px; ">
+   <div id="divUserProgramInput" style="width:500px; height:auto;">
       <label>
-         User Program Input
-         <br>
-         <textarea name="taProgramInput"
-                   id  ="taProgramInput"
-                   rows="8"
-                   cols="48"
-         >
-      
-         A9 01 A9 02 A9 03 A9 04 A9 05 A9 01 A9 02 A9 03 A9 04 A9 05 A9 01 A9 02 A9 03 A9 04 A9 05 A9 01 A9 02 A9 03 A9 04 A9 05 A9 01 A9 02 A9 03 A9 04 A9 05 00
-      
-      </textarea>
+          User Program Input
+          <br>
+          <textarea name="taProgramInput"
+                    id="taProgramInput"
+                    rows="8"
+                    cols="48">
+              A9 01 A9 02 A9 03 A9 04 A9 05 A9 01 A9 02 A9 03 A9 04 A9 05 A9 01 A9 02 A9 03 A9 04 A9 05 A9 01 A9 02 A9 03 A9 04 A9 05 A9 01 A9 02 A9 03 A9 04 A9 05 00
+          </textarea>
       </label>
    </div>
-</div>
 
+   <!-- Memory Table -->
+   <div id="divMemoryTable" style="width:500px; height:300px;  overflow-x:auto; margin-top:20px;">
+      <h5>Memory</h5>
+      <table id="memorytable">
+          <tbody>
+              <tr>
+                  <td>0x000</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td>
+              </tr>
+          </tbody>
+      </table>
+   </div>
+</div>
 
 <div id="divCPUTable" style="float:left; margin-left:20px; max-height:150px;">
    <h5>CPU Information</h5>
@@ -214,14 +162,62 @@
 
 
 
-<p class="footerText" style="clear:both;">
-   <br>
-   Copyright &copy; 2008 - 2019 No Rights Reserved.
-   <br>
-   Reproduction is inhibited without the express written consent of
-   Ted Codd, Stevie Ray Vaughan, and Ian Fleming.
-</p>
+<div id="divLog" style="float:left; margin-bottom:85px;">
+   <label>
+      Host Log
+      <br>
+      <textarea name="taHostLog"
+                id  ="taHostLog"        
+                style="width: 300px; height: 300px;"  
+      ></textarea>
+   </label>
+</div>
+
+
+
+
+  
+    <!-- PCB Table -->
+    <div id="divPCBTable" style="float:left; max-height:100px;">
+      <h5>Process Controll Table</h5>
+      <table id="pcbtable">
+          <thead>
+              <tr>
+                  <th>PID</th>
+                  <th>Prioty</th>
+                  <th>IR</th>
+                  <th>PC</th>
+                  <th>ACC</th>
+                  <th>Xreg</th>
+                  <th>Yreg</th>
+                  <th>Zflag</th>
+                  <th>Memory Location</th>
+                  <th>Running</th>
+
+              </tr>
+          </thead>
+          <tbody id = "pcbtablebody">
+             
+          </tbody>
+      </table>
+    </div>
+
+
+
+
+
+    <p class="footerText" style="clear:both; margin-top:100px">
+      <br>
+      Copyright &copy; 2008 - 2019 No Rights Reserved.
+      <br>
+      Reproduction is inhibited without the express written consent of
+      Ted Codd, Stevie Ray Vaughan, and Ian Fleming.
+   </p>
+   
 
 
 </body>
 </html>
+
+
+
