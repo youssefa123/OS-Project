@@ -284,22 +284,16 @@ module TSOS {
                 _StdOut.putText("Program input is not valid hexadecimal. Example: 'A9 08'");
                 return;
             }
-
-
             
             let currentPID = _LastAssignedPID++;
-
-           
-
             // Display the PID
             _StdOut.putText(`Valid hexadecimal input. Assigned PID: ${currentPID}`);
 
             // Update the memory display
-            //_Memory.load(userInput);
-            _MemoryManager.loadIntoMemory(currentPID,userInput)
+            _MemoryManager.loadIntoMemory(currentPID, userInput)
             _Memory.updateMemoryDisplay();
             
-             _StdOut.putText(this.promptStr + " ");  // Display the prompt
+            // _StdOut.putText(this.promptStr + " ");  // Display the prompt
 
         }
 
@@ -325,15 +319,7 @@ module TSOS {
 
             _CPU.executeProcess(pcbdata);
 
-
         }
-
-
-        
-    
-
-        
-    
         
         public shellWhereAmI(args: string[]) {
             console.log("shellWhereAmI function");

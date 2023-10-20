@@ -6,18 +6,19 @@ module TSOS {
             
             // Aslo the address should be within the bounds of our memory.
             if (address < 0 || address >= _Memory.limit) {
-                console.error("Invalid memory address.");
+
+                console.error("Invalid memory address.", address);
                 
                 return 0; // Return 0 if the address is invalid 
             }
-            return _Memory[address]; // Fetches the byte at the given address
+            return _Memory.storage[address]; // Fetches the byte at the given address
         }
 
         // Then we need to set a byte at a specific address in memory.
         public writeByte(address: number, value: number): void {
             console.log("Setting byte: ", Utils.formatHex(value,2,true), "at",Utils.formatHex(address,2,true))
             if (address < 0 || address >= _Memory.limit) {
-                console.error("Invalid memory address.");
+                console.error("Invalid memory address.",address);
                 return; // Exit if the address is invalid.
             }
             _Memory.storage[address] = value; // Sets the byte at the given address.

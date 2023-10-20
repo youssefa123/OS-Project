@@ -220,7 +220,7 @@ var TSOS;
             //_Memory.load(userInput);
             _MemoryManager.loadIntoMemory(currentPID, userInput);
             _Memory.updateMemoryDisplay();
-            _StdOut.putText(this.promptStr + " "); // Display the prompt
+            // _StdOut.putText(this.promptStr + " ");  // Display the prompt
         }
         shellRun(args) {
             console.log("shellRun Function");
@@ -236,6 +236,7 @@ var TSOS;
                 _StdOut.putText("No PID number found ");
                 return;
             }
+            _CPU.executeProcess(pcbdata);
         }
         shellWhereAmI(args) {
             console.log("shellWhereAmI function");

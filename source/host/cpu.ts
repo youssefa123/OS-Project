@@ -75,31 +75,43 @@
         }
         
         private fetch(): void { //Fetch the instruction from memory using the current PC and the memoryAccessor
-            
+            console.log('fetching at ', this.PC);
             
             this.currentInstruction = _MemoryAccessor.readByte(this.PC);
+            console.log(this.currentInstruction);
+
             this.PC++;
         }
 
 
         private decode(): void {
+            console.log('decode');
+
             // for now it'll be one-byte opcodes without operands... FOR NOW 
-            this.currentOpcode = this.currentInstruction;
+            this.currentOpcode = _MemoryAccessor.readByte(this.PC);;
+            console.log(this.currentOpcode);
         }
         
         private execute(): void {
-            switch (this.currentOpcode) {
+            console.log('execute');
+            let address;
+            switch (this.currentInstruction) {
                 case 0xA9: // (Load Accumulator with a constant)
                     this.Acc = _MemoryAccessor.readByte(this.PC);
                     this.PC++;
                     break;
                 case 0x8D: // (Store Accumulator in memory)
-                    let address = (_MemoryAccessor.readByte(this.PC) * 256) + _MemoryAccessor.readByte(this.PC + 1);
+                    address =  (_MemoryAccessor.readByte(this.PC) ) + (_MemoryAccessor.readByte(this.PC + 1)* 256);
                     _MemoryAccessor.writeByte(address, this.Acc);
                     this.PC += 2;
                     break;
+                case 0xAD: // (Load Accumulator from memory)
+                    address = (_MemoryAccessor.readByte(this.PC) ) + (_MemoryAccessor.readByte(this.PC + 1)* 256);
+                    this.Acc = _MemoryAccessor.readByte(address);
+                    this.PC += 2;
+                    break;
                 case 0x6D: // Add with carry
-                    let sumAddress = (_MemoryAccessor.readByte(this.PC) * 256) + _MemoryAccessor.readByte(this.PC + 1);
+                    let sumAddress = (_MemoryAccessor.readByte(this.PC) ) + (_MemoryAccessor.readByte(this.PC + 1)* 256);
                     this.Acc += _MemoryAccessor.readByte(sumAddress);
                     this.PC += 2;
                     break;
@@ -107,9 +119,8 @@
                     this.Xreg = _MemoryAccessor.readByte(this.PC);
                     this.PC++;
                     break;
-
                 case 0xAE: // Load the X register from memory
-                    let xAddress = (_MemoryAccessor.readByte(this.PC) * 256) + _MemoryAccessor.readByte(this.PC + 1);
+                    let xAddress =  (_MemoryAccessor.readByte(this.PC) ) + (_MemoryAccessor.readByte(this.PC + 1)* 256);
                     this.Xreg = _MemoryAccessor.readByte(xAddress);
                     this.PC += 2;
                     break;
@@ -120,7 +131,7 @@
                     break;
                 
                 case 0xAC: // Load the Y register from memory
-                    let yAddress = (_MemoryAccessor.readByte(this.PC) * 256) + _MemoryAccessor.readByte(this.PC + 1);
+                    let yAddress =  (_MemoryAccessor.readByte(this.PC) ) + (_MemoryAccessor.readByte(this.PC + 1)* 256);
                     this.Yreg = _MemoryAccessor.readByte(yAddress);
                     this.PC += 2;
                     break;
@@ -128,12 +139,12 @@
                 case 0xEA: // No Operation
                     break;
 
-                    case 0x00: 
+                case 0x00: 
                     this.isExecuting = false;
                     break;
         
                 case 0xEC: // Compare byte in memory to X reg
-                    let compareAddress = (_MemoryAccessor.readByte(this.PC) * 256) + _MemoryAccessor.readByte(this.PC + 1);
+                    let compareAddress =  (_MemoryAccessor.readByte(this.PC) ) + (_MemoryAccessor.readByte(this.PC + 1)* 256);
                     this.Zflag = (_MemoryAccessor.readByte(compareAddress) === this.Xreg) ? 1 : 0; //If the byte at the computed address is equal to the value in the X register, set Zflag to 1, otherwise set Zflag to 0
                     
                     this.PC += 2; // Increment the program counter to skip the two bytes 
@@ -142,7 +153,7 @@
                 case 0xEE: // Increment the value of a byte
 
                     
-                    let incrementAddress = (_MemoryAccessor.readByte(this.PC) * 256) + _MemoryAccessor.readByte(this.PC + 1);
+                    let incrementAddress =  (_MemoryAccessor.readByte(this.PC) ) + (_MemoryAccessor.readByte(this.PC + 1)* 256);
                     
                     //Fetches the current value of the byte
                     let value = _MemoryAccessor.readByte(incrementAddress);
@@ -153,9 +164,50 @@
                     //Increment the program counter to skip the two bytes 
                     this.PC += 2;
                     break;
-        
+                case 0xD0:
+                    if( this.Zflag == 0){
+                        let jump = _MemoryAccessor.readByte(this.PC) 
+                        this.PC = this.PC + 1;
+
+                        //fowards or backwards
+                        if (jump < 0x80){
+                            this.PC = this.PC + jump
+                        }
+                        else
+                        {   
+                            //represent as a negative number
+                            jump = 0x100 - jump;
+                            this.PC = this.PC - jump;                       
+                        }
+                    }
+                    else{
+                        this.PC += 1;
+                    }
+
+                    break
+                case 0xFF:
+                    if (this.Xreg == 1){
+                        _StdOut.putText(Utils.formatHex(this.Yreg,2,false));
+                    }
+                    else if (this.Xreg == 2){
+                        let yAddress = this.Yreg;
+                        //read current y register if not 0, then print out with ascii conversion. If it is 0 then stop.
+
+                        while(_MemoryAccessor.readByte(yAddress) != 0){
+
+                           // _StdOut.putText(this.numberToAscii(_MemoryAccessor.readByte(yAddress)));  
+                            yAddress += 1;
+                        }
+                    }
+
+                    
+                 
+    
+
+                    break;
                 default:
-                    _Kernel.krnTrace(`Not recognized opcode: ${this.currentOpcode}`);
+                    console.log(`Not recognized instruction: ${this.currentOpcode}`);
+                    _Kernel.krnTrace(`Not recognized instruction: ${this.currentOpcode}`);
                     this.isExecuting = false;
                     break;
             } 
@@ -170,11 +222,14 @@
         // Update the current running PCB with the latest state of the CPU after executing an instruction
         private updateCurrentPCB(): void {
             if (this.currentPCB) {
+                console.log(this.currentPCB);
                 this.currentPCB.PC = this.PC;
+                this.currentPCB.IR = this.currentInstruction;
                 this.currentPCB.ACC = this.Acc;
                 this.currentPCB.Xreg = this.Xreg;
                 this.currentPCB.Yreg = this.Yreg;
                 this.currentPCB.Zflag = this.Zflag;
+                this.currentPCB.running = this.isExecuting;
                 _MemoryManager.updateMemoryDisplay()
             }
         }
@@ -187,8 +242,12 @@
             this.Xreg = pcb.Xreg;
             this.Yreg = pcb.Yreg;
             this.Zflag = pcb.Zflag;
+            this.currentInstruction = pcb.IR;
+            pcb.running = true;
             _MemoryManager.updateMemoryDisplay()
             this.isExecuting = true;
         }
-    }
-}
+
+
+
+    }}

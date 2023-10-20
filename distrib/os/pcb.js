@@ -12,6 +12,7 @@ var TSOS;
             this.Xreg = Xreg;
             this.Yreg = Yreg;
             this.Zflag = Zflag;
+            this.running = false;
         }
     }
     TSOS.PCB = PCB;

@@ -25,6 +25,136 @@ var TSOS;
             this.clockcount = clockcount;
             this.isExecuting = isExecuting;
             this.currentPCB = null; //  current running PCB
+            this.asciilist = [
+                "Null",
+                "SoH",
+                "Start of Text",
+                "End of Text",
+                "End of Transmission",
+                "Enquiry",
+                "ACK",
+                "Bell",
+                "Backspace",
+                "Horizontal Tab",
+                "Line Feed",
+                "Vertical Tab",
+                "Form Feed",
+                "Carriage Return",
+                "Shift Out",
+                "Shift In",
+                "Data Link Escape",
+                "Device Control 1",
+                "Device Control 2",
+                "Device Control 3",
+                "Device Control 4",
+                "Negative ACK",
+                "Synchronous idle",
+                "End of Trans. Block",
+                "Cancel",
+                "End of Medium",
+                "Substitute",
+                "Escape",
+                "File Separator",
+                "Group Separator",
+                "Record Separator",
+                "Unit Separator",
+                "Space",
+                "!",
+                "'",
+                "#",
+                "$",
+                "%",
+                "&",
+                "'",
+                "(",
+                ")",
+                "*",
+                "+",
+                ",",
+                "-",
+                ".",
+                "/",
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                ":",
+                ";",
+                "<",
+                "=",
+                ">",
+                "?",
+                "@",
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "J",
+                "K",
+                "L",
+                "M",
+                "N",
+                "O",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "U",
+                "V",
+                "W",
+                "X",
+                "Y",
+                "Z",
+                "[",
+                "'\'",
+                "]",
+                "^",
+                "_",
+                "`",
+                "a",
+                "b",
+                "c",
+                "d",
+                "e",
+                "f",
+                "g",
+                "h",
+                "i",
+                "j",
+                "k",
+                "l",
+                "m",
+                "n",
+                "o",
+                "p",
+                "q",
+                "r",
+                "s",
+                "t",
+                "u",
+                "v",
+                "w",
+                "x",
+                "y",
+                "z",
+                "{",
+                "|",
+                "}",
+                "~",
+                "Del",
+            ];
         }
         init() {
             this.PC = 0;
@@ -58,45 +188,57 @@ var TSOS;
             }
         }
         fetch() {
-            this.currentInstruction = this.memoryAccessor.readByte(this.PC);
+            console.log('fetching at ', this.PC);
+            this.currentInstruction = _MemoryAccessor.readByte(this.PC);
+            console.log(this.currentInstruction);
             this.PC++;
         }
         decode() {
+            console.log('decode');
             // for now it'll be one-byte opcodes without operands... FOR NOW 
-            this.currentOpcode = this.currentInstruction;
+            this.currentOpcode = _MemoryAccessor.readByte(this.PC);
+            ;
+            console.log(this.currentOpcode);
         }
         execute() {
-            switch (this.currentOpcode) {
+            console.log('execute');
+            let address;
+            switch (this.currentInstruction) {
                 case 0xA9: // (Load Accumulator with a constant)
-                    this.Acc = this.memoryAccessor.readByte(this.PC);
+                    this.Acc = _MemoryAccessor.readByte(this.PC);
                     this.PC++;
                     break;
                 case 0x8D: // (Store Accumulator in memory)
-                    let address = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
-                    this.memoryAccessor.writeByte(address, this.Acc);
+                    address = (_MemoryAccessor.readByte(this.PC)) + (_MemoryAccessor.readByte(this.PC + 1) * 256);
+                    _MemoryAccessor.writeByte(address, this.Acc);
+                    this.PC += 2;
+                    break;
+                case 0xAD: // (Load Accumulator from memory)
+                    address = (_MemoryAccessor.readByte(this.PC)) + (_MemoryAccessor.readByte(this.PC + 1) * 256);
+                    this.Acc = _MemoryAccessor.readByte(address);
                     this.PC += 2;
                     break;
                 case 0x6D: // Add with carry
-                    let sumAddress = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
-                    this.Acc += this.memoryAccessor.readByte(sumAddress);
+                    let sumAddress = (_MemoryAccessor.readByte(this.PC)) + (_MemoryAccessor.readByte(this.PC + 1) * 256);
+                    this.Acc += _MemoryAccessor.readByte(sumAddress);
                     this.PC += 2;
                     break;
                 case 0xA2: // Load the X register with a constant
-                    this.Xreg = this.memoryAccessor.readByte(this.PC);
+                    this.Xreg = _MemoryAccessor.readByte(this.PC);
                     this.PC++;
                     break;
                 case 0xAE: // Load the X register from memory
-                    let xAddress = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
-                    this.Xreg = this.memoryAccessor.readByte(xAddress);
+                    let xAddress = (_MemoryAccessor.readByte(this.PC)) + (_MemoryAccessor.readByte(this.PC + 1) * 256);
+                    this.Xreg = _MemoryAccessor.readByte(xAddress);
                     this.PC += 2;
                     break;
                 case 0xA0: // Load the Y register with a constant
-                    this.Yreg = this.memoryAccessor.readByte(this.PC);
+                    this.Yreg = _MemoryAccessor.readByte(this.PC);
                     this.PC++;
                     break;
                 case 0xAC: // Load the Y register from memory
-                    let yAddress = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
-                    this.Yreg = this.memoryAccessor.readByte(yAddress);
+                    let yAddress = (_MemoryAccessor.readByte(this.PC)) + (_MemoryAccessor.readByte(this.PC + 1) * 256);
+                    this.Yreg = _MemoryAccessor.readByte(yAddress);
                     this.PC += 2;
                     break;
                 case 0xEA: // No Operation
@@ -105,51 +247,91 @@ var TSOS;
                     this.isExecuting = false;
                     break;
                 case 0xEC: // Compare byte in memory to X reg
-                    let compareAddress = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
-                    this.Zflag = (this.memoryAccessor.readByte(compareAddress) === this.Xreg) ? 1 : 0; //If the byte at the computed address is equal to the value in the X register, set Zflag to 1, otherwise set Zflag to 0
+                    let compareAddress = (_MemoryAccessor.readByte(this.PC)) + (_MemoryAccessor.readByte(this.PC + 1) * 256);
+                    this.Zflag = (_MemoryAccessor.readByte(compareAddress) === this.Xreg) ? 1 : 0; //If the byte at the computed address is equal to the value in the X register, set Zflag to 1, otherwise set Zflag to 0
                     this.PC += 2; // Increment the program counter to skip the two bytes 
                     break;
                 case 0xEE: // Increment the value of a byte
-                    let incrementAddress = (this.memoryAccessor.readByte(this.PC) * 256) + this.memoryAccessor.readByte(this.PC + 1);
+                    let incrementAddress = (_MemoryAccessor.readByte(this.PC)) + (_MemoryAccessor.readByte(this.PC + 1) * 256);
                     //Fetches the current value of the byte
-                    let value = this.memoryAccessor.readByte(incrementAddress);
+                    let value = _MemoryAccessor.readByte(incrementAddress);
                     //Increment the fetched value by 1 and store it back to the same address in memory
-                    this.memoryAccessor.writeByte(incrementAddress, value + 1);
+                    _MemoryAccessor.writeByte(incrementAddress, value + 1);
                     //Increment the program counter to skip the two bytes 
                     this.PC += 2;
                     break;
+                case 0xD0:
+                    if (this.Zflag == 0) {
+                        let jump = _MemoryAccessor.readByte(this.PC);
+                        this.PC = this.PC + 1;
+                        //fowards or backwards
+                        if (jump < 0x80) {
+                            this.PC = this.PC + jump;
+                        }
+                        else {
+                            //represent as a negative number
+                            jump = 0x100 - jump;
+                            this.PC = this.PC - jump;
+                        }
+                    }
+                    else {
+                        this.PC += 1;
+                    }
+                    break;
+                case 0xFF:
+                    if (this.Xreg == 1) {
+                        _StdOut.putText(TSOS.Utils.formatHex(this.Yreg, 2, false));
+                    }
+                    else if (this.Xreg == 2) {
+                        let yAddress = this.Yreg;
+                        //read current y register if not 0, then print out with ascii conversion. If it is 0 then stop.
+                        while (_MemoryAccessor.readByte(yAddress) != 0) {
+                            _StdOut.putText(this.numberToAscii(_MemoryAccessor.readByte(yAddress)));
+                            yAddress += 1;
+                        }
+                    }
+                    break;
                 default:
-                    _Kernel.krnTrace(`Not recognized opcode: ${this.currentOpcode}`);
+                    console.log(`Not recognized instruction: ${this.currentOpcode}`);
+                    _Kernel.krnTrace(`Not recognized instruction: ${this.currentOpcode}`);
                     this.isExecuting = false;
                     break;
             }
             // After executing any instruction we need to update the PCB of the running process
             this.updateCurrentPCB();
             if (this.currentPCB) {
-                this.currentPCB.updateProcessInTable();
+                _MemoryManager.updateMemoryDisplay();
             }
         }
         // Update the current running PCB with the latest state of the CPU after executing an instruction
         updateCurrentPCB() {
             if (this.currentPCB) {
+                console.log(this.currentPCB);
                 this.currentPCB.PC = this.PC;
-                this.currentPCB.Acc = this.Acc;
+                this.currentPCB.IR = this.currentInstruction;
+                this.currentPCB.ACC = this.Acc;
                 this.currentPCB.Xreg = this.Xreg;
                 this.currentPCB.Yreg = this.Yreg;
                 this.currentPCB.Zflag = this.Zflag;
-                this.currentPCB.updateProcessInTable();
+                this.currentPCB.running = this.isExecuting;
+                _MemoryManager.updateMemoryDisplay();
             }
         }
         //Process control block process to execute
         executeProcess(pcb) {
             this.currentPCB = pcb;
             this.PC = pcb.PC;
-            this.Acc = pcb.Acc;
+            this.Acc = pcb.ACC;
             this.Xreg = pcb.Xreg;
             this.Yreg = pcb.Yreg;
             this.Zflag = pcb.Zflag;
-            pcb.updateProcessInTable();
+            this.currentInstruction = pcb.IR;
+            pcb.running = true;
+            _MemoryManager.updateMemoryDisplay();
             this.isExecuting = true;
+        }
+        numberToAscii(tempByte) {
+            return this.asciilist[tempByte];
         }
     }
     TSOS.Cpu = Cpu;

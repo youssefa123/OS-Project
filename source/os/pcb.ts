@@ -11,6 +11,7 @@ module TSOS {
     public Xreg: number;
     public Yreg: number;
     public Zflag: number;  
+    public running: boolean;
     
 
     
@@ -25,6 +26,7 @@ module TSOS {
         this.Xreg = Xreg;
         this.Yreg = Yreg;
         this.Zflag = Zflag;
+        this.running = false;
     }
 
 
