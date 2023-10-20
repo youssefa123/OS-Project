@@ -173,6 +173,14 @@ var TSOS;
                 _MemoryManager.updateMemoryDisplay();
             }
         }
+        updateCurrentCPU() {
+            document.getElementById("cpuPC").innerText = this.PC.toString();
+            document.getElementById("cpuIR").innerText = TSOS.Utils.formatHex(this.currentInstruction, 2, false); // Assuming you want to display the IR in hex
+            document.getElementById("cpuACC").innerText = this.Acc.toString();
+            document.getElementById("cpuX").innerText = this.Xreg.toString();
+            document.getElementById("cpuY").innerText = this.Yreg.toString();
+            document.getElementById("cpuZ").innerText = this.Zflag.toString();
+        }
         // Update the current running PCB with the latest state of the CPU after executing an instruction
         updateCurrentPCB() {
             if (this.currentPCB) {
@@ -185,6 +193,7 @@ var TSOS;
                 this.currentPCB.Zflag = this.Zflag;
                 this.currentPCB.running = this.isExecuting;
                 _MemoryManager.updateMemoryDisplay();
+                this.updateCurrentCPU();
             }
         }
         //Process control block process to execute
