@@ -173,6 +173,7 @@ module TSOS {
                 _StdOut.advanceLine();
             }
             // ... and finally write the prompt again.
+            
             this.putPrompt();
         }
 
@@ -301,7 +302,7 @@ module TSOS {
             console.log("shellRun Function");
             console.log(args)
 
-             let pid : number = parseInt(args[0])
+            let pid : number = parseInt(args[0]);
             console.log(pid);
              
             if (Number.isNaN(pid)){
@@ -318,6 +319,11 @@ module TSOS {
             }
 
             _CPU.executeProcess(pcbdata);
+
+            while (_CPU.isExecuting) {
+                _CPU.cycle();
+            }
+
 
         }
         

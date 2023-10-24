@@ -236,6 +236,9 @@ var TSOS;
                 return;
             }
             _CPU.executeProcess(pcbdata);
+            while (_CPU.isExecuting) {
+                _CPU.cycle();
+            }
         }
         shellWhereAmI(args) {
             console.log("shellWhereAmI function");

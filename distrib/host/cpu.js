@@ -150,14 +150,21 @@ var TSOS;
                     break;
                 case 0xFF:
                     if (this.Xreg == 1) {
-                        _StdOut.putText(TSOS.Utils.formatHex(this.Yreg, 2, false));
+                        // ASCII
+                        let char = String.fromCharCode(this.Yreg);
+                        _StdOut.putText(char);
                     }
                     else if (this.Xreg == 2) {
-                        let yAddress = this.Yreg;
-                        //read current y register if not 0, then print out with ascii conversion. If it is 0 then stop.
-                        while (_MemoryAccessor.readByte(yAddress) != 0) {
-                            // _StdOut.putText(this.numberToAscii(_MemoryAccessor.readByte(yAddress)));  
-                            yAddress += 1;
+                        let hexValue = TSOS.Utils.formatHex(this.Yreg, 2, false);
+                        _StdOut.putText(hexValue);
+                    }
+                    else {
+                        let yAddress = this.Xreg;
+                        let char = _MemoryAccessor.readByte(yAddress);
+                        while (char != 0x00) {
+                            _StdOut.putText(String.fromCharCode(char));
+                            yAddress++;
+                            char = _MemoryAccessor.readByte(yAddress);
                         }
                     }
                     break;

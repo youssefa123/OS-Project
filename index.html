@@ -86,6 +86,7 @@
       }
 
    
+   
       onload = function () {
          onDocumentLoad();
          updateDateTime();
@@ -133,7 +134,7 @@
    </div>
 </div>
 
-<div id="divCPUTable" style="float:left; margin-left:20px; max-height:150px;">
+<div id="divCPUTable" style="float:left; margin-left:5px; max-height:150px;">
    <h5>CPU Information</h5>
    <table id="cputable" >
        <thead>
@@ -174,40 +175,37 @@
 </div>
 
 
+ <!-- PCB Table -->
+ <div id="divPCBTable" style="float:left; max-height:100px;">
+   <h5>Process Controll Table</h5>
+   <table id="pcbtable">
+       <thead>
+           <tr>
+               <th>PID</th>
+               <th>Prioty</th>
+               <th>IR</th>
+               <th>PC</th>
+               <th>ACC</th>
+               <th>Xreg</th>
+               <th>Yreg</th>
+               <th>Zflag</th>
+               <th>Memory Location</th>
+               <th>Running</th>
 
-
-  
-    <!-- PCB Table -->
-    <div id="divPCBTable" style="float:left; max-height:100px;">
-      <h5>Process Controll Table</h5>
-      <table id="pcbtable">
-          <thead>
-              <tr>
-                  <th>PID</th>
-                  <th>Prioty</th>
-                  <th>IR</th>
-                  <th>PC</th>
-                  <th>ACC</th>
-                  <th>Xreg</th>
-                  <th>Yreg</th>
-                  <th>Zflag</th>
-                  <th>Memory Location</th>
-                  <th>Running</th>
-
-              </tr>
-          </thead>
-          <tbody id = "pcbtablebody">
-             
-          </tbody>
-      </table>
-    </div>
+           </tr>
+       </thead>
+       <tbody id = "pcbtablebody">
+       </tbody>
+   </table>
+ </div>
 
 
 
 
+      
 
 </body>
 </html>
 
 
-
+      

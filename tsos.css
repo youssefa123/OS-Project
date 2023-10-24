@@ -31,11 +31,14 @@ h3 {
 }
 
 #display {
-  background-color:#00ffff;
+  background-color: whitesmoke; 
   cursor: default;
   float: left;
   overflow: auto;
+  color: #0FF; 
 }
+
+
 
 .normal_button {
   width: 100px;
@@ -74,26 +77,38 @@ h3 {
   background-color: #555; 
 }
 
+/* Modified PCB Table Styles to match CPU Table */
 #pcbtable {
-  width: 20%;  
-  border-collapse: collapse;  
-  height: 100px
-
+  border-collapse: separate;  /* Use separate to make individual cell borders visible */
+  border-spacing: 0;  /* No spacing between cells */
+  width: 100%;  
+  background-color: #f4f4f4; 
 }
 
 #pcbtable th, #pcbtable td {
-  border: 1px solid black;  
+  border: 2px solid #ddd;  /* Increase the border thickness for better visibility */
   padding: 8px;
-  text-align: left;
-  color: black;  
-}
-
-#pcbtable tr:hover {
-  background-color: #ff0606;  /* Green Hover Color */
+  text-align: center;  
 }
 
 #pcbtable th {
-  background-color: #f2f2f2;  
+  background-color: #e0e0e0;  /* Matching header background color */
+  font-weight: bold;
+}
+
+#pcbtablebody tr {
+  background-color: #444;  /* Matching row color */
+}
+
+#pcbtablebody td {
+  font-family: 'Courier New', Courier, monospace; 
+  color: #0f0;  /* Matching text color */
+  font-weight: bold;
+  font-size: 16px;  /* Matching font size */
+}
+
+#pcbtablebody td:hover {
+  background-color: #555;  /* Matching hover effect */
 }
 
 
