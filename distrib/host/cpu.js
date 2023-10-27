@@ -58,9 +58,9 @@ var TSOS;
             }
         }
         fetch() {
-            console.log('fetching at ', this.PC);
+            console.log('fetching at ', TSOS.Utils.formatHex(this.PC, 2, false));
             this.currentInstruction = _MemoryAccessor.readByte(this.PC);
-            console.log(this.currentInstruction);
+            console.log('got:', TSOS.Utils.formatHex(this.currentInstruction, 2, false));
             this.PC++;
         }
         decode() {
@@ -71,6 +71,7 @@ var TSOS;
             console.log(this.currentOpcode);
         }
         execute() {
+            this.updateCurrentCPU();
             console.log('execute');
             let address;
             switch (this.currentInstruction) {
@@ -137,6 +138,9 @@ var TSOS;
                         //fowards or backwards
                         if (jump < 0x80) {
                             this.PC = this.PC + jump;
+                            if (this.PC >= 0x100) {
+                                this.PC = this.PC - 0x100;
+                            }
                         }
                         else {
                             //represent as a negative number
@@ -150,21 +154,18 @@ var TSOS;
                     break;
                 case 0xFF:
                     if (this.Xreg == 1) {
-                        // ASCII
-                        let char = String.fromCharCode(this.Yreg);
-                        _StdOut.putText(char);
-                    }
-                    else if (this.Xreg == 2) {
                         let hexValue = TSOS.Utils.formatHex(this.Yreg, 2, false);
                         _StdOut.putText(hexValue);
+                        // ASCII
                     }
-                    else {
-                        let yAddress = this.Xreg;
-                        let char = _MemoryAccessor.readByte(yAddress);
-                        while (char != 0x00) {
-                            _StdOut.putText(String.fromCharCode(char));
-                            yAddress++;
-                            char = _MemoryAccessor.readByte(yAddress);
+                    else if (this.Xreg == 2) {
+                        let memCount = this.Yreg;
+                        let memValue = _MemoryAccessor.readByte(memCount);
+                        while (memValue != 0) {
+                            let char = String.fromCharCode(memValue);
+                            _StdOut.putText(char);
+                            memCount = memCount + 1;
+                            memValue = _MemoryAccessor.readByte(memCount);
                         }
                     }
                     break;

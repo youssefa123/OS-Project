@@ -41,7 +41,7 @@
             
         }
         
-            public init(): void {
+        public init(): void {
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
@@ -75,10 +75,10 @@
         }
         
         private fetch(): void { //Fetch the instruction from memory using the current PC and the memoryAccessor
-            console.log('fetching at ', this.PC);
+            console.log('fetching at ', Utils.formatHex(this.PC, 2, false));
             
             this.currentInstruction = _MemoryAccessor.readByte(this.PC);
-            console.log(this.currentInstruction);
+            console.log('got:', Utils.formatHex(this.currentInstruction, 2, false));
 
             this.PC++;
         }
@@ -93,6 +93,8 @@
         }
         
         private execute(): void {
+            this.updateCurrentCPU()
+        
             console.log('execute');
             let address;
             switch (this.currentInstruction) {
@@ -171,13 +173,17 @@
 
                         //fowards or backwards
                         if (jump < 0x80){
-                            this.PC = this.PC + jump
+                            this.PC = this.PC + jump;
+                            if (this.PC >= 0x100){
+                                this.PC = this.PC - 0x100;
+                            }
                         }
                         else
                         {   
                             //represent as a negative number
                             jump = 0x100 - jump;
                             this.PC = this.PC - jump;                       
+                            
                         }
                     }
                     else{
@@ -185,20 +191,26 @@
                     }
 
                     break
+                
                 case 0xFF:
-                    if (this.Xreg == 1){
-                        _StdOut.putText(Utils.formatHex(this.Yreg,2,false));
-                    }
-                    else if (this.Xreg == 2){
-                        let yAddress = this.Yreg;
-                        //read current y register if not 0, then print out with ascii conversion. If it is 0 then stop.
+                    if (this.Xreg == 1) {
+                        let hexValue = Utils.formatHex(this.Yreg, 2, false);
+                        _StdOut.putText(hexValue);
+                        
 
-                        while(_MemoryAccessor.readByte(yAddress) != 0){
-
-                           // _StdOut.putText(this.numberToAscii(_MemoryAccessor.readByte(yAddress)));  
-                            yAddress += 1;
+                        // ASCII
+                    } else if (this.Xreg == 2) {
+                        let memCount = this.Yreg;
+                        let memValue = _MemoryAccessor.readByte(memCount);
+                        while (memValue != 0){
+                            let char = String.fromCharCode(memValue);
+                            _StdOut.putText(char);
+                            memCount = memCount + 1;
+                            memValue = _MemoryAccessor.readByte(memCount);
                         }
+
                     }
+    
 
                     break;
                 default:

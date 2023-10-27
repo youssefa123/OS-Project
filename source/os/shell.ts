@@ -312,18 +312,12 @@ module TSOS {
 
 
             let pcbdata = _MemoryManager.getPCB(pid);
-
             if (pcbdata == null){
                 _StdOut.putText( "No PID number found ");
                 return;
             }
 
             _CPU.executeProcess(pcbdata);
-
-            while (_CPU.isExecuting) {
-                _CPU.cycle();
-            }
-
 
         }
         

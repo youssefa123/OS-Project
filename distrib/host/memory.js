@@ -3,7 +3,7 @@ var TSOS;
     class Memory {
         constructor() {
             this.base = 0;
-            this.limit = 256; //Memory limit is 256 bytes 
+            this.limit = 512; //Memory limit is 256 bytes 
         }
         init() {
             this.base = 0;
