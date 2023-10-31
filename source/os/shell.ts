@@ -111,6 +111,47 @@ module TSOS {
                                   "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(undefined,
+                                    "clearmem",
+                                    "- Clear all memory partitions.");
+            this.commandList[this.commandList.length] = sc;
+
+             // runall
+            sc = new ShellCommand(undefined,
+                                    "runall",
+                                    "- Execute all programs at once.");
+            this.commandList[this.commandList.length] = sc;
+
+
+            // ps
+            sc = new ShellCommand(undefined,
+                                    "ps",
+                                    "- Display the PID and state of all processes.");
+            this.commandList[this.commandList.length] = sc;
+
+
+            // kill <pid>
+            sc = new ShellCommand(undefined,
+                                    "kill",
+                                    "<pid> - Kill one process.");
+            this.commandList[this.commandList.length] = sc;
+
+            // killall
+            sc = new ShellCommand(undefined,
+                                    "killall",
+                                    "- Kill all processes.");
+            this.commandList[this.commandList.length] = sc;
+
+             // quantum <int>
+             sc = new ShellCommand(undefined,
+                                    "quantum",
+                                    "<int> - Let the user set the Round Robin quantum measured in cpu cycles.");
+            this.commandList[this.commandList.length] = sc;
+            
+
+
+
+
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
