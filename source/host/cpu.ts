@@ -77,7 +77,7 @@
         private fetch(): void { //Fetch the instruction from memory using the current PC and the memoryAccessor
             console.log('fetching at ', Utils.formatHex(this.PC, 2, false));
             
-            this.currentInstruction = _MemoryAccessor.readByte(this.PC);
+            this.currentInstruction = _MemoryAccessor.readByte(this.PC,this.currentPCB);
             console.log('got:', Utils.formatHex(this.currentInstruction, 2, false));
 
             this.PC++;
@@ -88,7 +88,7 @@
             console.log('decode');
 
             // for now it'll be one-byte opcodes without operands... FOR NOW 
-            this.currentOpcode = _MemoryAccessor.readByte(this.PC);;
+            this.currentOpcode = _MemoryAccessor.readByte(this.PC,this.currentPCB);;
             console.log(this.currentOpcode);
         }
         
@@ -99,42 +99,42 @@
             let address;
             switch (this.currentInstruction) {
                 case 0xA9: // (Load Accumulator with a constant)
-                    this.Acc = _MemoryAccessor.readByte(this.PC);
+                    this.Acc = _MemoryAccessor.readByte(this.PC,this.currentPCB);
                     this.PC++;
                     break;
                 case 0x8D: // (Store Accumulator in memory)
-                    address =  (_MemoryAccessor.readByte(this.PC) ) + (_MemoryAccessor.readByte(this.PC + 1)* 256);
-                    _MemoryAccessor.writeByte(address, this.Acc);
+                    address =  (_MemoryAccessor.readByte(this.PC,this.currentPCB) ) + (_MemoryAccessor.readByte(this.PC + 1,this.currentPCB)* 256);
+                    _MemoryAccessor.writeByte(address, this.Acc,this.currentPCB);
                     this.PC += 2;
                     break;
                 case 0xAD: // (Load Accumulator from memory)
-                    address = (_MemoryAccessor.readByte(this.PC) ) + (_MemoryAccessor.readByte(this.PC + 1)* 256);
-                    this.Acc = _MemoryAccessor.readByte(address);
+                    address = (_MemoryAccessor.readByte(this.PC,this.currentPCB) ) + (_MemoryAccessor.readByte(this.PC + 1,this.currentPCB)* 256);
+                    this.Acc = _MemoryAccessor.readByte(address,this.currentPCB);
                     this.PC += 2;
                     break;
                 case 0x6D: // Add with carry
-                    let sumAddress = (_MemoryAccessor.readByte(this.PC) ) + (_MemoryAccessor.readByte(this.PC + 1)* 256);
-                    this.Acc += _MemoryAccessor.readByte(sumAddress);
+                    let sumAddress = (_MemoryAccessor.readByte(this.PC,this.currentPCB) ) + (_MemoryAccessor.readByte(this.PC + 1,this.currentPCB)* 256);
+                    this.Acc += _MemoryAccessor.readByte(sumAddress,this.currentPCB);
                     this.PC += 2;
                     break;
                 case 0xA2: // Load the X register with a constant
-                    this.Xreg = _MemoryAccessor.readByte(this.PC);
+                    this.Xreg = _MemoryAccessor.readByte(this.PC,this.currentPCB);
                     this.PC++;
                     break;
                 case 0xAE: // Load the X register from memory
-                    let xAddress =  (_MemoryAccessor.readByte(this.PC) ) + (_MemoryAccessor.readByte(this.PC + 1)* 256);
-                    this.Xreg = _MemoryAccessor.readByte(xAddress);
+                    let xAddress =  (_MemoryAccessor.readByte(this.PC,this.currentPCB) ) + (_MemoryAccessor.readByte(this.PC + 1,this.currentPCB)* 256);
+                    this.Xreg = _MemoryAccessor.readByte(xAddress,this.currentPCB);
                     this.PC += 2;
                     break;
                 
                 case 0xA0: // Load the Y register with a constant
-                    this.Yreg = _MemoryAccessor.readByte(this.PC);
+                    this.Yreg = _MemoryAccessor.readByte(this.PC,this.currentPCB);
                     this.PC++;
                     break;
                 
                 case 0xAC: // Load the Y register from memory
-                    let yAddress =  (_MemoryAccessor.readByte(this.PC) ) + (_MemoryAccessor.readByte(this.PC + 1)* 256);
-                    this.Yreg = _MemoryAccessor.readByte(yAddress);
+                    let yAddress =  (_MemoryAccessor.readByte(this.PC,this.currentPCB) ) + (_MemoryAccessor.readByte(this.PC + 1,this.currentPCB)* 256);
+                    this.Yreg = _MemoryAccessor.readByte(yAddress,this.currentPCB);
                     this.PC += 2;
                     break;
 
@@ -146,8 +146,8 @@
                     break;
         
                 case 0xEC: // Compare byte in memory to X reg
-                    let compareAddress =  (_MemoryAccessor.readByte(this.PC) ) + (_MemoryAccessor.readByte(this.PC + 1)* 256);
-                    this.Zflag = (_MemoryAccessor.readByte(compareAddress) === this.Xreg) ? 1 : 0; //If the byte at the computed address is equal to the value in the X register, set Zflag to 1, otherwise set Zflag to 0
+                    let compareAddress =  (_MemoryAccessor.readByte(this.PC,this.currentPCB) ) + (_MemoryAccessor.readByte(this.PC + 1,this.currentPCB)* 256);
+                    this.Zflag = (_MemoryAccessor.readByte(compareAddress,this.currentPCB) === this.Xreg) ? 1 : 0; //If the byte at the computed address is equal to the value in the X register, set Zflag to 1, otherwise set Zflag to 0
                     
                     this.PC += 2; // Increment the program counter to skip the two bytes 
                     break;
@@ -155,20 +155,20 @@
                 case 0xEE: // Increment the value of a byte
 
                     
-                    let incrementAddress =  (_MemoryAccessor.readByte(this.PC) ) + (_MemoryAccessor.readByte(this.PC + 1)* 256);
+                    let incrementAddress =  (_MemoryAccessor.readByte(this.PC,this.currentPCB) ) + (_MemoryAccessor.readByte(this.PC + 1,this.currentPCB)* 256);
                     
                     //Fetches the current value of the byte
-                    let value = _MemoryAccessor.readByte(incrementAddress);
+                    let value = _MemoryAccessor.readByte(incrementAddress,this.currentPCB);
                     
                     //Increment the fetched value by 1 and store it back to the same address in memory
-                    _MemoryAccessor.writeByte(incrementAddress, value + 1);
+                    _MemoryAccessor.writeByte(incrementAddress, value + 1,this.currentPCB);
 
                     //Increment the program counter to skip the two bytes 
                     this.PC += 2;
                     break;
                 case 0xD0:
                     if( this.Zflag == 0){
-                        let jump = _MemoryAccessor.readByte(this.PC) 
+                        let jump = _MemoryAccessor.readByte(this.PC,this.currentPCB) 
                         this.PC = this.PC + 1;
 
                         //fowards or backwards
@@ -201,12 +201,12 @@
                         // ASCII
                     } else if (this.Xreg == 2) {
                         let memCount = this.Yreg;
-                        let memValue = _MemoryAccessor.readByte(memCount);
+                        let memValue = _MemoryAccessor.readByte(memCount,this.currentPCB);
                         while (memValue != 0){
                             let char = String.fromCharCode(memValue);
                             _StdOut.putText(char);
                             memCount = memCount + 1;
-                            memValue = _MemoryAccessor.readByte(memCount);
+                            memValue = _MemoryAccessor.readByte(memCount,this.currentPCB);
                         }
 
                     }

@@ -2,7 +2,7 @@ module TSOS {
 
     export class Memory {
         public base: number = 0;
-        public limit: number = 512 //Memory limit is 256 bytes 
+        public limit: number = 256*4 //Memory limit is 256 bytes 
         public storage: Array<number>; // Storage for the memory contents
 
         public init(): void {

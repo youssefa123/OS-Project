@@ -10,7 +10,7 @@ var TSOS;
             let base = this.lasteByteUsed;
             let Prioty = 50;
             let IR = 0;
-            let PC = base;
+            let PC = 0;
             let ACC = 0;
             let Xreg = 0;
             let Yreg = 0;
@@ -23,6 +23,7 @@ var TSOS;
             }
             let limit = base + data.length;
             this.lasteByteUsed = limit;
+            console.log("base", base, "limit: ", limit, "LBU", this.lasteByteUsed);
             // Create a PCB for the new process and add it to the pcbList
             let newPCB = new TSOS.PCB(pid, base, limit, Prioty, IR, PC, ACC, Xreg, Yreg, Zflag);
             this.pcbList.push(newPCB);
