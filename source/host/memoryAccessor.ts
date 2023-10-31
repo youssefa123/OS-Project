@@ -7,7 +7,7 @@ module TSOS {
                 address = address + currentPCB.base;
             }
             // Aslo the address should be within the bounds of our memory.
-            if (address < 0 || address >= _Memory.limit || (currentPCB && address > 255 + currentPCB.base)) {
+            if (address < 0 || address >= _Memory.limit || (currentPCB && address > currentPCB.limit)) {
 
                 console.error("Invalid memory address.", address);
                 
@@ -23,7 +23,7 @@ module TSOS {
             }
 
             console.log("Setting byte: ", Utils.formatHex(value,2,true), "at",Utils.formatHex(address,2,true))
-            if (address < 0 || address >= _Memory.limit || (currentPCB && address > 255 + currentPCB.base)) {
+            if (address < 0 || address >= _Memory.limit || (currentPCB && address > currentPCB.limit)) {
                 console.error("Invalid memory address.",address);
                 return; // Exit if the address is invalid.
             }

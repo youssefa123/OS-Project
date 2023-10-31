@@ -1,9 +1,12 @@
 module TSOS {
     export class memoryManager {
         private memoryAccessor: MemoryAccessor = new MemoryAccessor();
-        private pcbList: PCB[] = []; // Array to store active PCBs
-        private lasteByteUsed: number = 0;
+        private pcbList: PCB[] = []; // Array to store load PCBs
 
+        public readyQueue: PCB[] = []; // Array to store running PCBs
+
+        private lasteByteUsed: number = 0;
+        
         public loadIntoMemory(pid:number, data: string[]): void {
             
             
@@ -51,41 +54,29 @@ module TSOS {
 
         }
 
+        public runProcess(pid: number){
+            let executingPCB = this.getPCB(pid);
+            this.readyQueue.push(executingPCB);
+            //_CPU.executeProcess(executingPCB);
+        }
+
+        public runAll(){
+            for (let pcb of this.pcbList){
+                this.readyQueue.push(pcb);
+                _StdOut.putText(`Added Process ${pcb.pid} to ReadyQueue`);
+                _StdOut.advanceLine();
+
+            }
+        }
+        
 
 
         // Update the HTML table that displays the memory 
         public updateMemoryDisplay(): void {
-            // const memoryTable = <HTMLTableElement>document.getElementById("memorytable");
-
-            // // Clear the existing rows in the memory table.
-            // while (memoryTable.firstChild) {
-            //     memoryTable.removeChild(memoryTable.firstChild);
-            // }
-
-            // // Iterate through the memory array 
-            // for (let i = 0; i < 256; i += 2) {
-            //     let row = memoryTable.insertRow();       
-            //     let cell1 = row.insertCell(0);           
-            //     let cell2 = row.insertCell(1);          
-                
-            //     // Convert the bytes to hexadecimal and set them in the cells.
-            //     cell1.textContent = this.memoryAccessor.getByte(i).toString(16).toUpperCase().padStart(2, '0');
-            //     cell2.textContent = this.memoryAccessor.getByte(i + 1).toString(16).toUpperCase().padStart(2, '0');
-            // }
-
+            
             const pcbtablebody = document.getElementById("pcbtablebody");
             pcbtablebody.innerHTML = "";
-            /*
-            <th>PID</th>
-                  <th>Prioty</th>
-                  <th>IR</th>
-                  <th>PC</th>
-                  <th>ACC</th>
-                  <th>Xreg</th>
-                  <th>Yreg</th>
-                  <th>Zflag</th>
-                  <th>Memory Location</th>
-            */
+        
            for (const pcbdata of this.pcbList){
             let row = document.createElement("tr");
             let pid = document.createElement("td");

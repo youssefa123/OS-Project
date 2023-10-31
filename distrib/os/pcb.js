@@ -13,6 +13,7 @@ var TSOS;
             this.Yreg = Yreg;
             this.Zflag = Zflag;
             this.running = false;
+            this.currentOpcode = 0;
         }
     }
     TSOS.PCB = PCB;

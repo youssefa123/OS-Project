@@ -117,7 +117,7 @@ module TSOS {
             this.commandList[this.commandList.length] = sc;
 
              // runall
-            sc = new ShellCommand(undefined,
+            sc = new ShellCommand(this.shellRunAll,
                                     "runall",
                                     "- Execute all programs at once.");
             this.commandList[this.commandList.length] = sc;
@@ -262,6 +262,10 @@ module TSOS {
             }
         }
 
+        public clearmem() { 
+
+        }
+
 
 
         public shellCurse() {
@@ -357,9 +361,15 @@ module TSOS {
                 _StdOut.putText( "No PID number found ");
                 return;
             }
+            
+            _MemoryManager.runProcess(pid);
 
-            _CPU.executeProcess(pcbdata);
+        }
 
+        public shellRunAll(){
+            console.log("shellRunAll Function");
+
+            _MemoryManager.runAll();
         }
         
         public shellWhereAmI(args: string[]) {

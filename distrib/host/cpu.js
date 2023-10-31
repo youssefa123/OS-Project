@@ -37,6 +37,7 @@ var TSOS;
             this.pipelineState = PipelineState.FETCH;
         }
         cycle() {
+            this.clockcount = this.clockcount + 1;
             _Kernel.krnTrace('CPU cycle');
             switch (this.pipelineState) {
                 case PipelineState.FETCH:
@@ -58,21 +59,19 @@ var TSOS;
             }
         }
         fetch() {
-            console.log('fetching at ', TSOS.Utils.formatHex(this.PC, 2, false));
             this.currentInstruction = _MemoryAccessor.readByte(this.PC, this.currentPCB);
-            console.log('got:', TSOS.Utils.formatHex(this.currentInstruction, 2, false));
+            console.log(this.currentPCB.pid + ' fetching at ', TSOS.Utils.formatHex(this.PC, 2, false), 'got:', TSOS.Utils.formatHex(this.currentInstruction, 2, false));
             this.PC++;
         }
         decode() {
-            console.log('decode');
             // for now it'll be one-byte opcodes without operands... FOR NOW 
             this.currentOpcode = _MemoryAccessor.readByte(this.PC, this.currentPCB);
             ;
-            console.log(this.currentOpcode);
+            console.log(this.currentPCB.pid + ' decode', TSOS.Utils.formatHex(this.currentOpcode, 2, false));
         }
         execute() {
             this.updateCurrentCPU();
-            console.log('execute');
+            console.log(this.currentPCB.pid + ' execute', TSOS.Utils.formatHex(this.currentInstruction, 2, false));
             let address;
             switch (this.currentInstruction) {
                 case 0xA9: // (Load Accumulator with a constant)
@@ -170,8 +169,8 @@ var TSOS;
                     }
                     break;
                 default:
-                    console.log(`Not recognized instruction: ${this.currentOpcode}`);
-                    _Kernel.krnTrace(`Not recognized instruction: ${this.currentOpcode}`);
+                    console.log(this.currentPCB.pid + ` Not recognized instruction: ${this.currentInstruction}`);
+                    _Kernel.krnTrace(`Not recognized instruction: ${this.currentInstruction}`);
                     this.isExecuting = false;
                     break;
             }
@@ -200,12 +199,14 @@ var TSOS;
                 this.currentPCB.Yreg = this.Yreg;
                 this.currentPCB.Zflag = this.Zflag;
                 this.currentPCB.running = this.isExecuting;
+                this.currentPCB.currentOpcode = this.currentOpcode;
                 _MemoryManager.updateMemoryDisplay();
                 this.updateCurrentCPU();
             }
         }
         //Process control block process to execute
         executeProcess(pcb) {
+            console.log("Loading process", pcb);
             this.currentPCB = pcb;
             this.PC = pcb.PC;
             this.Acc = pcb.ACC;
@@ -213,6 +214,7 @@ var TSOS;
             this.Yreg = pcb.Yreg;
             this.Zflag = pcb.Zflag;
             this.currentInstruction = pcb.IR;
+            this.currentOpcode = pcb.currentOpcode;
             pcb.running = true;
             _MemoryManager.updateMemoryDisplay();
             this.isExecuting = true;

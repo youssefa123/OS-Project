@@ -12,6 +12,7 @@ module TSOS {
     public Yreg: number;
     public Zflag: number;  
     public running: boolean;
+    public currentOpcode: number;
     
 
     
@@ -27,6 +28,7 @@ module TSOS {
         this.Yreg = Yreg;
         this.Zflag = Zflag;
         this.running = false;
+        this.currentOpcode = 0;
     }
 
 

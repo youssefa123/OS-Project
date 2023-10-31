@@ -63,6 +63,23 @@ var TSOS;
             // prompt <string>
             sc = new TSOS.ShellCommand(this.shellPrompt, "prompt", "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(undefined, "clearmem", "- Clear all memory partitions.");
+            this.commandList[this.commandList.length] = sc;
+            // runall
+            sc = new TSOS.ShellCommand(this.shellRunAll, "runall", "- Execute all programs at once.");
+            this.commandList[this.commandList.length] = sc;
+            // ps
+            sc = new TSOS.ShellCommand(undefined, "ps", "- Display the PID and state of all processes.");
+            this.commandList[this.commandList.length] = sc;
+            // kill <pid>
+            sc = new TSOS.ShellCommand(undefined, "kill", "<pid> - Kill one process.");
+            this.commandList[this.commandList.length] = sc;
+            // killall
+            sc = new TSOS.ShellCommand(undefined, "killall", "- Kill all processes.");
+            this.commandList[this.commandList.length] = sc;
+            // quantum <int>
+            sc = new TSOS.ShellCommand(undefined, "quantum", "<int> - Let the user set the Round Robin quantum measured in cpu cycles.");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             // Display the initial prompt.
@@ -165,6 +182,8 @@ var TSOS;
                 _StdOut.putText("Type 'help' for, well... help.");
             }
         }
+        clearmem() {
+        }
         shellCurse() {
             _StdOut.putText("Oh, so that's how it's going to be, eh? Fine.");
             _StdOut.advanceLine();
@@ -235,7 +254,11 @@ var TSOS;
                 _StdOut.putText("No PID number found ");
                 return;
             }
-            _CPU.executeProcess(pcbdata);
+            _MemoryManager.runProcess(pid);
+        }
+        shellRunAll() {
+            console.log("shellRunAll Function");
+            _MemoryManager.runAll();
         }
         shellWhereAmI(args) {
             console.log("shellWhereAmI function");

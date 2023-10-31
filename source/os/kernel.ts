@@ -13,11 +13,13 @@ module TSOS {
         //
         // OS Startup and Shutdown Routines
         //
+
+        public quantum: number = 6;
         public krnBootstrap() {      // Page 8. {
             Control.hostLog("bootstrap", "host");  // Use hostLog because we ALWAYS want this, even if _Trace is off.
 
             
-            
+            this.quantum = 6;
             // Initialize our global queues.
             _KernelInterruptQueue = new Queue();  // A (currently) non-priority queue for interrupt requests (IRQs).
             _KernelBuffers = new Array();         // Buffers... for the kernel.
@@ -77,14 +79,24 @@ module TSOS {
                This, on the other hand, is the clock pulse from the hardware / VM / host that tells the kernel
                that it has to look for interrupts and process them if it finds any.                          
             */
-
+            
             // Check for an interrupt, if there are any. Page 560
             if (_KernelInterruptQueue.getSize() > 0) {
                 // Process the first interrupt on the interrupt queue.
                 // TODO (maybe): Implement a priority queue based on the IRQ number/id to enforce interrupt priority.
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
-            } else if (_CPU.isExecuting) { // If there are no interrupts then run one CPU cycle if there is anything being processed.
+            } else if (_CPU.isExecuting || _MemoryManager.readyQueue.length > 0) { // If there are no interrupts then run one CPU cycle if there is anything being processed.
+                if (_MemoryManager.readyQueue.length > 0 && _CPU.clockcount % this.quantum == 0){
+                    if (_CPU.currentPCB){
+                        _CPU.updateCurrentPCB();
+                        if (_CPU.isExecuting == true){
+                            _MemoryManager.readyQueue.push(_CPU.currentPCB);
+                        }
+                    }
+                    let nextPCB = _MemoryManager.readyQueue.shift();
+                    _CPU.executeProcess(nextPCB);
+                }
                 _CPU.cycle();
             } else {                       // If there are no interrupts and there is nothing being executed then just be idle.
                 this.krnTrace("Idle");

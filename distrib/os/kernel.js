@@ -9,11 +9,15 @@
 var TSOS;
 (function (TSOS) {
     class Kernel {
-        //
-        // OS Startup and Shutdown Routines
-        //
+        constructor() {
+            //
+            // OS Startup and Shutdown Routines
+            //
+            this.quantum = 6;
+        }
         krnBootstrap() {
             TSOS.Control.hostLog("bootstrap", "host"); // Use hostLog because we ALWAYS want this, even if _Trace is off.
+            this.quantum = 6;
             // Initialize our global queues.
             _KernelInterruptQueue = new TSOS.Queue(); // A (currently) non-priority queue for interrupt requests (IRQs).
             _KernelBuffers = new Array(); // Buffers... for the kernel.
@@ -69,7 +73,17 @@ var TSOS;
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             }
-            else if (_CPU.isExecuting) { // If there are no interrupts then run one CPU cycle if there is anything being processed.
+            else if (_CPU.isExecuting || _MemoryManager.readyQueue.length > 0) { // If there are no interrupts then run one CPU cycle if there is anything being processed.
+                if (_MemoryManager.readyQueue.length > 0 && _CPU.clockcount % this.quantum == 0) {
+                    if (_CPU.currentPCB) {
+                        _CPU.updateCurrentPCB();
+                        if (_CPU.isExecuting == true) {
+                            _MemoryManager.readyQueue.push(_CPU.currentPCB);
+                        }
+                    }
+                    let nextPCB = _MemoryManager.readyQueue.shift();
+                    _CPU.executeProcess(nextPCB);
+                }
                 _CPU.cycle();
             }
             else { // If there are no interrupts and there is nothing being executed then just be idle.
