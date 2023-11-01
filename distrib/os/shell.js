@@ -72,7 +72,7 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellps, "ps", "- Display the PID and state of all processes.");
             this.commandList[this.commandList.length] = sc;
             // kill <pid>
-            sc = new TSOS.ShellCommand(undefined, "kill", "<pid> - Kill one process.");
+            sc = new TSOS.ShellCommand(this.shellkillPID, "kill", "<pid> - Kill one process.");
             this.commandList[this.commandList.length] = sc;
             // killall
             sc = new TSOS.ShellCommand(undefined, "killall", "- Kill all processes.");
@@ -216,6 +216,27 @@ var TSOS;
             console.log("Current date:", CDate);
             console.log("Current time:", CurrentTime);
             _StdOut.putText("The date is: " + CDate + " The time is: " + CurrentTime);
+        }
+        shellkillPID(args) {
+            let indexRemove = -1;
+            let killpid = parseInt(args[0]);
+            //Check if the Pid is even there 
+            if (args.length > 0) {
+                //Find the pcb and removes the pid 
+                for (let i = 0; i < _MemoryManager.pcbList.length; i++) {
+                    indexRemove = i;
+                    break;
+                }
+            }
+            if (indexRemove !== -1) {
+                // Remove PCB from the list
+                _MemoryManager.pcbList.splice(indexRemove, 1);
+                _MemoryManager.updateMemoryDisplay();
+                _StdOut.putText(`Process with PID ${killpid} has been terminated.`);
+            }
+            else {
+                _StdOut.putText(`No process found with PID ${killpid}.`);
+            }
         }
         shellLoad() {
             // Regular Expression to match hexadecimal digits and spaces

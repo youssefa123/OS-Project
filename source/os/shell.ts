@@ -18,6 +18,7 @@ module TSOS {
         public apologies = "[sorry]";
         public programID: Number = 0;
         private pidCounter: number = 0;
+        
 
         constructor() {
         }
@@ -131,7 +132,7 @@ module TSOS {
 
 
             // kill <pid>
-            sc = new ShellCommand(undefined,
+            sc = new ShellCommand(this.shellkillPID,
                                     "kill",
                                     "<pid> - Kill one process.");
             this.commandList[this.commandList.length] = sc;
@@ -303,7 +304,35 @@ module TSOS {
             _StdOut.putText("The date is: " + CDate + " The time is: " + CurrentTime);
         }
 
-    
+        
+        public shellkillPID(args: string[]): void {
+
+            let indexRemove = -1;
+            let killpid = parseInt(args[0]);
+            
+            //Check if the Pid is even there 
+            if (args.length > 0) {
+                
+
+                //Find the pcb and removes the pid 
+                
+                for(let i = 0; i < _MemoryManager.pcbList.length; i++) {
+                    indexRemove = i;
+                    break;
+                }
+            }
+
+            if (indexRemove !== -1) {
+                // Remove PCB from the list
+                _MemoryManager.pcbList.splice(indexRemove, 1);
+
+                _MemoryManager.updateMemoryDisplay();
+                
+                _StdOut.putText(`Process with PID ${killpid} has been terminated.`);
+            } else {
+                _StdOut.putText(`No process found with PID ${killpid}.`);
+            }
+        }
         
         
         public shellLoad() {
