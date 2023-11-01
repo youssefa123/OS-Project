@@ -124,7 +124,7 @@ module TSOS {
 
 
             // ps
-            sc = new ShellCommand(undefined,
+            sc = new ShellCommand(this.shellps,
                                     "ps",
                                     "- Display the PID and state of all processes.");
             this.commandList[this.commandList.length] = sc;
@@ -148,12 +148,6 @@ module TSOS {
                                     "<int> - Let the user set the Round Robin quantum measured in cpu cycles.");
             this.commandList[this.commandList.length] = sc;
             
-
-
-
-
-            // ps  - list the running processes and their IDs
-            // kill <id> - kills the specified process id.
 
             // Display the initial prompt.
             this.putPrompt();
@@ -366,6 +360,31 @@ module TSOS {
             _MemoryManager.runProcess(pid);
 
         }
+
+        public shellps(args: string[]) {
+            //Check the memorymanager for the PCB list 
+            if (_MemoryManager && _MemoryManager.pcbList) {
+                let processes= _MemoryManager.pcbList;
+                
+                //If there is no Pid then return error in console. 
+                if (processes.length === 0) {
+                    _StdOut.putText("There is no current processes in memory");
+                    return;
+                }
+
+                for (let process of processes) { 
+                    let state = process.running ? "Running" : "Loaded";  //state checks ifthe process is running or loaded, then
+                    _StdOut.putText(`The current PID # is: ${process.pid} \t Current State: ${state}`);
+                    _StdOut.advanceLine();
+                }
+            } else {
+                _StdOut.putText("Error: Memory Manager or PCB List is not available.");
+            }
+        }
+            
+        
+         
+
 
         public shellRunAll(){
             console.log("shellRunAll Function");

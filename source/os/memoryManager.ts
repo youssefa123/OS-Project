@@ -1,11 +1,12 @@
 module TSOS {
     export class memoryManager {
         private memoryAccessor: MemoryAccessor = new MemoryAccessor();
-        private pcbList: PCB[] = []; // Array to store load PCBs
+        public pcbList: PCB[] = []; // Array to store load PCBs
 
         public readyQueue: PCB[] = []; // Array to store running PCBs
 
         private lasteByteUsed: number = 0;
+        
         
         public loadIntoMemory(pid:number, data: string[]): void {
             
