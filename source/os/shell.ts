@@ -138,7 +138,7 @@ module TSOS {
             this.commandList[this.commandList.length] = sc;
 
             // killall
-            sc = new ShellCommand(undefined,
+            sc = new ShellCommand(this.shellkillall,
                                     "killall",
                                     "- Kill all processes.");
             this.commandList[this.commandList.length] = sc;
@@ -262,6 +262,35 @@ module TSOS {
             _StdOut.putText("Cleared memory.");
         }
 
+        public shellkillall (args: string[]): void {
+
+            //Check to see if we have access to the processes
+            if (_MemoryManager && _MemoryManager.pcbList) {
+
+                //Loop through the pcb list 
+                for (let process of _MemoryManager.pcbList) {
+                    process.running = false;
+                
+                }
+
+                //Loop through the readyQueue and terminate running processes
+                for (let process of _MemoryManager.readyQueue) {
+                    process.running = false;
+                
+                }
+                // Clear the pcb list and readyQueue
+                _MemoryManager.readyQueue = [];
+                _MemoryManager.pcbList = [];
+                _MemoryManager.updateMemoryDisplay();
+                _StdOut.putText("All processes are terminated.");
+                _StdOut.advanceLine();
+
+            } else {
+                _StdOut.putText("Error: Memory Manager or PCB List is not available.");
+                _StdOut.advanceLine();
+            }
+        }
+
 
 
         public shellCurse() {
@@ -306,33 +335,39 @@ module TSOS {
 
         
         public shellkillPID(args: string[]): void {
-
-            let indexRemove = -1;
+            if (args.length == 0) {
+                _StdOut.putText("Please provide a PID to terminate.");
+                return;
+            }
+        
             let killpid = parseInt(args[0]);
+            let indexRemove = -1;
             
-            //Check if the Pid is even there 
-            if (args.length > 0) {
-                
-
-                //Find the pcb and removes the pid 
-                
-                for(let i = 0; i < _MemoryManager.pcbList.length; i++) {
+            // Find the PCB 
+            for(let i = 0; i < _MemoryManager.pcbList.length; i++) {
+                if (_MemoryManager.pcbList[i].pid == killpid) {
                     indexRemove = i;
                     break;
                 }
             }
-
+        
+            // kill the process in the readyQueue 
+            for (let process of _MemoryManager.readyQueue) {
+                if (process.pid == killpid) {
+                    process.running = false;
+                }
+            }
+        
             if (indexRemove !== -1) {
                 // Remove PCB from the list
                 _MemoryManager.pcbList.splice(indexRemove, 1);
-
                 _MemoryManager.updateMemoryDisplay();
-                
                 _StdOut.putText(`Process with PID ${killpid} has been terminated.`);
             } else {
                 _StdOut.putText(`No process found with PID ${killpid}.`);
             }
         }
+        
         
         
         public shellLoad() {
