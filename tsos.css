@@ -31,32 +31,130 @@ h3 {
 }
 
 #display {
-  background-color:#DFDBC3;
-  border: 2px solid red;
+  background-color: whitesmoke; 
   cursor: default;
+  float: left;
+  overflow: auto;
+  color: #0FF; 
 }
+
+
 
 .normal_button {
   width: 100px;
 }
 
-.footerText {
-  color: black;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 8pt;
-  text-align: center;
-}
-
-
-#divConsole {
-    width: 800px;
-    height: 300px;
-    float: left;
-    overflow: auto;  /*Scroll Bar*/
-}
 
 
 #consoleContent {
   overflow: auto; /* SHould FIx the scrolling  */
   flex: 1; /* Expands I think */
 }
+
+
+
+#memorytable th, #memorytable td {
+  border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#memorytable th {
+  background-color: #e0e0e0;
+  font-weight: bold;
+}
+
+#memorytable tr {
+  background-color: #444;
+}
+
+#memorytable td {
+  color: #0f0; 
+}
+
+
+#memorytable tr:hover {
+  background-color: #555; 
+}
+
+/* Modified PCB Table Styles to match CPU Table */
+#pcbtable {
+  border-collapse: separate;  /* Use separate to make individual cell borders visible */
+  border-spacing: 0;  /* No spacing between cells */
+  width: 100%;  
+  background-color: #f4f4f4; 
+}
+
+#pcbtable th, #pcbtable td {
+  border: 2px solid #ddd;  /* Increase the border thickness for better visibility */
+  padding: 8px;
+  text-align: center;  
+}
+
+#pcbtable th {
+  background-color: #e0e0e0;  /* Matching header background color */
+  font-weight: bold;
+}
+
+#pcbtablebody tr {
+  background-color: #444;  /* Matching row color */
+}
+
+#pcbtablebody td {
+  font-family: 'Courier New', Courier, monospace; 
+  color: #0f0;  /* Matching text color */
+  font-weight: bold;
+  font-size: 16px;  /* Matching font size */
+}
+
+#pcbtablebody td:hover {
+  background-color: #555;  /* Matching hover effect */
+}
+
+
+#taHostLog {
+  resize: none;  /* disables the resize handle */
+   
+}
+
+
+#UserProgramInput {
+  resize: none;
+}
+
+#divCPUTable {
+  font-family: Arial, sans-serif;
+}
+
+#cputable {
+  border-collapse: collapse;
+  width: 100%;
+  background-color: #f4f4f4;
+}
+
+#cputable th, #cputable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+#cputable th {
+  background-color: #e0e0e0;
+  font-weight: bold;
+}
+
+#cputablebody tr {
+  background-color: #444;
+}
+
+#cputablebody td {
+  font-family: 'Courier New', Courier, monospace; 
+  color: #0f0; 
+  font-weight: bold;
+  font-size: 16px;
+}
+
+#cputablebody td:hover {
+  background-color: #555; 
+}
+

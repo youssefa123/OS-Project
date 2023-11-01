@@ -15,6 +15,9 @@
    <script type="text/javascript" src="distrib/host/control.js"></script>
    <script type="text/javascript" src="distrib/host/devices.js"></script>
    <script type="text/javascript" src="distrib/host/cpu.js"></script>
+   <script type="text/javascript" src="distrib/host/memory.js"></script>
+   <script type="text/javascript" src="distrib/host/memoryAccessor.js"></script>
+
 
    <!-- Virtual OS Routines: Make sure Kernel code is last, since it needs those above it. -->
    <script type="text/javascript" src="distrib/os/interrupt.js"></script>
@@ -27,11 +30,13 @@
    <script type="text/javascript" src="distrib/os/shellCommand.js"></script>
    <script type="text/javascript" src="distrib/os/userCommand.js"></script>
    <script type="text/javascript" src="distrib/os/kernel.js"></script>
+   <script type="text/javascript" src="distrib/os/pcb.js"></script>
+   <script type="text/javascript" src="distrib/os/memorymanager.js"></script>
 
    <!-- Other Routines -->
    <script type="text/javascript" src="distrib/utils.js"></script>
    <!-- Uncomment the line below to enable GLaDOS testing. -->
-   <script type="text/javascript" src="http://alanclasses.github.io/TSOS/test/glados-ip0.js"></script>
+   <script type="text/javascript" src="http://alanclasses.github.io/TSOS/test/glados-ip2.js"></script>
 
 </head>
 
@@ -70,7 +75,6 @@
    <div id="statusBar">
       <p>Date: <span id="currentdate"></span></p>
       <p>Time: <span id="currenttime"></span></p>
-      <p>Status: <span id="status"></span></p>
    </div>
    
    <script>
@@ -81,9 +85,7 @@
          document.getElementById("currenttime").textContent = currentTime;
       }
 
-      function setStatus() {
-        document.getElementById("status").textContent = " Welcome back. Your currently 🟢Online"; //Not as cool as I thought it would look 
-      }
+   
    
       onload = function () {
          onDocumentLoad();
@@ -94,51 +96,116 @@
    </script>
    
 
-   <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left; overflow:auto;">
-      <canvas id="display"
-              width="640px"
-              height="420px"   
-              tabindex="3"> 
-      </canvas>
-   </div>
+   <!-- Console Log -->
+<div id="divConsole" style="width:500px; height:500px; float:left;">
+   <canvas id="display"
+           width="600px"
+           height="420px" 
+           tabindex="3"> 
+   </canvas>
+</div>
 
 
-  
+<div style="width:500px; height:auto; float:left; margin-left:120px;">
 
-
-   <div id="divLog" style="margin-left:520px;">
+   <div id="divUserProgramInput" style="width:500px; height:auto;">
       <label>
-         Host Log
-         <br>
-         <textarea name="taHostLog"
-                   id  ="taHostLog"
-                   rows="26"
-                   cols="48"
-         ></textarea>
+          User Program Input
+          <br>
+          <textarea name="taProgramInput"
+                    id="taProgramInput"
+                    rows="8"
+                    cols="48">
+              A9 01 A9 02 A9 03 A9 04 A9 05 A9 01 A9 02 A9 03 A9 04 A9 05 A9 01 A9 02 A9 03 A9 04 A9 05 A9 01 A9 02 A9 03 A9 04 A9 05 A9 01 A9 02 A9 03 A9 04 A9 05 00
+          </textarea>
       </label>
    </div>
 
-   <div id="divUserProgramInput" style="margin-left:520px;">
-      <label>
-         User Program Input
-         <br>
-         <textarea name="taProgramInput"
-                   id  ="taProgramInput"
-                   rows="8"
-                   cols="48"
-         ></textarea>
-      </label>
+   <!-- Memory Table -->
+   <div id="divMemoryTable" style="width:500px; height:300px;  overflow-x:auto; margin-top:20px;">
+      <h5>Memory</h5>
+      <table id="memorytable">
+          <tbody>
+              <tr>
+                  <td>0x000</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td>
+              </tr>
+          </tbody>
+      </table>
    </div>
 </div>
 
-<p class="footerText" style="clear:both;">
-   <br>
-   Copyright &copy; 2008 - 2019 No Rights Reserved.
-   <br>
-   Reproduction is inhibited without the express written consent of
-   Ted Codd, Stevie Ray Vaughan, and Ian Fleming.
-</p>
+<div id="divCPUTable" style="float:left; margin-left:5px; max-height:150px;">
+   <h5>CPU Information</h5>
+   <table id="cputable" >
+       <thead>
+           <tr>
+               <th>PC</th>
+               <th>IR</th>
+               <th>ACC</th>
+               <th>Xreg</th>
+               <th>Yreg</th>
+               <th>Zflag</th>
+           </tr>
+       </thead>
+       <tbody id="cputablebody">
+           <tr>
+               <td id="cpuPC">00</td>
+               <td id="cpuIR">00</td>
+               <td id="cpuACC">00</td>
+               <td id="cpuX">00</td>
+               <td id="cpuY">00</td>
+               <td id="cpuZ">00</td>
+           </tr>
+       </tbody>
+   </table>
+</div>
 
+
+
+
+<div id="divLog" style="float:left; margin-bottom:100px;">
+   <label>
+      Host Log
+      <br>
+      <textarea name="taHostLog"
+                id  ="taHostLog"        
+                style="width: 300px; height: 300px;"  
+      ></textarea>
+   </label>
+</div>
+
+
+ <!-- PCB Table -->
+ <div id="divPCBTable" style="float:left; max-height:100px;">
+   <h5>Process Controll Table</h5>
+   <table id="pcbtable">
+       <thead>
+           <tr>
+               <th>PID</th>
+               <th>Prioty</th>
+               <th>IR</th>
+               <th>PC</th>
+               <th>ACC</th>
+               <th>Xreg</th>
+               <th>Yreg</th>
+               <th>Zflag</th>
+               <th>Memory Location</th>
+               <th>Running</th>
+
+           </tr>
+       </thead>
+       <tbody id = "pcbtablebody">
+       </tbody>
+   </table>
+ </div>
+
+
+
+
+      
 
 </body>
 </html>
+
+
+      

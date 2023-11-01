@@ -16,6 +16,8 @@ var TSOS;
             this.commandList = [];
             this.curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
             this.apologies = "[sorry]";
+            this.programID = 0;
+            this.pidCounter = 0;
         }
         init() {
             var sc;
@@ -46,6 +48,8 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.bsod, "bsod", "-Break the OS");
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellLoad, "load", "- Verifies user code and will load it.");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellRun, "run", "<PID> run a program already in memory.");
             this.commandList[this.commandList.length] = sc;
             // man <topic>
             sc = new TSOS.ShellCommand(this.shellMan, "man", "<topic> - Displays the MANual page for <topic>.");
@@ -194,18 +198,44 @@ var TSOS;
             console.log("Current time:", CurrentTime);
             _StdOut.putText("The date is: " + CDate + " The time is: " + CurrentTime);
         }
-        shellLoad(args) {
-            // Get the text area element and its value
-            const userinput = document.getElementById("taProgramInput");
-            const input = userinput.value;
-            // only hex digits and spaces
-            let isloadValid = /^[0-9a-fA-F ]+$/.test(input); //it kept testing as valid even when it was empty so I added a plus so that one valid character is present to be valid
-            if (isloadValid) {
-                _StdOut.putText("Valid hex input");
+        shellLoad() {
+            // Regular Expression to match hexadecimal digits and spaces
+            const hexDigitAndSpaceRegex = /^([0-9a-fA-F]{2}\s)*[0-9a-fA-F]{2}$/;
+            // Get the user input and cleaned up extra spaces with the .trim()
+            let userinput = (document.getElementById("taProgramInput")).value.trim();
+            /// Split user input into individual bytes (but keep them as strings)
+            let userInput = userinput.split(/\s+/);
+            if (userInput.length == 0) {
+                _StdOut.putText("User Program Input is Empty!");
+                return;
             }
-            else {
-                _StdOut.putText("Unable to load: Input is not in hex");
+            if (!hexDigitAndSpaceRegex.test(userinput)) {
+                _StdOut.putText("Program input is not valid hexadecimal. Example: 'A9 08'");
+                return;
             }
+            let currentPID = _LastAssignedPID++;
+            // Display the PID
+            _StdOut.putText(`Valid hexadecimal input. Assigned PID: ${currentPID}`);
+            // Update the memory display
+            _MemoryManager.loadIntoMemory(currentPID, userInput);
+            _Memory.updateMemoryDisplay();
+            // _StdOut.putText(this.promptStr + " ");  // Display the prompt
+        }
+        shellRun(args) {
+            console.log("shellRun Function");
+            console.log(args);
+            let pid = parseInt(args[0]);
+            console.log(pid);
+            if (Number.isNaN(pid)) {
+                _StdOut.putText("Bad input enter a number: ");
+                return;
+            }
+            let pcbdata = _MemoryManager.getPCB(pid);
+            if (pcbdata == null) {
+                _StdOut.putText("No PID number found ");
+                return;
+            }
+            _CPU.executeProcess(pcbdata);
         }
         shellWhereAmI(args) {
             console.log("shellWhereAmI function");
