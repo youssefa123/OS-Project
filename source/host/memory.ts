@@ -13,6 +13,12 @@ module TSOS {
             this.updateMemoryDisplay();
         }
 
+        public clear(){
+            this.storage = new Array<number>(this.limit).fill(0); // Filling with 0 as a default memory value
+            this.updateMemoryDisplay();
+
+        }
+
         // Load data into the memory
         public load(data: Array<number>): void {
             // Logic to load data into the memory

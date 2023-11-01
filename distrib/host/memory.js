@@ -11,6 +11,10 @@ var TSOS;
             this.storage = new Array(this.limit).fill(0); // Filling with 0 as a default memory value
             this.updateMemoryDisplay();
         }
+        clear() {
+            this.storage = new Array(this.limit).fill(0); // Filling with 0 as a default memory value
+            this.updateMemoryDisplay();
+        }
         // Load data into the memory
         load(data) {
             // Logic to load data into the memory

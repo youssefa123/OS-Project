@@ -111,7 +111,7 @@ module TSOS {
                                   "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
 
-            sc = new ShellCommand(undefined,
+            sc = new ShellCommand(this.clearMem,
                                     "clearmem",
                                     "- Clear all memory partitions.");
             this.commandList[this.commandList.length] = sc;
@@ -262,8 +262,9 @@ module TSOS {
             }
         }
 
-        public clearmem() { 
-
+        public clearMem() { 
+            _MemoryManager.clear();
+            _StdOut.putText("Cleared memory.");
         }
 
 

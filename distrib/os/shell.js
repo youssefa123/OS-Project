@@ -63,7 +63,7 @@ var TSOS;
             // prompt <string>
             sc = new TSOS.ShellCommand(this.shellPrompt, "prompt", "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
-            sc = new TSOS.ShellCommand(undefined, "clearmem", "- Clear all memory partitions.");
+            sc = new TSOS.ShellCommand(this.clearMem, "clearmem", "- Clear all memory partitions.");
             this.commandList[this.commandList.length] = sc;
             // runall
             sc = new TSOS.ShellCommand(this.shellRunAll, "runall", "- Execute all programs at once.");
@@ -182,7 +182,9 @@ var TSOS;
                 _StdOut.putText("Type 'help' for, well... help.");
             }
         }
-        clearmem() {
+        clearMem() {
+            _MemoryManager.clear();
+            _StdOut.putText("Cleared memory.");
         }
         shellCurse() {
             _StdOut.putText("Oh, so that's how it's going to be, eh? Fine.");

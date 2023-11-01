@@ -51,6 +51,12 @@ var TSOS;
                 _StdOut.advanceLine();
             }
         }
+        clear() {
+            this.pcbList = [];
+            this.readyQueue = [];
+            _Memory.clear();
+            this.updateMemoryDisplay();
+        }
         // Update the HTML table that displays the memory 
         updateMemoryDisplay() {
             const pcbtablebody = document.getElementById("pcbtablebody");
