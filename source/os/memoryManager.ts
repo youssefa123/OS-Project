@@ -38,8 +38,8 @@ module TSOS {
 
             this.pcbList.push(newPCB)
 
-            // Update the memory display
-            this.updateMemoryDisplay();
+            // Update the PCB display
+            this.updatePCBDisplay();
 
         }
 
@@ -60,7 +60,7 @@ module TSOS {
             this.pcbList = [];
             _Memory.clear();
             _Scheduler.clear();
-            this.updateMemoryDisplay();
+            this.updatePCBDisplay();
         }
 
         public runAll(){
@@ -69,7 +69,7 @@ module TSOS {
 
 
         // Update the HTML table that displays the memory 
-        public updateMemoryDisplay(): void {
+        public updatePCBDisplay(): void {
             
             const pcbtablebody = document.getElementById("pcbtablebody");
             pcbtablebody.innerHTML = "";

@@ -4,6 +4,8 @@ module TSOS {
         public base: number = 0;
         public limit: number = 256*4 //Memory limit is 256 bytes 
         public storage: Array<number>; // Storage for the memory contents
+        public instructionByte: number = null;
+        public memoryByte: number = null;
 
         public init(): void {
             this.base = 0;
@@ -25,6 +27,7 @@ module TSOS {
             for (let i = 0; i < data.length && i < this.limit; i++) {
                 this.storage[i] = data[i];
             }
+            this.updateMemoryDisplay();
         }
 
         public updateMemoryDisplay(): void {
@@ -47,6 +50,15 @@ module TSOS {
                 for (let j = 0; j < 8; j++) {
                     let cell = document.createElement('td');
                     cell.innerText = Utils.formatHex(this.storage[i + j], 2,false);
+                    if (i + j == this.instructionByte){
+                        cell.style.color = "white";
+                        cell.style.backgroundColor = "red";
+                    }
+                    if (i + j == this.memoryByte){
+                        cell.style.color = "white";
+                        cell.style.backgroundColor = "blue";
+                    }
+
                     row.appendChild(cell);
                 }
 

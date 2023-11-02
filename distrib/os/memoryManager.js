@@ -28,8 +28,8 @@ var TSOS;
             // Create a PCB for the new process and add it to the pcbList
             let newPCB = new TSOS.PCB(pid, base, limit, Prioty, IR, PC, ACC, Xreg, Yreg, Zflag);
             this.pcbList.push(newPCB);
-            // Update the memory display
-            this.updateMemoryDisplay();
+            // Update the PCB display
+            this.updatePCBDisplay();
         }
         getPCB(pid) {
             for (const pcbdata of this.pcbList) {
@@ -43,13 +43,13 @@ var TSOS;
             this.pcbList = [];
             _Memory.clear();
             _Scheduler.clear();
-            this.updateMemoryDisplay();
+            this.updatePCBDisplay();
         }
         runAll() {
             _Scheduler.runGroup(this.pcbList);
         }
         // Update the HTML table that displays the memory 
-        updateMemoryDisplay() {
+        updatePCBDisplay() {
             const pcbtablebody = document.getElementById("pcbtablebody");
             pcbtablebody.innerHTML = "";
             for (const pcbdata of this.pcbList) {

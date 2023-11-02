@@ -198,7 +198,7 @@ var TSOS;
                 // Clear the pcb list and readyQueue
                 _MemoryManager.readyQueue = [];
                 _MemoryManager.pcbList = [];
-                _MemoryManager.updateMemoryDisplay();
+                _MemoryManager.updatePCBDisplay();
                 _StdOut.putText("All processes are terminated.");
                 _StdOut.advanceLine();
             }
@@ -263,7 +263,7 @@ var TSOS;
             if (indexRemove !== -1) {
                 // Remove PCB from the list
                 _MemoryManager.pcbList.splice(indexRemove, 1);
-                _MemoryManager.updateMemoryDisplay();
+                _MemoryManager.updatePCBDisplay();
                 _StdOut.putText(`Process with PID ${killpid} has been terminated.`);
             }
             else {

@@ -4,6 +4,8 @@ var TSOS;
         constructor() {
             this.base = 0;
             this.limit = 256 * 4; //Memory limit is 256 bytes 
+            this.instructionByte = null;
+            this.memoryByte = null;
         }
         init() {
             this.base = 0;
@@ -21,6 +23,7 @@ var TSOS;
             for (let i = 0; i < data.length && i < this.limit; i++) {
                 this.storage[i] = data[i];
             }
+            this.updateMemoryDisplay();
         }
         updateMemoryDisplay() {
             const memoryTable = document.getElementById('memorytable');
@@ -40,6 +43,14 @@ var TSOS;
                 for (let j = 0; j < 8; j++) {
                     let cell = document.createElement('td');
                     cell.innerText = TSOS.Utils.formatHex(this.storage[i + j], 2, false);
+                    if (i + j == this.instructionByte) {
+                        cell.style.color = "white";
+                        cell.style.backgroundColor = "red";
+                    }
+                    if (i + j == this.memoryByte) {
+                        cell.style.color = "white";
+                        cell.style.backgroundColor = "blue";
+                    }
                     row.appendChild(cell);
                 }
                 memoryTable.appendChild(row);

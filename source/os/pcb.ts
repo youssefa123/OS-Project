@@ -13,6 +13,7 @@ module TSOS {
     public Zflag: number;  
     public running: boolean;
     public currentOpcode: number;
+    public pipelineState;
     
 
     
@@ -29,6 +30,7 @@ module TSOS {
         this.Zflag = Zflag;
         this.running = false;
         this.currentOpcode = 0;
+        this.pipelineState = null;
     }
 
 

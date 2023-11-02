@@ -11,6 +11,7 @@ var TSOS;
                 console.error("Invalid memory address.", address);
                 return 0; // Return 0 if the address is invalid 
             }
+            _Memory.memoryByte = address;
             return _Memory.storage[address]; // Fetches the byte at the given address
         }
         // Then we need to set a byte at a specific address in memory.
@@ -25,6 +26,8 @@ var TSOS;
             }
             _Memory.storage[address] = value; // Sets the byte at the given address.
             console.log('Target address is now', TSOS.Utils.formatHex(_Memory.storage[address], 2, true));
+            _Memory.memoryByte = address;
+            _Memory.updateMemoryDisplay();
         }
     }
     TSOS.MemoryAccessor = MemoryAccessor;

@@ -73,15 +73,18 @@
                 default:
                     this.pipelineState = PipelineState.FETCH;
                     break;
-                this.updateCurrentPCB();
             }
+            _Memory.updateMemoryDisplay();
+            this.updateCurrentPCB();
+
         }
         
         private fetch(): void { //Fetch the instruction from memory using the current PC and the memoryAccessor
             
             this.currentInstruction = _MemoryAccessor.readByte(this.PC,this.currentPCB);
             console.log(this.currentPCB.pid+' fetching at ', Utils.formatHex(this.PC, 2, false),'got:', Utils.formatHex(this.currentInstruction, 2, false));
-
+            _Memory.instructionByte = this.PC;
+            console.log("set mem highlight to ", this.PC);
             this.PC++;
         }
 
@@ -224,7 +227,7 @@
             // After executing any instruction we need to update the PCB of the running process
             this.updateCurrentPCB();
             if (this.currentPCB) {
-                _MemoryManager.updateMemoryDisplay()
+                _MemoryManager.updatePCBDisplay()
             }
             
         }
@@ -252,7 +255,8 @@
                 this.currentPCB.Zflag = this.Zflag;
                 this.currentPCB.running = this.isExecuting;
                 this.currentPCB.currentOpcode = this.currentOpcode;
-                _MemoryManager.updateMemoryDisplay();
+                this.currentPCB.pipelineState = this.pipelineState;
+                _MemoryManager.updatePCBDisplay();
                 this.updateCurrentCPU();
 
             }
@@ -262,6 +266,11 @@
         public executeProcess(pcb: PCB): void {
 
             console.log("Loading process "+pcb.pid, JSON.stringify(pcb));
+            if (pcb.pipelineState == null){
+                pcb.pipelineState = PipelineState.FETCH;
+            }
+=
+            this.pipelineState = pcb.pipelineState;
             this.currentPCB = pcb;
             this.PC = pcb.PC;
             this.Acc = pcb.ACC;
@@ -271,7 +280,7 @@
             this.currentInstruction = pcb.IR;
             this.currentOpcode = pcb.currentOpcode;
             pcb.running = true;
-            _MemoryManager.updateMemoryDisplay()
+            _MemoryManager.updatePCBDisplay()
             this.isExecuting = true;
         }
 

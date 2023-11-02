@@ -14,6 +14,7 @@ var TSOS;
             this.Zflag = Zflag;
             this.running = false;
             this.currentOpcode = 0;
+            this.pipelineState = null;
         }
     }
     TSOS.PCB = PCB;
