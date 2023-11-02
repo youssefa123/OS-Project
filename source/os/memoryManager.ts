@@ -29,7 +29,7 @@ module TSOS {
                 this.memoryAccessor.writeByte(base + i, d);
             }
 
-            let limit = base + data.length; 
+            let limit = base + data.length+256; 
             this.lasteByteUsed = limit;
             console.log("base", base, "limit: ", limit, "LBU", this.lasteByteUsed)
             // Create a PCB for the new process and add it to the pcbList
@@ -55,26 +55,16 @@ module TSOS {
 
         }
 
-        public runProcess(pid: number){
-            let executingPCB = this.getPCB(pid);
-            this.readyQueue.push(executingPCB);
-            //_CPU.executeProcess(executingPCB);
-        }
-
-        public runAll(){
-            for (let pcb of this.pcbList){
-                this.readyQueue.push(pcb);
-                _StdOut.putText(`Added Process ${pcb.pid} to ReadyQueue`);
-                _StdOut.advanceLine();
-
-            }
-        }
         
         public clear(){
             this.pcbList = [];
-            this.readyQueue = [];
             _Memory.clear();
+            _Scheduler.clear();
             this.updateMemoryDisplay();
+        }
+
+        public runAll(){
+            _Scheduler.runGroup(this.pcbList);
         }
 
 

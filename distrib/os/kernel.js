@@ -9,15 +9,11 @@
 var TSOS;
 (function (TSOS) {
     class Kernel {
-        constructor() {
-            //
-            // OS Startup and Shutdown Routines
-            //
-            this.quantum = 6;
-        }
+        //
+        // OS Startup and Shutdown Routines
+        //
         krnBootstrap() {
             TSOS.Control.hostLog("bootstrap", "host"); // Use hostLog because we ALWAYS want this, even if _Trace is off.
-            this.quantum = 6;
             // Initialize our global queues.
             _KernelInterruptQueue = new TSOS.Queue(); // A (currently) non-priority queue for interrupt requests (IRQs).
             _KernelBuffers = new Array(); // Buffers... for the kernel.
@@ -73,15 +69,15 @@ var TSOS;
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             }
-            else if (_CPU.isExecuting || _MemoryManager.readyQueue.length > 0) { // If there are no interrupts then run one CPU cycle if there is anything being processed.
-                if (_MemoryManager.readyQueue.length > 0 && _CPU.clockcount % this.quantum == 0) {
+            else if (_CPU.isExecuting || _Scheduler.readyQueue.length > 0) { // If there are no interrupts then run one CPU cycle if there is anything being processed.
+                if (_Scheduler.readyQueue.length > 0 && _CPU.clockcount % _Scheduler.quantum == 0) {
                     if (_CPU.currentPCB) {
                         _CPU.updateCurrentPCB();
                         if (_CPU.isExecuting == true) {
-                            _MemoryManager.readyQueue.push(_CPU.currentPCB);
+                            _Scheduler.readyQueue.push(_CPU.currentPCB);
                         }
                     }
-                    let nextPCB = _MemoryManager.readyQueue.shift();
+                    let nextPCB = _Scheduler.readyQueue.shift();
                     _CPU.executeProcess(nextPCB);
                 }
                 _CPU.cycle();

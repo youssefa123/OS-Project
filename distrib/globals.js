@@ -23,6 +23,7 @@ const KEYBOARD_IRQ = 1;
 var _CPU; // Utilize TypeScript's type annotation system to ensure that _CPU is an instance of the Cpu class.
 var _Memory;
 var _MemoryAccessor;
+var _Scheduler;
 var _MemoryManager;
 let _LastAssignedPID = 0; // Global PID counter
 let _Utils;

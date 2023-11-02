@@ -22,7 +22,7 @@ var TSOS;
                 let d = parseInt(data[i], 16);
                 this.memoryAccessor.writeByte(base + i, d);
             }
-            let limit = base + data.length;
+            let limit = base + data.length + 256;
             this.lasteByteUsed = limit;
             console.log("base", base, "limit: ", limit, "LBU", this.lasteByteUsed);
             // Create a PCB for the new process and add it to the pcbList
@@ -39,23 +39,14 @@ var TSOS;
             }
             return null;
         }
-        runProcess(pid) {
-            let executingPCB = this.getPCB(pid);
-            this.readyQueue.push(executingPCB);
-            //_CPU.executeProcess(executingPCB);
-        }
-        runAll() {
-            for (let pcb of this.pcbList) {
-                this.readyQueue.push(pcb);
-                _StdOut.putText(`Added Process ${pcb.pid} to ReadyQueue`);
-                _StdOut.advanceLine();
-            }
-        }
         clear() {
             this.pcbList = [];
-            this.readyQueue = [];
             _Memory.clear();
+            _Scheduler.clear();
             this.updateMemoryDisplay();
+        }
+        runAll() {
+            _Scheduler.runGroup(this.pcbList);
         }
         // Update the HTML table that displays the memory 
         updateMemoryDisplay() {

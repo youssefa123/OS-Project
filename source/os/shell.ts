@@ -144,7 +144,7 @@ module TSOS {
             this.commandList[this.commandList.length] = sc;
 
              // quantum <int>
-             sc = new ShellCommand(undefined,
+             sc = new ShellCommand(this.shellQuantum,
                                     "quantum",
                                     "<int> - Let the user set the Round Robin quantum measured in cpu cycles.");
             this.commandList[this.commandList.length] = sc;
@@ -421,9 +421,27 @@ module TSOS {
                 return;
             }
             
-            _MemoryManager.runProcess(pid);
+            _Scheduler.runProcess(pid);
 
         }
+
+        public shellQuantum(args:string[]) {
+            console.log("shellQuantum Function");
+            console.log(args)
+
+            let q : number = parseInt(args[0]);
+             
+            if (!q){
+                _StdOut.putText( "Bad input enter a positive number: ");
+                return;
+            }
+
+            _Scheduler.setQuantum(q);
+            _StdOut.putText( "Set quantum to "+q+" CPU Cycle(s).");
+
+        }
+
+        
 
         public shellps(args: string[]) {
             //Check the memorymanager for the PCB list 

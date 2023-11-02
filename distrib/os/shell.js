@@ -78,7 +78,7 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellkillall, "killall", "- Kill all processes.");
             this.commandList[this.commandList.length] = sc;
             // quantum <int>
-            sc = new TSOS.ShellCommand(undefined, "quantum", "<int> - Let the user set the Round Robin quantum measured in cpu cycles.");
+            sc = new TSOS.ShellCommand(this.shellQuantum, "quantum", "<int> - Let the user set the Round Robin quantum measured in cpu cycles.");
             this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
@@ -307,7 +307,18 @@ var TSOS;
                 _StdOut.putText("No PID number found ");
                 return;
             }
-            _MemoryManager.runProcess(pid);
+            _Scheduler.runProcess(pid);
+        }
+        shellQuantum(args) {
+            console.log("shellQuantum Function");
+            console.log(args);
+            let q = parseInt(args[0]);
+            if (!q) {
+                _StdOut.putText("Bad input enter a positive number: ");
+                return;
+            }
+            _Scheduler.setQuantum(q);
+            _StdOut.putText("Set quantum to " + q + " CPU Cycle(s).");
         }
         shellps(args) {
             //Check the memorymanager for the PCB list 
