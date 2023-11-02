@@ -99,7 +99,7 @@ module TSOS {
             Xreg.innerText = Utils.formatHex(pcbdata.Xreg,2,true);
             Yreg.innerText = Utils.formatHex(pcbdata.Yreg,2,true);
             Zflag.innerText = Utils.formatHex(pcbdata.Zflag,2,true);
-            basecell.innerText = pcbdata.base.toString(); //Base is in decimal form needs to be hex. 
+            basecell.innerText = Utils.formatHex(pcbdata.base,2,true);
             runningCell.innerText = pcbdata.running.toString(); //Base is in decimal form needs to be hex. 
 
 
@@ -119,7 +119,8 @@ module TSOS {
 
 
            }
-
+           
+           _Scheduler.updateQueueDisplay()
 
         }
     }

@@ -191,7 +191,7 @@ var TSOS;
         // Update the current running PCB with the latest state of the CPU after executing an instruction
         updateCurrentPCB() {
             if (this.currentPCB) {
-                console.log(this.currentPCB);
+                console.log("Saving Process " + this.currentPCB.pid, JSON.stringify(this.currentPCB));
                 this.currentPCB.PC = this.PC;
                 this.currentPCB.IR = this.currentInstruction;
                 this.currentPCB.ACC = this.Acc;
@@ -206,7 +206,7 @@ var TSOS;
         }
         //Process control block process to execute
         executeProcess(pcb) {
-            console.log("Loading process", pcb);
+            console.log("Loading process " + pcb.pid, JSON.stringify(pcb));
             this.currentPCB = pcb;
             this.PC = pcb.PC;
             this.Acc = pcb.ACC;

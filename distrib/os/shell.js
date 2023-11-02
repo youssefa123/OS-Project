@@ -313,7 +313,7 @@ var TSOS;
             console.log("shellQuantum Function");
             console.log(args);
             let q = parseInt(args[0]);
-            if (!q) {
+            if (!q || q < 1) {
                 _StdOut.putText("Bad input enter a positive number: ");
                 return;
             }

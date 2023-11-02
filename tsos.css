@@ -78,36 +78,36 @@ h3 {
 }
 
 /* Modified PCB Table Styles to match CPU Table */
-#pcbtable {
+#pcbtable,  #queuetable{
   border-collapse: separate;  /* Use separate to make individual cell borders visible */
   border-spacing: 0;  /* No spacing between cells */
   width: 100%;  
   background-color: #f4f4f4; 
 }
 
-#pcbtable th, #pcbtable td {
+#pcbtable th, #pcbtable td, #queuetable th, #queuetable td {
   border: 2px solid #ddd;  /* Increase the border thickness for better visibility */
   padding: 8px;
   text-align: center;  
 }
 
-#pcbtable th {
+#pcbtable th, #queuetable th {
   background-color: #e0e0e0;  /* Matching header background color */
   font-weight: bold;
 }
 
-#pcbtablebody tr {
+#pcbtablebody tr, #queuetablebody tr {
   background-color: #444;  /* Matching row color */
 }
 
-#pcbtablebody td {
+#pcbtablebody td, #queuetablebody td {
   font-family: 'Courier New', Courier, monospace; 
   color: #0f0;  /* Matching text color */
   font-weight: bold;
   font-size: 16px;  /* Matching font size */
 }
 
-#pcbtablebody td:hover {
+#pcbtablebody td:hover, #queuetablebody td:hover {
   background-color: #555;  /* Matching hover effect */
 }
 

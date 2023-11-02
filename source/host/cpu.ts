@@ -237,13 +237,13 @@
             document.getElementById("cpuX")!.innerText = this.Xreg.toString();
             document.getElementById("cpuY")!.innerText = this.Yreg.toString();
             document.getElementById("cpuZ")!.innerText = this.Zflag.toString();
-         }
+        }
          
 
         // Update the current running PCB with the latest state of the CPU after executing an instruction
         public updateCurrentPCB(): void {
             if (this.currentPCB) {
-                console.log(this.currentPCB);
+                console.log("Saving Process "+this.currentPCB.pid,JSON.stringify(this.currentPCB));
                 this.currentPCB.PC = this.PC;
                 this.currentPCB.IR = this.currentInstruction;
                 this.currentPCB.ACC = this.Acc;
@@ -260,7 +260,8 @@
 
         //Process control block process to execute
         public executeProcess(pcb: PCB): void {
-            console.log("Loading process", pcb);
+
+            console.log("Loading process "+pcb.pid, JSON.stringify(pcb));
             this.currentPCB = pcb;
             this.PC = pcb.PC;
             this.Acc = pcb.ACC;

@@ -72,7 +72,7 @@ var TSOS;
                 Xreg.innerText = TSOS.Utils.formatHex(pcbdata.Xreg, 2, true);
                 Yreg.innerText = TSOS.Utils.formatHex(pcbdata.Yreg, 2, true);
                 Zflag.innerText = TSOS.Utils.formatHex(pcbdata.Zflag, 2, true);
-                basecell.innerText = pcbdata.base.toString(); //Base is in decimal form needs to be hex. 
+                basecell.innerText = TSOS.Utils.formatHex(pcbdata.base, 2, true);
                 runningCell.innerText = pcbdata.running.toString(); //Base is in decimal form needs to be hex. 
                 pcbtablebody.appendChild(row);
                 row.appendChild(pid);
@@ -86,6 +86,7 @@ var TSOS;
                 row.appendChild(basecell);
                 row.appendChild(runningCell);
             }
+            _Scheduler.updateQueueDisplay();
         }
     }
     TSOS.memoryManager = memoryManager;

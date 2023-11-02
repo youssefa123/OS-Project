@@ -431,10 +431,11 @@ module TSOS {
 
             let q : number = parseInt(args[0]);
              
-            if (!q){
+            if (!q || q < 1){
                 _StdOut.putText( "Bad input enter a positive number: ");
                 return;
             }
+            
 
             _Scheduler.setQuantum(q);
             _StdOut.putText( "Set quantum to "+q+" CPU Cycle(s).");
