@@ -1,8 +1,5 @@
-<p align="center">
-  <img src="https://via.placeholder.com/150/0000FF/808080?Text=Project3" alt="Project 3 Logo"/>
-</p>
 
-<h1 align="center">🎓 Project 3 Grading Guide</h1>
+<h1 align="center">🎓Project 3 Grading Guide</h1>
 
 <p align="center">
   <strong>Welcome to the evaluation phase of Project 3!</strong>
