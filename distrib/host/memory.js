@@ -2,8 +2,9 @@ var TSOS;
 (function (TSOS) {
     class Memory {
         constructor() {
-            this.base = 0;
-            this.limit = 256 * 4; //Memory limit is 256 bytes 
+            this.base = 0; //Iproject 3
+            this.limit = 256 * 4; //Memory limit is 256 bytes //IProject 3 
+            //Tracking specific memory bytes to display when loading/running
             this.instructionByte = null;
             this.memoryByte = null;
         }

@@ -282,6 +282,7 @@ module TSOS {
                 _MemoryManager.readyQueue = [];
                 _MemoryManager.pcbList = [];
                 _MemoryManager.updatePCBDisplay();
+                _MemoryManager.clear(); //Testing to see if this fixes killall
                 _StdOut.putText("All processes are terminated.");
                 _StdOut.advanceLine();
 

@@ -1,9 +1,11 @@
 module TSOS {
 
     export class Memory {
-        public base: number = 0;
-        public limit: number = 256*4 //Memory limit is 256 bytes 
+        public base: number = 0; //Iproject 3
+        public limit: number = 256*4 //Memory limit is 256 bytes //IProject 3 
         public storage: Array<number>; // Storage for the memory contents
+        
+        //Tracking specific memory bytes to display when loading/running
         public instructionByte: number = null;
         public memoryByte: number = null;
 
