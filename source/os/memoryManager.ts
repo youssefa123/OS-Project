@@ -6,7 +6,7 @@ module TSOS {
         public readyQueue: PCB[] = []; // Array to store running PCBs
 
         private lasteByteUsed: number = 0;
-        
+        private nextSegment:number = 0;
         
         public loadIntoMemory(pid:number, data: string[]): void {
             
@@ -33,8 +33,8 @@ module TSOS {
             this.lasteByteUsed = limit;
             console.log("base", base, "limit: ", limit, "LBU", this.lasteByteUsed)
             // Create a PCB for the new process and add it to the pcbList
-            let newPCB = new TSOS.PCB(pid, base, limit, Prioty, IR, PC, ACC, Xreg, Yreg, Zflag );
-
+            let newPCB = new TSOS.PCB(pid, base, limit, Prioty, IR, PC, ACC, Xreg, Yreg, Zflag,this.nextSegment );
+            this.nextSegment = this.nextSegment + 1;
 
             this.pcbList.push(newPCB)
 
@@ -60,6 +60,7 @@ module TSOS {
             this.pcbList = [];
             _Memory.clear();
             _Scheduler.clear();
+            this.nextSegment = 0;
             this.updatePCBDisplay();
         }
 

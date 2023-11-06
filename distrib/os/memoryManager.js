@@ -6,6 +6,7 @@ var TSOS;
             this.pcbList = []; // Array to store load PCBs
             this.readyQueue = []; // Array to store running PCBs
             this.lasteByteUsed = 0;
+            this.nextSegment = 0;
         }
         loadIntoMemory(pid, data) {
             let base = this.lasteByteUsed;
@@ -26,7 +27,8 @@ var TSOS;
             this.lasteByteUsed = limit;
             console.log("base", base, "limit: ", limit, "LBU", this.lasteByteUsed);
             // Create a PCB for the new process and add it to the pcbList
-            let newPCB = new TSOS.PCB(pid, base, limit, Prioty, IR, PC, ACC, Xreg, Yreg, Zflag);
+            let newPCB = new TSOS.PCB(pid, base, limit, Prioty, IR, PC, ACC, Xreg, Yreg, Zflag, this.nextSegment);
+            this.nextSegment = this.nextSegment + 1;
             this.pcbList.push(newPCB);
             // Update the PCB display
             this.updatePCBDisplay();
@@ -43,6 +45,7 @@ var TSOS;
             this.pcbList = [];
             _Memory.clear();
             _Scheduler.clear();
+            this.nextSegment = 0;
             this.updatePCBDisplay();
         }
         runAll() {

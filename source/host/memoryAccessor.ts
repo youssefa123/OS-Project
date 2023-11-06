@@ -8,7 +8,10 @@ module TSOS {
             }
             // Aslo the address should be within the bounds of our memory.
             if (address < 0 || address >= _Memory.limit || (currentPCB && address > currentPCB.limit)) {
-
+                _StdOut.putText("Process " + currentPCB.pid + " Cannot Access location " + Utils.formatHex(address,2,true) );
+                _StdOut.advanceLine();
+                _StdOut.putText("Halting Process")
+                _CPU.isExecuting = false;
                 console.error("Invalid memory address.", address);
                 
                 return 0; // Return 0 if the address is invalid 
@@ -26,7 +29,13 @@ module TSOS {
 
             console.log("Setting byte: ", Utils.formatHex(value,2,true), "at",Utils.formatHex(address,2,true))
             if (address < 0 || address >= _Memory.limit || (currentPCB && address > currentPCB.limit)) {
-                console.error("Invalid memory address.",address);
+                _StdOut.putText("Process " + currentPCB.pid + " Cannot Access location " + Utils.formatHex(address,2,true) );
+                _StdOut.advanceLine();
+                _StdOut.putText("Halting Process")
+                _CPU.isExecuting = false;
+                console.error("Invalid memory address.", address);
+
+                
                 return; // Exit if the address is invalid.
             }
             _Memory.storage[address] = value; // Sets the byte at the given address.

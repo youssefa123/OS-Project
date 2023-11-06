@@ -156,7 +156,7 @@ var TSOS;
                     break;
                 case 0xFF:
                     if (this.Xreg == 1) {
-                        let hexValue = TSOS.Utils.formatHex(this.Yreg, 2, false);
+                        let hexValue = TSOS.Utils.formatHex(this.Yreg, 0, false);
                         _StdOut.putText(hexValue);
                         // ASCII
                     }

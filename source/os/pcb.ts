@@ -14,10 +14,12 @@ module TSOS {
     public running: boolean;
     public currentOpcode: number;
     public pipelineState;
+    public segment: number;
+    public location: string;
     
 
     
-    constructor(pid: number, base: number, limit: number, Prioty: number, IR: number, PC: number, ACC: number, Xreg: number, Yreg: number, Zflag: number) {
+    constructor(pid: number, base: number, limit: number, Prioty: number, IR: number, PC: number, ACC: number, Xreg: number, Yreg: number, Zflag: number, segment: number) {
         this.pid = pid;
         this.base = base;
         this.limit = limit;
@@ -31,6 +33,8 @@ module TSOS {
         this.running = false;
         this.currentOpcode = 0;
         this.pipelineState = null;
+        this.segment = segment;
+        this.location = "memory";
     }
 
 

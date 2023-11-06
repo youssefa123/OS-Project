@@ -37,7 +37,7 @@ module TSOS {
         public updateQueueDisplay(): void {
             
             const queuetablebody = document.getElementById("queuetablebody");
-            queuetablebody.innerHTML = "";
+            queuetablebody.innerHTML = ""; 
 
             let count = 0;
         
@@ -45,29 +45,29 @@ module TSOS {
             count++;
             let row = document.createElement("tr");
             let pid = document.createElement("td");
-            let pcell = document.createElement("td"); //Prioty cell for table 
-            let IRcell = document.createElement("td");
-            let PCcell = document.createElement("td");
-            let ACC = document.createElement("td");
-            let Xreg = document.createElement("td");
-            let Yreg = document.createElement("td");
-            let Zflag = document.createElement("td");
-            let basecell = document.createElement("td"); //Memory location for now 
-            let runningCell = document.createElement("td"); //Memory location for now 
-
-            
-
             pid.innerText = pcbdata.pid.toString();
+
+            let locationCell = document.createElement("td");
+            locationCell.innerText = pcbdata.location;
+
+            let segmentCell = document.createElement("td");
+            segmentCell.innerText = Utils.formatHex(pcbdata.segment,2,true);
+
+            let pcell = document.createElement("td"); //Prioty cell for table 
             pcell.innerText = count.toString();
 
-
-            IRcell.innerText = Utils.formatHex(pcbdata.IR,2,true);
-            PCcell.innerText = Utils.formatHex(pcbdata.PC,2,true);
-            ACC.innerText = Utils.formatHex(pcbdata.ACC,2,true);
-            Xreg.innerText = Utils.formatHex(pcbdata.Xreg,2,true);
-            Yreg.innerText = Utils.formatHex(pcbdata.Yreg,2,true);
-            Zflag.innerText = Utils.formatHex(pcbdata.Zflag,2,true);
+            let basecell = document.createElement("td"); //Memory location for now 
             basecell.innerText = Utils.formatHex(pcbdata.base,2,true);
+
+            let limitcell = document.createElement("td"); //Memory location for now 
+            limitcell.innerText = Utils.formatHex(pcbdata.limit,2,true);
+            let runningCell = document.createElement("td"); //Memory location for now 
+            let quantumCell = document.createElement("td");  
+            quantumCell.innerText = Utils.formatHex(_Scheduler.quantum,2,true);
+            
+
+
+
             runningCell.innerText = pcbdata.running.toString(); //Base is in decimal form needs to be hex. 
 
 
@@ -75,14 +75,14 @@ module TSOS {
             queuetablebody.appendChild(row);
             row.appendChild(pid);
             row.appendChild(pcell);
-            row.appendChild(IRcell);
-            row.appendChild(PCcell);
-            row.appendChild(ACC);
-            row.appendChild(Xreg);
-            row.appendChild(Yreg);
-            row.appendChild(Zflag);
+            row.appendChild(locationCell);
+            row.appendChild(segmentCell);
+
             row.appendChild(basecell);
+            row.appendChild(limitcell);
+
             row.appendChild(runningCell);
+            row.appendChild(quantumCell);
 
 
 

@@ -1,7 +1,7 @@
 var TSOS;
 (function (TSOS) {
     class PCB {
-        constructor(pid, base, limit, Prioty, IR, PC, ACC, Xreg, Yreg, Zflag) {
+        constructor(pid, base, limit, Prioty, IR, PC, ACC, Xreg, Yreg, Zflag, segment) {
             this.pid = pid;
             this.base = base;
             this.limit = limit;
@@ -15,6 +15,8 @@ var TSOS;
             this.running = false;
             this.currentOpcode = 0;
             this.pipelineState = null;
+            this.segment = segment;
+            this.location = "memory";
         }
     }
     TSOS.PCB = PCB;

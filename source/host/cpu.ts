@@ -199,7 +199,7 @@
                 
                 case 0xFF:
                     if (this.Xreg == 1) {
-                        let hexValue = Utils.formatHex(this.Yreg, 2, false);
+                        let hexValue = Utils.formatHex(this.Yreg, 0, false);
                         _StdOut.putText(hexValue);
                         
 
@@ -269,7 +269,7 @@
             if (pcb.pipelineState == null){
                 pcb.pipelineState = PipelineState.FETCH;
             }
-=
+
             this.pipelineState = pcb.pipelineState;
             this.currentPCB = pcb;
             this.PC = pcb.PC;
