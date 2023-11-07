@@ -257,6 +257,8 @@ module TSOS {
             }
         }
 
+        
+        //calling the memory manager's clear function to wipe the memory,
         public clearMem() { 
             _MemoryManager.clear();
             _StdOut.putText("Cleared memory.");
@@ -422,6 +424,7 @@ module TSOS {
                 return;
             }
             
+            
             _Scheduler.runProcess(pid);
 
         }
@@ -473,7 +476,7 @@ module TSOS {
         public shellRunAll(){
             console.log("shellRunAll Function");
 
-            _MemoryManager.runAll();
+            _MemoryManager.runAll();  // calls the scheduler's runGroup function with the current list of PCBs
         }
         
         public shellWhereAmI(args: string[]) {

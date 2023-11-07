@@ -3,43 +3,44 @@ module TSOS {
 
         public readyQueue: PCB[] = []; // Array to store running PCBs
         
-        public quantum:number = 6;
+        public quantum:number = 6; //Quantum TIME 
 
         constructor(){
-            this.quantum = 6;
+            this.quantum = 6; //initializes Quantum time 
         }
 
+
+        // This will set a new quantum value for the scheduler
         public setQuantum(newQuant: number){
-            this.quantum = newQuant;
+            this.quantum = newQuant; // Update the quantum value with the new value
         }
 
+        // Adds a process to the ready queue based on its PID
         public runProcess(pid: number){
-            
-            let executingPCB = _MemoryManager.getPCB(pid);
-            this.readyQueue.push(executingPCB);
-            //_CPU.executeProcess(executingPCB);
+            let executingPCB = _MemoryManager.getPCB(pid); //// Grabs the PCB from memory manager
+            this.readyQueue.push(executingPCB); // Add the retrieved PCB to the ready queue
         }
 
         public runGroup(pcbList: PCB[]){
-            for (let pcb of pcbList){
-                this.readyQueue.push(pcb);
-                _StdOut.putText(`Added Process ${pcb.pid} to ReadyQueue`);
+            for (let pcb of pcbList){ //Iterate over each PCB in the list
+                this.readyQueue.push(pcb); // Add the current PCB to the ready queue
+                _StdOut.putText(`Added Process ${pcb.pid} to ReadyQueue`); // LET the user that the process has been queued.
                 _StdOut.advanceLine();
 
             }
         }
         
         public clear(){
-            this.readyQueue = [];
+            this.readyQueue = [];  // Reset the ready queue to an empty array
         }
 
         // Update the HTML table that displays the memory 
         public updateQueueDisplay(): void {
             
             const queuetablebody = document.getElementById("queuetablebody");
-            queuetablebody.innerHTML = ""; 
+            queuetablebody.innerHTML = ""; ///Clear the existing display
 
-            let count = 0;
+            let count = 0; //For display 
         
            for (const pcbdata of this.readyQueue){
             count++;
@@ -53,15 +54,15 @@ module TSOS {
             let segmentCell = document.createElement("td");
             segmentCell.innerText = Utils.formatHex(pcbdata.segment,2,true);
 
-            let pcell = document.createElement("td"); //Prioty cell for table 
+            let pcell = document.createElement("td"); 
             pcell.innerText = count.toString();
 
-            let basecell = document.createElement("td"); //Memory location for now 
+            let basecell = document.createElement("td"); 
             basecell.innerText = Utils.formatHex(pcbdata.base,2,true);
 
-            let limitcell = document.createElement("td"); //Memory location for now 
+            let limitcell = document.createElement("td");  
             limitcell.innerText = Utils.formatHex(pcbdata.limit,2,true);
-            let runningCell = document.createElement("td"); //Memory location for now 
+            let runningCell = document.createElement("td"); 
             let quantumCell = document.createElement("td");  
             quantumCell.innerText = Utils.formatHex(_Scheduler.quantum,2,true);
             
@@ -71,7 +72,7 @@ module TSOS {
             runningCell.innerText = pcbdata.running.toString(); //Base is in decimal form needs to be hex. 
 
 
-
+            // appending all cells to the row then the row to the table body
             queuetablebody.appendChild(row);
             row.appendChild(pid);
             row.appendChild(pcell);

@@ -180,6 +180,7 @@ var TSOS;
                 _StdOut.putText("Type 'help' for, well... help.");
             }
         }
+        //calling the memory manager's clear function to wipe the memory,
         clearMem() {
             _MemoryManager.clear();
             _StdOut.putText("Cleared memory.");
@@ -342,7 +343,7 @@ var TSOS;
         }
         shellRunAll() {
             console.log("shellRunAll Function");
-            _MemoryManager.runAll();
+            _MemoryManager.runAll(); // calls the scheduler's runGroup function with the current list of PCBs
         }
         shellWhereAmI(args) {
             console.log("shellWhereAmI function");

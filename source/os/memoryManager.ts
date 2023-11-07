@@ -55,10 +55,10 @@ module TSOS {
 
         }
 
-        
-        public clear(){
-            this.pcbList = [];
-            _Memory.clear();
+        //Clear function to help clear memeory, running process, and scheduler 
+        public clear(){ 
+            this.pcbList = [];  //Reset the process control block list to an empty array.
+            _Memory.clear();  // Call the clear unction on the memory to reset it.
             _Scheduler.clear();
             this.nextSegment = 0;
             this.updatePCBDisplay();

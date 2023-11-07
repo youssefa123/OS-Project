@@ -81,17 +81,25 @@ module TSOS {
             // Check for an interrupt, if there are any. Page 560
             if (_KernelInterruptQueue.getSize() > 0) {
                 // Process the first interrupt on the interrupt queue.
-                // TODO (maybe): Implement a priority queue based on the IRQ number/id to enforce interrupt priority.
+                // TODO (maybe): Implement a priority queue based on the IRQ number/id to enforce interrupt priority
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
-            } else if (_CPU.isExecuting || _Scheduler.readyQueue.length > 0) { // If there are no interrupts then run one CPU cycle if there is anything being processed.
+
+                //IKIK it should have been in a dispatcher file, I'm sorry. I will fix soon >.  checks CPU execution state and ready queue length
+            } else if (_CPU.isExecuting || _Scheduler.readyQueue.length > 0) { 
+                ///context switch if the quantum value expired for the currently executing process
+
                 if (_Scheduler.readyQueue.length > 0 && _CPU.clockcount % _Scheduler.quantum == 0){
+                    //Saves the current CPU state to the current pcb if a process is executing 
                     if (_CPU.currentPCB){
                         _CPU.updateCurrentPCB();
+
+                        // If the CPU is still executing, place the current PCB back into the ready queue
                         if (_CPU.isExecuting == true){
                             _Scheduler.readyQueue.push(_CPU.currentPCB);
                         }
                     }
+                    //  Dequeue the next state from the set to be processed by the CPU
                     let nextPCB = _Scheduler.readyQueue.shift();
                     _CPU.executeProcess(nextPCB);
                 }
