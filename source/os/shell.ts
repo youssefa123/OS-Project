@@ -18,6 +18,7 @@ module TSOS {
         public apologies = "[sorry]";
         public programID: Number = 0;
         private pidCounter: number = 0;
+        
 
         constructor() {
         }
@@ -111,8 +112,43 @@ module TSOS {
                                   "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
 
-            // ps  - list the running processes and their IDs
-            // kill <id> - kills the specified process id.
+            sc = new ShellCommand(this.clearMem,
+                                    "clearmem",
+                                    "- Clear all memory partitions.");
+            this.commandList[this.commandList.length] = sc;
+
+             // runall
+            sc = new ShellCommand(this.shellRunAll,
+                                    "runall",
+                                    "- Execute all programs at once.");
+            this.commandList[this.commandList.length] = sc;
+
+
+            // ps
+            sc = new ShellCommand(this.shellps,
+                                    "ps",
+                                    "- Display the PID and state of all processes.");
+            this.commandList[this.commandList.length] = sc;
+
+
+            // kill <pid>
+            sc = new ShellCommand(this.shellkillPID,
+                                    "kill",
+                                    "<pid> - Kill one process.");
+            this.commandList[this.commandList.length] = sc;
+
+            // killall
+            sc = new ShellCommand(this.shellkillall,
+                                    "killall",
+                                    "- Kill all processes.");
+            this.commandList[this.commandList.length] = sc;
+
+             // quantum <int>
+             sc = new ShellCommand(this.shellQuantum,
+                                    "quantum",
+                                    "<int> - Let the user set the Round Robin quantum measured in cpu cycles.");
+            this.commandList[this.commandList.length] = sc;
+            
 
             // Display the initial prompt.
             this.putPrompt();
@@ -221,6 +257,43 @@ module TSOS {
             }
         }
 
+        
+        //calling the memory manager's clear function to wipe the memory,
+        public clearMem() { 
+            _MemoryManager.clear();
+            _StdOut.putText("Cleared memory.");
+        }
+
+        public shellkillall (args: string[]): void {
+
+            //Check to see if we have access to the processes
+            if (_MemoryManager && _MemoryManager.pcbList) {
+
+                //Loop through the pcb list 
+                for (let process of _MemoryManager.pcbList) {
+                    process.running = false;
+                
+                }
+
+                //Loop through the readyQueue and terminate running processes
+                for (let process of _MemoryManager.readyQueue) {
+                    process.running = false;
+                
+                }
+                // Clear the pcb list and readyQueue
+                _MemoryManager.readyQueue = [];
+                _MemoryManager.pcbList = [];
+                _MemoryManager.updatePCBDisplay();
+                _MemoryManager.clear(); //Testing to see if this fixes killall
+                _StdOut.putText("All processes are terminated.");
+                _StdOut.advanceLine();
+
+            } else {
+                _StdOut.putText("Error: Memory Manager or PCB List is not available.");
+                _StdOut.advanceLine();
+            }
+        }
+
 
 
         public shellCurse() {
@@ -263,7 +336,41 @@ module TSOS {
             _StdOut.putText("The date is: " + CDate + " The time is: " + CurrentTime);
         }
 
-    
+        
+        public shellkillPID(args: string[]): void {
+            if (args.length == 0) {
+                _StdOut.putText("Please provide a PID to terminate.");
+                return;
+            }
+        
+            let killpid = parseInt(args[0]);
+            let indexRemove = -1;
+            
+            // Find the PCB 
+            for(let i = 0; i < _MemoryManager.pcbList.length; i++) {
+                if (_MemoryManager.pcbList[i].pid == killpid) {
+                    indexRemove = i;
+                    break;
+                }
+            }
+        
+            // kill the process in the readyQueue 
+            for (let process of _MemoryManager.readyQueue) {
+                if (process.pid == killpid) {
+                    process.running = false;
+                }
+            }
+        
+            if (indexRemove !== -1) {
+                // Remove PCB from the list
+                _MemoryManager.pcbList.splice(indexRemove, 1);
+                _MemoryManager.updatePCBDisplay();
+                _StdOut.putText(`Process with PID ${killpid} has been terminated.`);
+            } else {
+                _StdOut.putText(`No process found with PID ${killpid}.`);
+            }
+        }
+        
         
         
         public shellLoad() {
@@ -316,9 +423,60 @@ module TSOS {
                 _StdOut.putText( "No PID number found ");
                 return;
             }
+            
+            
+            _Scheduler.runProcess(pid);
 
-            _CPU.executeProcess(pcbdata);
+        }
 
+        public shellQuantum(args:string[]) {
+            console.log("shellQuantum Function");
+            console.log(args)
+
+            let q : number = parseInt(args[0]);
+             
+            if (!q || q < 1){
+                _StdOut.putText( "Bad input enter a positive number: ");
+                return;
+            }
+            
+
+            _Scheduler.setQuantum(q);
+            _StdOut.putText( "Set quantum to "+q+" CPU Cycle(s).");
+
+        }
+
+        
+
+        public shellps(args: string[]) {
+            //Check the memorymanager for the PCB list 
+            if (_MemoryManager && _MemoryManager.pcbList) {
+                let processes= _MemoryManager.pcbList;
+                
+                //If there is no Pid then return error in console. 
+                if (processes.length === 0) {
+                    _StdOut.putText("There is no current processes in memory");
+                    return;
+                }
+
+                for (let process of processes) { 
+                    let state = process.running ? "Running" : "Loaded";  //state checks ifthe process is running or loaded, then
+                    _StdOut.putText(`The current PID # is: ${process.pid} \t Current State: ${state}`);
+                    _StdOut.advanceLine();
+                }
+            } else {
+                _StdOut.putText("Error: Memory Manager or PCB List is not available.");
+            }
+        }
+            
+        
+         
+
+
+        public shellRunAll(){
+            console.log("shellRunAll Function");
+
+            _MemoryManager.runAll();  // calls the scheduler's runGroup function with the current list of PCBs
         }
         
         public shellWhereAmI(args: string[]) {

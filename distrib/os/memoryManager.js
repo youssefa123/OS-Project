@@ -3,14 +3,16 @@ var TSOS;
     class memoryManager {
         constructor() {
             this.memoryAccessor = new TSOS.MemoryAccessor();
-            this.pcbList = []; // Array to store active PCBs
+            this.pcbList = []; // Array to store load PCBs
+            this.readyQueue = []; // Array to store running PCBs
             this.lasteByteUsed = 0;
+            this.nextSegment = 0;
         }
         loadIntoMemory(pid, data) {
             let base = this.lasteByteUsed;
             let Prioty = 50;
             let IR = 0;
-            let PC = base;
+            let PC = 0;
             let ACC = 0;
             let Xreg = 0;
             let Yreg = 0;
@@ -21,13 +23,15 @@ var TSOS;
                 let d = parseInt(data[i], 16);
                 this.memoryAccessor.writeByte(base + i, d);
             }
-            let limit = base + data.length;
+            let limit = base + data.length + 256;
             this.lasteByteUsed = limit;
+            console.log("base", base, "limit: ", limit, "LBU", this.lasteByteUsed);
             // Create a PCB for the new process and add it to the pcbList
-            let newPCB = new TSOS.PCB(pid, base, limit, Prioty, IR, PC, ACC, Xreg, Yreg, Zflag);
+            let newPCB = new TSOS.PCB(pid, base, limit, Prioty, IR, PC, ACC, Xreg, Yreg, Zflag, this.nextSegment);
+            this.nextSegment = this.nextSegment + 1;
             this.pcbList.push(newPCB);
-            // Update the memory display
-            this.updateMemoryDisplay();
+            // Update the PCB display
+            this.updatePCBDisplay();
         }
         getPCB(pid) {
             for (const pcbdata of this.pcbList) {
@@ -37,35 +41,21 @@ var TSOS;
             }
             return null;
         }
+        //Clear function to help clear memeory, running process, and scheduler 
+        clear() {
+            this.pcbList = []; //Reset the process control block list to an empty array.
+            _Memory.clear(); // Call the clear unction on the memory to reset it.
+            _Scheduler.clear();
+            this.nextSegment = 0;
+            this.updatePCBDisplay();
+        }
+        runAll() {
+            _Scheduler.runGroup(this.pcbList);
+        }
         // Update the HTML table that displays the memory 
-        updateMemoryDisplay() {
-            // const memoryTable = <HTMLTableElement>document.getElementById("memorytable");
-            // // Clear the existing rows in the memory table.
-            // while (memoryTable.firstChild) {
-            //     memoryTable.removeChild(memoryTable.firstChild);
-            // }
-            // // Iterate through the memory array 
-            // for (let i = 0; i < 256; i += 2) {
-            //     let row = memoryTable.insertRow();       
-            //     let cell1 = row.insertCell(0);           
-            //     let cell2 = row.insertCell(1);          
-            //     // Convert the bytes to hexadecimal and set them in the cells.
-            //     cell1.textContent = this.memoryAccessor.getByte(i).toString(16).toUpperCase().padStart(2, '0');
-            //     cell2.textContent = this.memoryAccessor.getByte(i + 1).toString(16).toUpperCase().padStart(2, '0');
-            // }
+        updatePCBDisplay() {
             const pcbtablebody = document.getElementById("pcbtablebody");
             pcbtablebody.innerHTML = "";
-            /*
-            <th>PID</th>
-                  <th>Prioty</th>
-                  <th>IR</th>
-                  <th>PC</th>
-                  <th>ACC</th>
-                  <th>Xreg</th>
-                  <th>Yreg</th>
-                  <th>Zflag</th>
-                  <th>Memory Location</th>
-            */
             for (const pcbdata of this.pcbList) {
                 let row = document.createElement("tr");
                 let pid = document.createElement("td");
@@ -86,7 +76,7 @@ var TSOS;
                 Xreg.innerText = TSOS.Utils.formatHex(pcbdata.Xreg, 2, true);
                 Yreg.innerText = TSOS.Utils.formatHex(pcbdata.Yreg, 2, true);
                 Zflag.innerText = TSOS.Utils.formatHex(pcbdata.Zflag, 2, true);
-                basecell.innerText = pcbdata.base.toString(); //Base is in decimal form needs to be hex. 
+                basecell.innerText = TSOS.Utils.formatHex(pcbdata.base, 2, true);
                 runningCell.innerText = pcbdata.running.toString(); //Base is in decimal form needs to be hex. 
                 pcbtablebody.appendChild(row);
                 row.appendChild(pid);
@@ -100,6 +90,7 @@ var TSOS;
                 row.appendChild(basecell);
                 row.appendChild(runningCell);
             }
+            _Scheduler.updateQueueDisplay();
         }
     }
     TSOS.memoryManager = memoryManager;

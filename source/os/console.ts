@@ -144,6 +144,9 @@ module TSOS {
                 // Move the current X position.
                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
                 this.currentXPosition = this.currentXPosition + offset;
+                if (this.currentXPosition > 440){
+                    this.advanceLine();
+                }
             }
          }
 

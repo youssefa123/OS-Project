@@ -1,9 +1,13 @@
 module TSOS {
 
     export class Memory {
-        public base: number = 0;
-        public limit: number = 512 //Memory limit is 256 bytes 
+        public base: number = 0; //Iproject 3
+        public limit: number = 256*4 //Memory limit is 256 bytes //IProject 3 
         public storage: Array<number>; // Storage for the memory contents
+        
+        //Tracking specific memory bytes to display when loading/running
+        public instructionByte: number = null;
+        public memoryByte: number = null;
 
         public init(): void {
             this.base = 0;
@@ -13,12 +17,19 @@ module TSOS {
             this.updateMemoryDisplay();
         }
 
+        public clear(){
+            this.storage = new Array<number>(this.limit).fill(0); // Filling with 0 as a default memory value
+            this.updateMemoryDisplay();
+
+        }
+
         // Load data into the memory
         public load(data: Array<number>): void {
             // Logic to load data into the memory
             for (let i = 0; i < data.length && i < this.limit; i++) {
                 this.storage[i] = data[i];
             }
+            this.updateMemoryDisplay();
         }
 
         public updateMemoryDisplay(): void {
@@ -41,6 +52,15 @@ module TSOS {
                 for (let j = 0; j < 8; j++) {
                     let cell = document.createElement('td');
                     cell.innerText = Utils.formatHex(this.storage[i + j], 2,false);
+                    if (i + j == this.instructionByte){
+                        cell.style.color = "white";
+                        cell.style.backgroundColor = "red";
+                    }
+                    if (i + j == this.memoryByte){
+                        cell.style.color = "white";
+                        cell.style.backgroundColor = "blue";
+                    }
+
                     row.appendChild(cell);
                 }
 

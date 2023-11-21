@@ -95,6 +95,7 @@ module TSOS {
             _MemoryAccessor	= new MemoryAccessor(); 
 
             _MemoryManager	= new memoryManager(); 
+            _Scheduler	= new Scheduler(); 
 
            
             
