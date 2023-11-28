@@ -148,6 +148,11 @@ module TSOS {
                                     "quantum",
                                     "<int> - Let the user set the Round Robin quantum measured in cpu cycles.");
             this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellformat,    
+                                    "format",
+                                    "-Formats The Disk ");
+            this.commandList[this.commandList.length] = sc;
             
 
             // Display the initial prompt.
@@ -579,6 +584,13 @@ module TSOS {
             } else {
                 _StdOut.putText("Usage: prompt <string>  Please supply a string.");
             }
+        }
+        
+        public shellformat(){
+            _Kernel.krnFormat();
+            _DiskDisplay.updateDiskDisplay();
+            _StdOut.putText("Formatted the disk.");
+
         }
 
     }

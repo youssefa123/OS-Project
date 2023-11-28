@@ -122,7 +122,7 @@ module TSOS {
            }
            
            _Scheduler.updateQueueDisplay()
-
+           _DiskDisplay.updateDiskDisplay();
         }
     }
 }

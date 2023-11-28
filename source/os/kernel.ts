@@ -173,6 +173,9 @@ module TSOS {
         // - WriteFile
         // - CloseFile
 
+        public krnFormat(){
+            _krnDiskSystemDeviceDriver.format();
+        }
 
         //
         // OS Utility Routines

@@ -24,6 +24,7 @@ var _CPU; // Utilize TypeScript's type annotation system to ensure that _CPU is 
 var _Memory;
 var _MemoryAccessor;
 var _Scheduler;
+var _DiskDisplay;
 var _MemoryManager;
 let _LastAssignedPID = 0; // Global PID counter
 let _Utils;

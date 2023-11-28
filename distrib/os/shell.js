@@ -80,6 +80,8 @@ var TSOS;
             // quantum <int>
             sc = new TSOS.ShellCommand(this.shellQuantum, "quantum", "<int> - Let the user set the Round Robin quantum measured in cpu cycles.");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellformat, "format", "-Formats The Disk ");
+            this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
         }
@@ -436,6 +438,11 @@ var TSOS;
             else {
                 _StdOut.putText("Usage: prompt <string>  Please supply a string.");
             }
+        }
+        shellformat() {
+            _Kernel.krnFormat();
+            _DiskDisplay.updateDiskDisplay();
+            _StdOut.putText("Formatted the disk.");
         }
     }
     TSOS.Shell = Shell;

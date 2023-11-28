@@ -91,6 +91,7 @@ var TSOS;
                 row.appendChild(runningCell);
             }
             _Scheduler.updateQueueDisplay();
+            _DiskDisplay.updateDiskDisplay();
         }
     }
     TSOS.memoryManager = memoryManager;

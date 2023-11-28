@@ -148,6 +148,9 @@ var TSOS;
         // - ReadFile
         // - WriteFile
         // - CloseFile
+        krnFormat() {
+            _krnDiskSystemDeviceDriver.format();
+        }
         //
         // OS Utility Routines
         //

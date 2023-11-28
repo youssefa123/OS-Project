@@ -96,6 +96,7 @@ module TSOS {
 
             _MemoryManager	= new memoryManager(); 
             _Scheduler	= new Scheduler(); 
+            _DiskDisplay	= new DiskDisplay(); 
 
            
             
