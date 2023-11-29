@@ -201,5 +201,15 @@ module TSOS {
             // TODO: Display error on console, perhaps in some sort of colored screen. (Maybe blue?)
             this.krnShutdown();
         } 
+
+        public krnDiskCreate(filename : string){
+            _krnDiskSystemDeviceDriver.create(filename);
+        }
+        public krnDiskRead(filename : string){
+            _krnDiskSystemDeviceDriver.read(filename);
+        }
+        public krnDiskWrite(filename:string, content: string){
+            _krnDiskSystemDeviceDriver.write(filename, content);
+        }
     }
 }

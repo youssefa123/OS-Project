@@ -143,6 +143,7 @@ module TSOS {
                                     "- Kill all processes.");
             this.commandList[this.commandList.length] = sc;
 
+
              // quantum <int>
              sc = new ShellCommand(this.shellQuantum,
                                     "quantum",
@@ -152,6 +153,22 @@ module TSOS {
             sc = new ShellCommand(this.shellformat,    
                                     "format",
                                     "-Formats The Disk ");
+            this.commandList[this.commandList.length] = sc;
+
+
+            sc = new ShellCommand(this.shellcreate,
+                                    "create",
+                                    "- Creates File .");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellread,
+                                    "read",
+                                    "- Reads whats inside a file .");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellwrite,
+                                    "write",
+                                    "- Writes stuff in the file ");
             this.commandList[this.commandList.length] = sc;
             
 
@@ -593,5 +610,43 @@ module TSOS {
 
         }
 
+        public shellcreate(args: string[]){
+            var name = args[0];
+            if (!name){
+                _StdOut.putText("Enter a file name.");
+
+            }
+            else{
+                _Kernel.krnDiskCreate(name);
+                _DiskDisplay.updateDiskDisplay();
+            }
+
+        }
+
+        public shellread(args: string[]){
+
+        }
+
+        public shellwrite(args: string[]){
+            var name = args[0];
+            args.shift();
+            var content = args.join(" ")
+
+            if (!name ){
+                _StdOut.putText("Enter a file name.");
+                return;
+            }
+            if (!content || !content.startsWith('"') || !content.endsWith('"') ){
+                console.log("Bad quotes", content)
+                _StdOut.putText("Enter content with quotes.");
+                return;
+            }
+            
+            _Kernel.krnDiskWrite(name, content);
+            _DiskDisplay.updateDiskDisplay();
+
+        
+
     }
+}
 }

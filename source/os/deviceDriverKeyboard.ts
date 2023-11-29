@@ -33,7 +33,7 @@
             _Kernel.krnTrace("Key code:" + keyCode + " shifted:" + isShifted);
             var chr = "";
 
-        
+            
         
             if ((keyCode >= 65) && (keyCode <= 90)) { // letter
                 if (isShifted) {
@@ -123,7 +123,10 @@
 
             else if (keyCode == 222) { //the number 222 represents faith, trust and harmony.
                 if (isShifted) {
-                    chr = " ' ";   
+                    chr = '"';   
+                }
+                else{
+                    chr = "'"
                 }
                 _KernelInputQueue.enqueue(chr);
             }
@@ -169,6 +172,9 @@
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }
+            
+
+            
             
         }
     }

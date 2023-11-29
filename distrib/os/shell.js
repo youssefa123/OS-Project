@@ -82,6 +82,12 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellformat, "format", "-Formats The Disk ");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellcreate, "create", "- Creates File .");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellread, "read", "- Reads whats inside a file .");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellwrite, "write", "- Writes stuff in the file ");
+            this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
         }
@@ -443,6 +449,34 @@ var TSOS;
             _Kernel.krnFormat();
             _DiskDisplay.updateDiskDisplay();
             _StdOut.putText("Formatted the disk.");
+        }
+        shellcreate(args) {
+            var name = args[0];
+            if (!name) {
+                _StdOut.putText("Enter a file name.");
+            }
+            else {
+                _Kernel.krnDiskCreate(name);
+                _DiskDisplay.updateDiskDisplay();
+            }
+        }
+        shellread(args) {
+        }
+        shellwrite(args) {
+            var name = args[0];
+            args.shift();
+            var content = args.join(" ");
+            if (!name) {
+                _StdOut.putText("Enter a file name.");
+                return;
+            }
+            if (!content || !content.startsWith('"') || !content.endsWith('"')) {
+                console.log("Bad quotes", content);
+                _StdOut.putText("Enter content with quotes.");
+                return;
+            }
+            _Kernel.krnDiskWrite(name, content);
+            _DiskDisplay.updateDiskDisplay();
         }
     }
     TSOS.Shell = Shell;

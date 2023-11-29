@@ -175,6 +175,15 @@ var TSOS;
             // TODO: Display error on console, perhaps in some sort of colored screen. (Maybe blue?)
             this.krnShutdown();
         }
+        krnDiskCreate(filename) {
+            _krnDiskSystemDeviceDriver.create(filename);
+        }
+        krnDiskRead(filename) {
+            _krnDiskSystemDeviceDriver.read(filename);
+        }
+        krnDiskWrite(filename, content) {
+            _krnDiskSystemDeviceDriver.write(filename, content);
+        }
     }
     TSOS.Kernel = Kernel;
 })(TSOS || (TSOS = {}));
