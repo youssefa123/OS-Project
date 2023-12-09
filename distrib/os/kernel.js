@@ -184,6 +184,12 @@ var TSOS;
         krnDiskWrite(filename, content) {
             _krnDiskSystemDeviceDriver.write(filename, content);
         }
+        krnDiskList() {
+            _krnDiskSystemDeviceDriver.list();
+        }
+        krnDiskCopy(sourcename, copyname) {
+            _krnDiskSystemDeviceDriver.copy(sourcename, copyname);
+        }
     }
     TSOS.Kernel = Kernel;
 })(TSOS || (TSOS = {}));

@@ -211,5 +211,11 @@ module TSOS {
         public krnDiskWrite(filename:string, content: string){
             _krnDiskSystemDeviceDriver.write(filename, content);
         }
+        public krnDiskList(){
+            _krnDiskSystemDeviceDriver.list();
+        }
+        public krnDiskCopy(sourcename:string, copyname: string){
+            _krnDiskSystemDeviceDriver.copy(sourcename, copyname);
+        }
     }
 }

@@ -170,6 +170,26 @@ module TSOS {
                                     "write",
                                     "- Writes stuff in the file ");
             this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shelldelete,
+                                    "delete",
+                                    "-Removes filename from storage");
+            this.commandList[this.commandList.length] = sc; 
+            
+            sc = new ShellCommand(this.shellcopy,
+                                    "copy",
+                                    "-Copys exisiting file name");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellls,
+                                    "ls",
+                                    "-list the files currently stored on the disk");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellrename,
+                                    "rename",
+                                    "-rename current file name")
+              
             
 
             // Display the initial prompt.
@@ -624,6 +644,16 @@ module TSOS {
         }
 
         public shellread(args: string[]){
+            var name = args[0];
+
+            if (!name ){
+                _StdOut.putText("Enter a file name.");
+                return;
+            }
+            
+        
+            _Kernel.krnDiskRead(name);
+            _DiskDisplay.updateDiskDisplay();
 
         }
 
@@ -644,9 +674,45 @@ module TSOS {
             
             _Kernel.krnDiskWrite(name, content);
             _DiskDisplay.updateDiskDisplay();
+        }
 
+        public shellls(args: string[]){
         
+            _Kernel.krnDiskList();
+            _DiskDisplay.updateDiskDisplay();
 
-    }
-}
+        }
+
+        public shellcopy(args: string[]){
+            var name = args[0];
+            var copyName = args[1];
+
+            if (!name ){
+                _StdOut.putText("Enter a source file name.");
+                return;
+            }
+            if (!copyName ){
+                _StdOut.putText("Enter a destination file name.");
+                return;
+            }
+        
+            _Kernel.krnDiskCopy(name,copyName);
+            _DiskDisplay.updateDiskDisplay();
+
+        }
+
+        public shelldelete(args: string[]){
+            var name = args[0];
+
+            if (!name ){
+                _StdOut.putText("Enter a file name.");
+                return;
+            }
+            
+        
+            _Kernel.krnDiskRead(name);
+            _DiskDisplay.updateDiskDisplay();
+
+        }
+}   
 }

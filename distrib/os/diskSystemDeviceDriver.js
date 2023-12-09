@@ -167,6 +167,50 @@ var TSOS;
             }
         }
         read(filename) {
+            var myBlock = this.getFileBlock(filename);
+            if (myBlock == null) {
+                _StdOut.putText("Could not find file: " + filename);
+                return;
+            }
+            var firstContentBlock = this.getBlock(myBlock.nextName);
+            var currentContentBlock = firstContentBlock;
+            var nextChar = 0;
+            var content = "";
+            while (currentContentBlock.data[nextChar] != 0x00 && nextChar < currentContentBlock.data.length) {
+                let char = String.fromCharCode(currentContentBlock.data[nextChar]);
+                _StdOut.putText(char);
+                content = content + char;
+                nextChar = nextChar + 1;
+                if (nextChar >= currentContentBlock.data.length && currentContentBlock.nextName != "F:F:F") {
+                    nextChar = 0;
+                    currentContentBlock = this.getBlock(currentContentBlock.nextName);
+                }
+            }
+            console.log("Finished print");
+            return content;
+        }
+        list() {
+            for (var s = 0; s < this.tracks[0].length; s++) {
+                var mySector = this.tracks[0][s];
+                for (var b = 0; b < mySector.length; b++) {
+                    var myBlock = mySector[b];
+                    if (myBlock.inUse == true) {
+                        // Printing out the file name;
+                        var nextChar = 0;
+                        while (myBlock.data[nextChar] != 0x00 && nextChar < myBlock.data.length) {
+                            let char = String.fromCharCode(myBlock.data[nextChar]);
+                            _StdOut.putText(char);
+                            nextChar = nextChar + 1;
+                        }
+                        _StdOut.advanceLine();
+                    }
+                }
+            }
+        }
+        copy(sourcename, copyname) {
+            this.create(copyname);
+            var content = this.read(sourcename);
+            this.write(copyname, content);
         }
         krnKbdDriverEntry() {
             // Initialization routine for this, the kernel-mode Keyboard Device Driver.

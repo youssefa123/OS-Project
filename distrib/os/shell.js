@@ -88,6 +88,12 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellwrite, "write", "- Writes stuff in the file ");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shelldelete, "delete", "-Removes filename from storage");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellcopy, "copy", "-Copys exisiting file name");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellls, "ls", "-list the files currently stored on the disk");
+            this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
         }
@@ -461,6 +467,13 @@ var TSOS;
             }
         }
         shellread(args) {
+            var name = args[0];
+            if (!name) {
+                _StdOut.putText("Enter a file name.");
+                return;
+            }
+            _Kernel.krnDiskRead(name);
+            _DiskDisplay.updateDiskDisplay();
         }
         shellwrite(args) {
             var name = args[0];
@@ -476,6 +489,33 @@ var TSOS;
                 return;
             }
             _Kernel.krnDiskWrite(name, content);
+            _DiskDisplay.updateDiskDisplay();
+        }
+        shellls(args) {
+            _Kernel.krnDiskList();
+            _DiskDisplay.updateDiskDisplay();
+        }
+        shellcopy(args) {
+            var name = args[0];
+            var copyName = args[1];
+            if (!name) {
+                _StdOut.putText("Enter a source file name.");
+                return;
+            }
+            if (!copyName) {
+                _StdOut.putText("Enter a destination file name.");
+                return;
+            }
+            _Kernel.krnDiskCopy(name, copyName);
+            _DiskDisplay.updateDiskDisplay();
+        }
+        shelldelete(args) {
+            var name = args[0];
+            if (!name) {
+                _StdOut.putText("Enter a file name.");
+                return;
+            }
+            _Kernel.krnDiskRead(name);
             _DiskDisplay.updateDiskDisplay();
         }
     }
