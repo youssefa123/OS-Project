@@ -190,6 +190,12 @@ var TSOS;
         krnDiskCopy(sourcename, copyname) {
             _krnDiskSystemDeviceDriver.copy(sourcename, copyname);
         }
+        krnDiskRename(filename, newname) {
+            _krnDiskSystemDeviceDriver.rename(filename, newname);
+        }
+        krnDiskDelete(filename) {
+            _krnDiskSystemDeviceDriver.delete(filename);
+        }
     }
     TSOS.Kernel = Kernel;
 })(TSOS || (TSOS = {}));

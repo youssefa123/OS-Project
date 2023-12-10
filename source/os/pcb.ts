@@ -35,7 +35,9 @@ module TSOS {
         this.pipelineState = null;
         this.segment = segment;
         this.location = "memory";
+
     }
+    
 
 
     }

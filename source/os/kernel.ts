@@ -217,5 +217,11 @@ module TSOS {
         public krnDiskCopy(sourcename:string, copyname: string){
             _krnDiskSystemDeviceDriver.copy(sourcename, copyname);
         }
+        public krnDiskRename(filename:string, newname: string){
+            _krnDiskSystemDeviceDriver.rename(filename, newname);
+        }
+        public krnDiskDelete(filename:string){
+            _krnDiskSystemDeviceDriver.delete(filename);
+        }
     }
 }

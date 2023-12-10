@@ -189,7 +189,7 @@ module TSOS {
             sc = new ShellCommand(this.shellrename,
                                     "rename",
                                     "-rename current file name")
-              
+            this.commandList[this.commandList.length] = sc;
             
 
             // Display the initial prompt.
@@ -671,7 +671,11 @@ module TSOS {
                 _StdOut.putText("Enter content with quotes.");
                 return;
             }
-            
+            // remove front quote
+            content = content.substring(1);
+            // remove back quote
+            content = content.substring(0,content.length-1);
+
             _Kernel.krnDiskWrite(name, content);
             _DiskDisplay.updateDiskDisplay();
         }
@@ -701,6 +705,24 @@ module TSOS {
 
         }
 
+        public shellrename(args: string[]){
+            var name = args[0];
+            var newname = args[1];
+
+            if (!name ){
+                _StdOut.putText("Enter a file name.");
+                return;
+            }
+            if (!newname ){
+                _StdOut.putText("Enter a new file name.");
+                return;
+            }
+        
+            _Kernel.krnDiskRename(name,newname);
+            _DiskDisplay.updateDiskDisplay();
+
+        }
+
         public shelldelete(args: string[]){
             var name = args[0];
 
@@ -710,7 +732,7 @@ module TSOS {
             }
             
         
-            _Kernel.krnDiskRead(name);
+            _Kernel.krnDiskDelete(name);
             _DiskDisplay.updateDiskDisplay();
 
         }
