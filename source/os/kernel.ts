@@ -102,10 +102,13 @@ module TSOS {
                         // If the CPU is still executing, place the current PCB back into the ready queue
                         if (_CPU.isExecuting == true){
                             _Scheduler.readyQueue.push(_CPU.currentPCB);
+
                         }
                     }
                     //  Dequeue the next state from the set to be processed by the CPU
                     let nextPCB = _Scheduler.readyQueue.shift();
+                    
+
                     _CPU.executeProcess(nextPCB);
                 }
                 _CPU.cycle();

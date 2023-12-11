@@ -8,7 +8,7 @@ var TSOS;
             this.lasteByteUsed = 0;
             this.nextSegment = 0;
         }
-        loadIntoMemory(pid, data) {
+        loadNewProcess(pid, data) {
             let base = this.lasteByteUsed;
             let Prioty = 50;
             let IR = 0;
@@ -17,14 +17,29 @@ var TSOS;
             let Xreg = 0;
             let Yreg = 0;
             let Zflag = 0;
-            // Load the data into memory starting from the 'base' address
-            console.log("MM", data);
-            for (let i = 0; i < data.length; i++) {
-                let d = parseInt(data[i], 16);
-                this.memoryAccessor.writeByte(base + i, d);
+            let limit = base + 256;
+            if (this.pcbList.length < 3) {
+                // Load the data into memory starting from the 'base' address
+                console.log("Loading process into memory");
+                console.log("MM", data);
+                for (let i = 0; i < data.length; i++) {
+                    let d = parseInt(data[i], 16);
+                    this.memoryAccessor.writeByte(base + i, d);
+                }
+                this.lasteByteUsed = limit;
             }
-            let limit = base + data.length + 256;
-            this.lasteByteUsed = limit;
+            else {
+                base = -1;
+                limit = -1;
+                console.log("Loading process into disk");
+                var savedData = [];
+                console.log("MM", data);
+                for (let i = 0; i < data.length; i++) {
+                    let d = parseInt(data[i], 16);
+                    savedData.push(d);
+                }
+                _krnDiskSystemDeviceDriver.saveProcess(pid, savedData);
+            }
             console.log("base", base, "limit: ", limit, "LBU", this.lasteByteUsed);
             // Create a PCB for the new process and add it to the pcbList
             let newPCB = new TSOS.PCB(pid, base, limit, Prioty, IR, PC, ACC, Xreg, Yreg, Zflag, this.nextSegment);

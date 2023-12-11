@@ -8,7 +8,7 @@ module TSOS {
         private lasteByteUsed: number = 0;
         private nextSegment:number = 0;
         
-        public loadIntoMemory(pid:number, data: string[]): void {
+        public loadNewProcess(pid:number, data: string[]): void {
             
             
             let base = this.lasteByteUsed; 
@@ -19,23 +19,40 @@ module TSOS {
             let Xreg = 0;
             let Yreg = 0;
             let Zflag = 0;
+            let limit = base + 256;
 
 
-            // Load the data into memory starting from the 'base' address
-            console.log("MM", data)
-            for (let i = 0; i < data.length; i++) {
-                let d = parseInt(data[i],16);
+            if (this.pcbList.length < 3){
+                // Load the data into memory starting from the 'base' address
+                console.log("Loading process into memory");
+                console.log("MM", data)
+                for (let i = 0; i < data.length; i++) {
+                    let d = parseInt(data[i],16);
+    
+                    this.memoryAccessor.writeByte(base + i, d);
+                }
+                this.lasteByteUsed = limit;    
 
-                this.memoryAccessor.writeByte(base + i, d);
+            }
+            else{
+                base = -1;
+                limit = -1;
+                console.log("Loading process into disk");
+                var savedData = [];
+                console.log("MM", data)
+                for (let i = 0; i < data.length; i++) {
+                    let d = parseInt(data[i],16);
+    
+                    savedData.push(d);
+                }
+                _krnDiskSystemDeviceDriver.saveProcess(pid,savedData);
             }
 
-            let limit = base + data.length+256; 
-            this.lasteByteUsed = limit;
+
             console.log("base", base, "limit: ", limit, "LBU", this.lasteByteUsed)
             // Create a PCB for the new process and add it to the pcbList
             let newPCB = new TSOS.PCB(pid, base, limit, Prioty, IR, PC, ACC, Xreg, Yreg, Zflag,this.nextSegment );
             this.nextSegment = this.nextSegment + 1;
-
             this.pcbList.push(newPCB)
 
             // Update the PCB display

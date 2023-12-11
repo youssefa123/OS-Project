@@ -71,8 +71,6 @@ var TSOS;
                     for (var b = 0; b < blockCount; b++) {
                         var myBlock = {
                             name: `${t}:${s}:${b}`,
-                            inUse: false,
-                            nextName: 'F:F:F',
                             data: []
                         };
                         for (let i = 0; i < byteCount; i++) {
@@ -188,9 +186,9 @@ var TSOS;
                     sessionStorage.setItem(currentContentBlock, JSON.stringify(blockInput));
                     // set currentContentBlock to new block
                     currentContentBlock = nextBlockName;
-                    let nextBlockTempData = Array(64).fill(0x00);
-                    nextBlockTempData[60] = 1;
-                    sessionStorage.setItem(nextBlockName, JSON.stringify(nextBlockTempData));
+                    blockInput = Array(64).fill(0x00);
+                    blockInput[60] = 1;
+                    sessionStorage.setItem(nextBlockName, JSON.stringify(blockInput));
                 }
             }
             blockInput[60] = (0x01); // set current block inUse to true
@@ -199,50 +197,58 @@ var TSOS;
             blockInput[63] = (0x00);
             sessionStorage.setItem(currentContentBlock, JSON.stringify(blockInput));
         }
-        read(filename) {
+        read(filename, print = true) {
             var myBlock = this.getFileBlock(filename);
             if (myBlock == null) {
                 _StdOut.putText("Could not find file: " + filename);
-                return;
             }
-            var firstContentBlock = this.getBlock(myBlock.nextName);
+            var blockData = JSON.parse(sessionStorage.getItem(myBlock));
+            var firstContentBlock = `${blockData[61]}:${blockData[62]}:${blockData[63]}`;
             var currentContentBlock = firstContentBlock;
-            var nextChar = 0;
+            var currentBlockData = JSON.parse(sessionStorage.getItem(currentContentBlock));
+            var nextContentBlock = `${currentBlockData[61]}:${currentBlockData[62]}:${currentBlockData[63]}`;
+            var counter = 0;
             var content = "";
-            while (currentContentBlock.data[nextChar] != 0x00 && nextChar < currentContentBlock.data.length) {
-                let char = String.fromCharCode(currentContentBlock.data[nextChar]);
-                _StdOut.putText(char);
+            while (currentBlockData[counter] != 0x00 && counter < 60) {
+                let char = String.fromCharCode(currentBlockData[counter]);
+                if (print) {
+                    _StdOut.putText(char);
+                }
                 content = content + char;
-                nextChar = nextChar + 1;
-                if (nextChar >= currentContentBlock.data.length && currentContentBlock.nextName != "F:F:F") {
-                    nextChar = 0;
-                    currentContentBlock = this.getBlock(currentContentBlock.nextName);
+                counter = counter + 1;
+                if (counter >= 60 && nextContentBlock != "0:0:0") {
+                    counter = 0;
+                    currentContentBlock = nextContentBlock;
+                    currentBlockData = JSON.parse(sessionStorage.getItem(currentContentBlock));
+                    nextContentBlock = `${currentBlockData[61]}:${currentBlockData[62]}:${currentBlockData[63]}`;
                 }
             }
             console.log("Finished print");
             return content;
         }
         list() {
-            for (var s = 0; s < this.tracks[0].length; s++) {
-                var mySector = this.tracks[0][s];
-                for (var b = 0; b < mySector.length; b++) {
-                    var myBlock = mySector[b];
-                    if (myBlock.inUse == true) {
-                        // Printing out the file name;
-                        var nextChar = 0;
-                        while (myBlock.data[nextChar] != 0x00 && nextChar < myBlock.data.length) {
-                            let char = String.fromCharCode(myBlock.data[nextChar]);
-                            _StdOut.putText(char);
-                            nextChar = nextChar + 1;
-                        }
-                        _StdOut.advanceLine();
+            for (var s = 0; s < 8; s++) {
+                for (var b = 0; b < 8; b++) {
+                    var blockName = `0:${s}:${b}`;
+                    var blockString = sessionStorage.getItem(blockName);
+                    var blockData = JSON.parse(blockString);
+                    if (blockData[60] == 0x00) {
+                        continue;
                     }
+                    // Printing out the file name;
+                    var nextChar = 0;
+                    while (blockData[nextChar] != 0x00 && nextChar < blockData.length) {
+                        let char = String.fromCharCode(blockData[nextChar]);
+                        _StdOut.putText(char);
+                        nextChar = nextChar + 1;
+                    }
+                    _StdOut.advanceLine();
                 }
             }
         }
         copy(sourcename, copyname) {
             this.create(copyname);
-            var content = this.read(sourcename);
+            var content = this.read(sourcename, false);
             this.write(copyname, content);
         }
         krnKbdDriverEntry() {
@@ -255,26 +261,35 @@ var TSOS;
             if (myBlock == null) {
                 _StdOut.putText("Could not find file: " + filename);
             }
-            // erasing old name
-            for (let i = 0; i < myBlock.data.length; i++) {
-                myBlock.data[0] = 0;
+            var oldBlockData = JSON.parse(sessionStorage.getItem(myBlock));
+            let newBlockData = Array(64).fill(0x00);
+            // writing the file name into the system
+            for (let i = 0; i < newname.length; i++) {
+                newBlockData[i] = newname.charCodeAt(i);
             }
-            // writing the new file name into the system
-            for (let i = 0; i < filename.length; i++) {
-                myBlock.data[i] = newname.charCodeAt(i);
-            }
+            // set inUse to true
+            newBlockData[60] = 1;
+            newBlockData[61] = oldBlockData[61];
+            newBlockData[61] = oldBlockData[62];
+            newBlockData[61] = oldBlockData[63];
+            sessionStorage.setItem(myBlock, JSON.stringify(newBlockData));
         }
         delete(filename) {
             var myBlock = this.getFileBlock(filename);
             if (myBlock == null) {
                 _StdOut.putText("Could not find file: " + filename);
             }
-            // erasing old name
-            for (let i = 0; i < myBlock.data.length; i++) {
-                myBlock.data[0] = 0;
-            }
-            myBlock.inUse = false;
-            myBlock.nextName = "F:F:F";
+            var wipedData = Array(64).fill(0x00);
+            sessionStorage.setItem(myBlock, JSON.stringify(wipedData));
+        }
+        saveProcess(pid, memory) {
+            this.create("p" + pid);
+            this.write("p" + pid, JSON.stringify(memory));
+        }
+        loadProcess(pid) {
+            let storedString = this.read("p" + pid, false);
+            let array = JSON.parse(storedString);
+            return array;
         }
     }
     TSOS.DiskSystemDeviceDriver = DiskSystemDeviceDriver;
