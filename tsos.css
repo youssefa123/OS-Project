@@ -118,9 +118,12 @@ h3 {
 }
 
 
-#UserProgramInput {
+#divUserProgramInput {
   resize: none;
+  height: 100px;
 }
+
+
 
 #divCPUTable {
   font-family: Arial, sans-serif;
@@ -158,3 +161,39 @@ h3 {
   background-color: #555; 
 }
 
+#divDiskTable, #divCPUTable {
+  font-family: Arial, sans-serif;
+}
+
+#diskTable, #cputable {
+  border-collapse: collapse;
+  width: 50%;
+  background-color: #f4f4f4;
+}
+
+#diskTable th, #diskTable td, #cputable th, #cputable td {
+  border: 1px solid #ddd;
+  padding: 4px;
+  text-align: center;
+}
+
+#diskTable th, #cputable th {
+  background-color: #e0e0e0;
+  font-weight: bold;
+}
+
+/* Specific styles for disk table body */
+#disktablebody tr {
+  background-color: #444;
+}
+
+#disktablebody td {
+  font-family: 'Courier New', Courier, monospace; 
+  color: #0f0; 
+  font-weight: bold;
+  font-size: 8px;
+}
+
+#disktablebody td:hover {
+  background-color: #555; 
+}
