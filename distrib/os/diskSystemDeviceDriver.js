@@ -223,7 +223,6 @@ var TSOS;
                     nextContentBlock = `${currentBlockData[61]}:${currentBlockData[62]}:${currentBlockData[63]}`;
                 }
             }
-            console.log("Finished print");
             return content;
         }
         list() {
@@ -279,8 +278,15 @@ var TSOS;
             if (myBlock == null) {
                 _StdOut.putText("Could not find file: " + filename);
             }
-            var wipedData = Array(64).fill(0x00);
-            sessionStorage.setItem(myBlock, JSON.stringify(wipedData));
+            var blockData = JSON.parse(sessionStorage.getItem(myBlock));
+            var nextBlock = `${blockData[61]}:${blockData[62]}:${blockData[63]}`;
+            while (nextBlock != `0:0:0` || blockData[60] != 0) {
+                var wipedData = Array(64).fill(0x00);
+                sessionStorage.setItem(myBlock, JSON.stringify(wipedData));
+                myBlock = nextBlock;
+                blockData = JSON.parse(sessionStorage.getItem(myBlock));
+                nextBlock = `${blockData[61]}:${blockData[62]}:${blockData[63]}`;
+            }
         }
         saveProcess(pid, memory) {
             this.create("p" + pid);
@@ -289,6 +295,7 @@ var TSOS;
         loadProcess(pid) {
             let storedString = this.read("p" + pid, false);
             let array = JSON.parse(storedString);
+            this.delete("p" + pid);
             return array;
         }
     }
