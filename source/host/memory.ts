@@ -41,7 +41,7 @@ module TSOS {
           </tr>
  
             */
-            console.log('memory displaying', this.storage)
+            //console.log('memory displaying', this.storage)
             for (let i = 0; i < this.limit; i += 8) {
                 let row = document.createElement('tr');
 
