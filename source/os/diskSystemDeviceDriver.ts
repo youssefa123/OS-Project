@@ -272,7 +272,6 @@ const byteCount = 64;
                 }
 
             }
-            console.log("Finished print")
 
             return content;
         }
@@ -344,8 +343,18 @@ const byteCount = 64;
                 _StdOut.putText("Could not find file: "+filename);
             }
 
-            var wipedData = Array(64).fill(0x00);
-            sessionStorage.setItem(myBlock,JSON.stringify(wipedData));            
+            var blockData = JSON.parse(sessionStorage.getItem(myBlock))
+            var nextBlock = `${blockData[61]}:${blockData[62]}:${blockData[63]}`
+
+            while (nextBlock != `0:0:0` || blockData[60] != 0){
+                var wipedData = Array(64).fill(0x00);
+                sessionStorage.setItem(myBlock,JSON.stringify(wipedData));            
+                
+                myBlock = nextBlock;
+                blockData = JSON.parse(sessionStorage.getItem(myBlock))
+                nextBlock = `${blockData[61]}:${blockData[62]}:${blockData[63]}`
+            } 
+
 
         }
 
@@ -359,6 +368,8 @@ const byteCount = 64;
             let storedString = this.read("p"+pid, false);
 
             let array = JSON.parse(storedString);
+
+            this.delete("p"+pid);
 
             return array;
         }
