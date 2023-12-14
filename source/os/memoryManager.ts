@@ -5,13 +5,21 @@ module TSOS {
 
         public readyQueue: PCB[] = []; // Array to store running PCBs
 
-        private lasteByteUsed: number = 0;
         private nextSegment:number = 0;
         
         public loadNewProcess(pid:number, data: string[]): void {
             
             
-            let base = this.lasteByteUsed; 
+            let base = 0;
+            if (this.memoryAccessor.readByte(base) != 0){
+                base = 256;
+            } 
+            if (this.memoryAccessor.readByte(base) != 0){
+                base = 256*2;
+            } 
+            if (this.memoryAccessor.readByte(base) != 0){
+                base = 256*3;
+            } 
             let Prioty = 50;
             let IR = 0;
             let PC = 0;
@@ -20,9 +28,10 @@ module TSOS {
             let Yreg = 0;
             let Zflag = 0;
             let limit = base + 256;
+            let location = "memory";
 
 
-            if (this.pcbList.length < 3){
+            if (base != 256*3 ){
                 // Load the data into memory starting from the 'base' address
                 console.log("Loading process into memory");
                 console.log("MM", data)
@@ -31,8 +40,6 @@ module TSOS {
     
                     this.memoryAccessor.writeByte(base + i, d);
                 }
-                this.lasteByteUsed = limit;    
-
             }
             else{
                 base = -1;
@@ -42,16 +49,17 @@ module TSOS {
                 console.log("MM", data)
                 for (let i = 0; i < data.length; i++) {
                     let d = parseInt(data[i],16);
-    
                     savedData.push(d);
                 }
                 _krnDiskSystemDeviceDriver.saveProcess(pid,savedData);
+                location = "disk"
             }
 
 
-            console.log("base", base, "limit: ", limit, "LBU", this.lasteByteUsed)
+            console.log("base", base, "limit: ", limit)
             // Create a PCB for the new process and add it to the pcbList
             let newPCB = new TSOS.PCB(pid, base, limit, Prioty, IR, PC, ACC, Xreg, Yreg, Zflag,this.nextSegment );
+            newPCB.location = location;
             this.nextSegment = this.nextSegment + 1;
             this.pcbList.push(newPCB)
 
@@ -103,6 +111,8 @@ module TSOS {
             let Yreg = document.createElement("td");
             let Zflag = document.createElement("td");
             let basecell = document.createElement("td"); //Memory location for now 
+            let locationCell = document.createElement("td"); //Memory location for now 
+
             let runningCell = document.createElement("td"); //Memory location for now 
 
             
@@ -118,6 +128,7 @@ module TSOS {
             Yreg.innerText = Utils.formatHex(pcbdata.Yreg,2,true);
             Zflag.innerText = Utils.formatHex(pcbdata.Zflag,2,true);
             basecell.innerText = Utils.formatHex(pcbdata.base,2,true);
+            locationCell.innerText = pcbdata.location;
             runningCell.innerText = pcbdata.running.toString(); //Base is in decimal form needs to be hex. 
 
 
@@ -132,6 +143,7 @@ module TSOS {
             row.appendChild(Yreg);
             row.appendChild(Zflag);
             row.appendChild(basecell);
+            row.appendChild(locationCell);
             row.appendChild(runningCell);
 
 
