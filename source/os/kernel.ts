@@ -97,17 +97,59 @@ module TSOS {
                 if (_Scheduler.readyQueue.length > 0 && _CPU.clockcount % _Scheduler.quantum == 0){
                     //Saves the current CPU state to the current pcb if a process is executing 
                     if (_CPU.currentPCB){
+
+
+                        if (_Scheduler.readyQueue[0].location == "disk"){
+                            // deallocate the memory 
+                            console.log(`Deallocating process ${_CPU.currentPCB.pid}`)
+
+                            _CPU.currentPCB.location = "disk";
+                            var savedData = [];
+                            for (let i = _CPU.currentPCB.base; i < _CPU.currentPCB.limit; i++) {
+                                savedData.push(_MemoryAccessor.readByte(i));
+                                _MemoryAccessor.writeByte(i,0);
+                            }
+            
+                            _krnDiskSystemDeviceDriver.saveProcess(_CPU.currentPCB.pid,savedData);
+
+                        }
                         _CPU.updateCurrentPCB();
+
 
                         // If the CPU is still executing, place the current PCB back into the ready queue
                         if (_CPU.isExecuting == true){
                             _Scheduler.readyQueue.push(_CPU.currentPCB);
-
                         }
                     }
                     //  Dequeue the next state from the set to be processed by the CPU
                     let nextPCB = _Scheduler.readyQueue.shift();
+                    if (nextPCB.location == "disk"){
+                        console.log(`loading from disk process ${nextPCB.pid}`)
+
+                        let savedData = _krnDiskSystemDeviceDriver.loadProcess(nextPCB.pid);
+                        console.log("Saved data: ", savedData);
+                        let base = 0;
+                        if (_MemoryAccessor.readByte(base) != 0){
+                            base = 256;
+                        } 
+                        if (_MemoryAccessor.readByte(base) != 0){
+                            base = 256*2;
+                        } 
+                        nextPCB.base = base;
+                        nextPCB.limit = base+256;
+                        let loadedBytes = [];
+                        for (let i = 0; i < 256; i++) {
+                            let byte = savedData[i] || 0;
+                            
+                            _MemoryAccessor.writeByte(nextPCB.base+i, byte);
+                            loadedBytes.push(byte);
+                        }
                     
+                        nextPCB.location = "memory"
+                        console.log("Completed loading: ",loadedBytes)
+
+            
+                    }
 
                     _CPU.executeProcess(nextPCB);
                 }
