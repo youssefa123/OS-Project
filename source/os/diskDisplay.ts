@@ -16,7 +16,7 @@ module TSOS {
             for (var s = 0; s < 8; s++){
                 for (var b = 0; b < 8; b++){
                     var blockName = `${t}:${s}:${b}`
-                    console.log("Rendering", blockName)
+                    //console.log("Rendering", blockName)
                     var blockString = sessionStorage.getItem(blockName);
                     var blockData = JSON.parse(blockString);
 
