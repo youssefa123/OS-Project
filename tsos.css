@@ -124,7 +124,6 @@ h3 {
 }
 
 
-
 #divCPUTable {
   font-family: Arial, sans-serif;
 }
@@ -163,11 +162,14 @@ h3 {
 
 #divDiskTable, #divCPUTable {
   font-family: Arial, sans-serif;
+  max-height: 200px;
+  width:100%;
+  overflow-y: auto;
 }
 
 #diskTable, #cputable {
   border-collapse: collapse;
-  width: 50%;
+  width: 100%;
   background-color: #f4f4f4;
 }
 
