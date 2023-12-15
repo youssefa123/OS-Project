@@ -329,8 +329,8 @@ const byteCount = 64;
             // set inUse to true
             newBlockData[60] = 1;
             newBlockData[61] = oldBlockData[61];
-            newBlockData[61] = oldBlockData[62];
-            newBlockData[61] = oldBlockData[63];
+            newBlockData[62] = oldBlockData[62];
+            newBlockData[63] = oldBlockData[63];
             
             sessionStorage.setItem(myBlock, JSON.stringify(newBlockData));
 
