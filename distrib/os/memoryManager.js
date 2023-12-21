@@ -5,11 +5,19 @@ var TSOS;
             this.memoryAccessor = new TSOS.MemoryAccessor();
             this.pcbList = []; // Array to store load PCBs
             this.readyQueue = []; // Array to store running PCBs
-            this.lasteByteUsed = 0;
             this.nextSegment = 0;
         }
-        loadIntoMemory(pid, data) {
-            let base = this.lasteByteUsed;
+        loadNewProcess(pid, data) {
+            let base = 0;
+            if (this.memoryAccessor.readByte(base) != 0) {
+                base = 256;
+            }
+            if (this.memoryAccessor.readByte(base) != 0) {
+                base = 256 * 2;
+            }
+            if (this.memoryAccessor.readByte(base) != 0) {
+                base = 256 * 3;
+            }
             let Prioty = 50;
             let IR = 0;
             let PC = 0;
@@ -17,17 +25,34 @@ var TSOS;
             let Xreg = 0;
             let Yreg = 0;
             let Zflag = 0;
-            // Load the data into memory starting from the 'base' address
-            console.log("MM", data);
-            for (let i = 0; i < data.length; i++) {
-                let d = parseInt(data[i], 16);
-                this.memoryAccessor.writeByte(base + i, d);
+            let limit = base + 256;
+            let location = "memory";
+            if (base != 256 * 3) {
+                // Load the data into memory starting from the 'base' address
+                console.log("Loading process into memory");
+                console.log("MM", data);
+                for (let i = 0; i < data.length; i++) {
+                    let d = parseInt(data[i], 16);
+                    this.memoryAccessor.writeByte(base + i, d);
+                }
             }
-            let limit = base + data.length + 256;
-            this.lasteByteUsed = limit;
-            console.log("base", base, "limit: ", limit, "LBU", this.lasteByteUsed);
+            else {
+                base = -1;
+                limit = -1;
+                console.log("Loading process into disk");
+                var savedData = [];
+                console.log("MM", data);
+                for (let i = 0; i < data.length; i++) {
+                    let d = parseInt(data[i], 16);
+                    savedData.push(d);
+                }
+                _krnDiskSystemDeviceDriver.saveProcess(pid, savedData);
+                location = "disk";
+            }
+            console.log("base", base, "limit: ", limit);
             // Create a PCB for the new process and add it to the pcbList
             let newPCB = new TSOS.PCB(pid, base, limit, Prioty, IR, PC, ACC, Xreg, Yreg, Zflag, this.nextSegment);
+            newPCB.location = location;
             this.nextSegment = this.nextSegment + 1;
             this.pcbList.push(newPCB);
             // Update the PCB display
@@ -67,6 +92,7 @@ var TSOS;
                 let Yreg = document.createElement("td");
                 let Zflag = document.createElement("td");
                 let basecell = document.createElement("td"); //Memory location for now 
+                let locationCell = document.createElement("td"); //Memory location for now 
                 let runningCell = document.createElement("td"); //Memory location for now 
                 pid.innerText = pcbdata.pid.toString();
                 pcell.innerText = pcbdata.Prioty.toString();
@@ -77,6 +103,7 @@ var TSOS;
                 Yreg.innerText = TSOS.Utils.formatHex(pcbdata.Yreg, 2, true);
                 Zflag.innerText = TSOS.Utils.formatHex(pcbdata.Zflag, 2, true);
                 basecell.innerText = TSOS.Utils.formatHex(pcbdata.base, 2, true);
+                locationCell.innerText = pcbdata.location;
                 runningCell.innerText = pcbdata.running.toString(); //Base is in decimal form needs to be hex. 
                 pcbtablebody.appendChild(row);
                 row.appendChild(pid);
@@ -88,9 +115,11 @@ var TSOS;
                 row.appendChild(Yreg);
                 row.appendChild(Zflag);
                 row.appendChild(basecell);
+                row.appendChild(locationCell);
                 row.appendChild(runningCell);
             }
             _Scheduler.updateQueueDisplay();
+            _DiskDisplay.updateDiskDisplay();
         }
     }
     TSOS.memoryManager = memoryManager;

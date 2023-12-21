@@ -143,10 +143,52 @@ module TSOS {
                                     "- Kill all processes.");
             this.commandList[this.commandList.length] = sc;
 
+
              // quantum <int>
              sc = new ShellCommand(this.shellQuantum,
                                     "quantum",
                                     "<int> - Let the user set the Round Robin quantum measured in cpu cycles.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellformat,    
+                                    "format",
+                                    "-Formats The Disk ");
+            this.commandList[this.commandList.length] = sc;
+
+
+            sc = new ShellCommand(this.shellcreate,
+                                    "create",
+                                    "- Creates File .");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellread,
+                                    "read",
+                                    "- Reads whats inside a file .");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellwrite,
+                                    "write",
+                                    "- Writes stuff in the file ");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shelldelete,
+                                    "delete",
+                                    "-Removes filename from storage");
+            this.commandList[this.commandList.length] = sc; 
+            
+            sc = new ShellCommand(this.shellcopy,
+                                    "copy",
+                                    "-Copys exisiting file name");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellls,
+                                    "ls",
+                                    "-list the files currently stored on the disk");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellrename,
+                                    "rename",
+                                    "-rename current file name")
             this.commandList[this.commandList.length] = sc;
             
 
@@ -392,13 +434,18 @@ module TSOS {
                 _StdOut.putText("Program input is not valid hexadecimal. Example: 'A9 08'");
                 return;
             }
+
+            if (_krnDiskSystemDeviceDriver.myBlocks < 1 && _LastAssignedPID > 2){
+                _StdOut.putText("Format the disk before adding a 4th process");
+                return;
+            }
             
             let currentPID = _LastAssignedPID++;
             // Display the PID
             _StdOut.putText(`Valid hexadecimal input. Assigned PID: ${currentPID}`);
 
             // Update the memory display
-            _MemoryManager.loadIntoMemory(currentPID, userInput)
+            _MemoryManager.loadNewProcess(currentPID, userInput)
             _Memory.updateMemoryDisplay();
             
             // _StdOut.putText(this.promptStr + " ");  // Display the prompt
@@ -580,6 +627,119 @@ module TSOS {
                 _StdOut.putText("Usage: prompt <string>  Please supply a string.");
             }
         }
+        
+        public shellformat(){
+            _Kernel.krnFormat();
+            _DiskDisplay.updateDiskDisplay();
+            _StdOut.putText("Formatted the disk.");
 
-    }
+        }
+
+        public shellcreate(args: string[]){
+            var name = args[0];
+            if (!name){
+                _StdOut.putText("Enter a file name.");
+
+            }
+            else{
+                _Kernel.krnDiskCreate(name);
+                _DiskDisplay.updateDiskDisplay();
+            }
+
+        }
+
+        public shellread(args: string[]){
+            var name = args[0];
+
+            if (!name ){
+                _StdOut.putText("Enter a file name.");
+                return;
+            }
+            
+        
+            _Kernel.krnDiskRead(name);
+            _DiskDisplay.updateDiskDisplay();
+
+        }
+
+        public shellwrite(args: string[]){
+            var name = args[0];
+            args.shift();
+            var content = args.join(" ")
+
+            if (!name ){
+                _StdOut.putText("Enter a file name.");
+                return;
+            }
+            if (!content || !content.startsWith('"') || !content.endsWith('"') ){
+                console.log("Bad quotes", content)
+                _StdOut.putText("Enter content with quotes.");
+                return;
+            }
+            // remove front quote
+            content = content.substring(1);
+            // remove back quote
+            content = content.substring(0,content.length-1);
+
+            _Kernel.krnDiskWrite(name, content);
+            _DiskDisplay.updateDiskDisplay();
+        }
+
+        public shellls(args: string[]){
+        
+            _Kernel.krnDiskList();
+            _DiskDisplay.updateDiskDisplay();
+
+        }
+
+        public shellcopy(args: string[]){
+            var name = args[0];
+            var copyName = args[1];
+
+            if (!name ){
+                _StdOut.putText("Enter a source file name.");
+                return;
+            }
+            if (!copyName ){
+                _StdOut.putText("Enter a destination file name.");
+                return;
+            }
+        
+            _Kernel.krnDiskCopy(name,copyName);
+            _DiskDisplay.updateDiskDisplay();
+
+        }
+
+        public shellrename(args: string[]){
+            var name = args[0];
+            var newname = args[1];
+
+            if (!name ){
+                _StdOut.putText("Enter a file name.");
+                return;
+            }
+            if (!newname ){
+                _StdOut.putText("Enter a new file name.");
+                return;
+            }
+        
+            _Kernel.krnDiskRename(name,newname);
+            _DiskDisplay.updateDiskDisplay();
+
+        }
+
+        public shelldelete(args: string[]){
+            var name = args[0];
+
+            if (!name ){
+                _StdOut.putText("Enter a file name.");
+                return;
+            }
+            
+        
+            _Kernel.krnDiskDelete(name);
+            _DiskDisplay.updateDiskDisplay();
+
+        }
+}   
 }

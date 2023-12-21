@@ -84,7 +84,7 @@
             this.currentInstruction = _MemoryAccessor.readByte(this.PC,this.currentPCB);
             console.log(this.currentPCB.pid+' fetching at ', Utils.formatHex(this.PC, 2, false),'got:', Utils.formatHex(this.currentInstruction, 2, false));
             _Memory.instructionByte = this.PC;
-            console.log("set mem highlight to ", this.PC);
+            //console.log("set mem highlight to ", this.PC);
             this.PC++;
         }
 
@@ -93,14 +93,14 @@
 
             // for now it'll be one-byte opcodes without operands... FOR NOW 
             this.currentOpcode = _MemoryAccessor.readByte(this.PC,this.currentPCB);;
-            console.log(this.currentPCB.pid+' decode', Utils.formatHex(this.currentOpcode, 2, false) );
+            //console.log(this.currentPCB.pid+' decode', Utils.formatHex(this.currentOpcode, 2, false) );
 
         }
         
         private execute(): void {
             this.updateCurrentCPU()
         
-            console.log(this.currentPCB.pid+' execute', Utils.formatHex(this.currentInstruction, 2, false));
+            //console.log(this.currentPCB.pid+' execute', Utils.formatHex(this.currentInstruction, 2, false));
             let address;
             switch (this.currentInstruction) {
                 case 0xA9: // (Load Accumulator with a constant)

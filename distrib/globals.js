@@ -24,6 +24,7 @@ var _CPU; // Utilize TypeScript's type annotation system to ensure that _CPU is 
 var _Memory;
 var _MemoryAccessor;
 var _Scheduler;
+var _DiskDisplay;
 var _MemoryManager;
 let _LastAssignedPID = 0; // Global PID counter
 let _Utils;
@@ -50,6 +51,7 @@ var _OsShell;
 var _SarcasticMode = false;
 // Global Device Driver Objects - page 12
 var _krnKeyboardDriver = null;
+var _krnDiskSystemDeviceDriver = null;
 var _hardwareClockID = null;
 // For testing (and enrichment)...
 var Glados = null; // This is the function Glados() in glados-ip*.js http://alanclasses.github.io/TSOS/test/ .

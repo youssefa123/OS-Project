@@ -30,6 +30,7 @@ var _CPU: TSOS.Cpu;  // Utilize TypeScript's type annotation system to ensure th
 var _Memory: TSOS.Memory;
 var _MemoryAccessor: TSOS.MemoryAccessor;
 var _Scheduler: TSOS.Scheduler;
+var _DiskDisplay: TSOS.DiskDisplay;
 
 var _MemoryManager: TSOS.memoryManager;
 let _LastAssignedPID: number = 0;  // Global PID counter
@@ -68,7 +69,7 @@ var _SarcasticMode: boolean = false;
 
 // Global Device Driver Objects - page 12
 var _krnKeyboardDriver: TSOS.DeviceDriverKeyboard  = null;
-
+var _krnDiskSystemDeviceDriver: TSOS.DiskSystemDeviceDriver = null;
 var _hardwareClockID: number = null;
 
 // For testing (and enrichment)...
