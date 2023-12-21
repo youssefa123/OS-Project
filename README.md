@@ -5,6 +5,7 @@
 -- Then in the command line type  --
 1. cd OS-Project
 2. tsc
-3. Open the Index.html file
+
+--Open the Index.html file
 
 # What it looks like 
