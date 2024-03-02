@@ -6,6 +6,8 @@
 1. cd OS-Project
 2. tsc
 
+   OR CLICK THIS: https://virtualos.netlify.app
+
 --Open the Index.html file
 
 # Console Commands
